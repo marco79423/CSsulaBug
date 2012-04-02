@@ -44,7 +44,7 @@ void SFDownloadPreparer::onReply(QNetworkReply *reply)
 {
     if(reply->error())
     {
-        qCritical() << tr("SFDownloadPreparer::") << reply->error();
+        qCritical() << tr("SFDownloadPreparer:: error") << reply->error();
         reply->deleteLater();
         return;
     }

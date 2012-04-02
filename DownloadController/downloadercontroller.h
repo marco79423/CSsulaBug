@@ -2,6 +2,8 @@
 #define DOWNLOADERCONTROLLER_H
 
 #include <QObject>
+#include <QHash>
+#include <QStringList>
 
 class QNetworkAccessManager;
 class QNetworkReply;
@@ -24,12 +26,21 @@ signals:
 public slots:
 
     void download(const QString &key, const QString &dirPath);
+
+private slots:
+
+    void listDownloadList();
+    void get(const QString &url);
     void onReply(QNetworkReply *reply);
 
 private:
 
     QNetworkAccessManager *_networkAccessManager;
     SFDownloadPreparer *_downloadPreparer;
+
+    QString _comicName;
+    QString _dirPath;
+    QHash<QString, QString> _downloadHash;
 };
 
 #endif // DOWNLOADERCONTROLLER_H
