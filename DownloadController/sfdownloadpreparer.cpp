@@ -4,7 +4,7 @@
 #include <QDebug>
 
 SFDownloadPreparer::SFDownloadPreparer(QObject *parent) :
-    QObject(parent), _prepared(false)
+    QObject(parent), _state(Prepared)
 {
     _networkAccessManager = new QNetworkAccessManager(this);
     connect(_networkAccessManager, SIGNAL(finished(QNetworkReply*)),
@@ -13,13 +13,13 @@ SFDownloadPreparer::SFDownloadPreparer(QObject *parent) :
 
 QStringList SFDownloadPreparer::getChapterNameList()
 {
-    if(!_prepared) qCritical() << tr("SFDownloader:: 還沒準備好");
+    if(!_state != Done) qCritical() << tr("SFDownloader:: 還沒準備好");
     return _chapterNameList;
 }
 
 QStringList SFDownloadPreparer::getUrlList(const QString &chapterName)
 {
-    if(!_prepared) qCritical() << tr("SFDownloader:: 還沒準備好");
+    if(!_state != Done) qCritical() << tr("SFDownloader:: 還沒準備好");
     return _urlListHash[chapterName];
 }
 
@@ -29,7 +29,11 @@ void SFDownloadPreparer::download(const QString &key)
 
     QNetworkRequest request;
     request.setUrl(QUrl(QString("http://comic.sfacg.com/HTML/%1/").arg(key)));
-    request.setRawHeader("User-Agent", "MyOwnBrowser 1.0");
+
+    request.setRawHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64)"
+                         "AppleWebKit/536.5 (KHTML, like Gecko) Chrome/19.0."
+                         "1084.1 Safari/536.5");
+
     qDebug() << tr("SFDownloadPreparer::發送要求至 ") << request.url();
 
     _networkAccessManager->get(request);
@@ -45,30 +49,31 @@ void SFDownloadPreparer::onReply(QNetworkReply *reply)
 
     switch(_state)
     {
-    case PreProcess://前置準備
-        preprocess(reply->readAll());
+    case Prepared://前置準備
+        listChapterName(reply->readAll());
+        _state = ChapterNameListing;
         break;
-    case ListChapterName://列出所有話
+    case ChapterNameListing://列出所有話
         break;
-    case ListUrlList://列出所有張圖
+    case UrlListing://列出所有張圖
+        break;
+    case Done:
         break;
     }
 }
 
 void SFDownloadPreparer::initialize()
 {
-    _state = PreProcess;
-
     _chapterNameList.clear();
     _comicID = -1;
     _comicType.clear();
 
     _urlListHash.clear();
 
-    _prepared = false;
+    _state = Prepared;
 }
 
-void SFDownloadPreparer::preprocess(const QString &content)
+void SFDownloadPreparer::listChapterName(const QString &content)
 {
     qDebug() << content;
     //取得 ID
@@ -93,10 +98,10 @@ void SFDownloadPreparer::preprocess(const QString &content)
     while ((pos = chapterExp.indexIn(content, pos)) != -1)
     {
         _chapterNameList << chapterExp.cap(1);
-        qDebug() << "SFDownloadPreparer::取得 chapterName"
-                 << chapterExp.cap(1);
         pos += chapterExp.matchedLength();
     }
+    qDebug() << "SFDownloadPreparer::取得 chapterName "
+             << _chapterNameList.join(", ");
 
     qDebug() << "SFDownloadPreparer::preprocess 結束";
 }

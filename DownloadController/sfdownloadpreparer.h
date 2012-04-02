@@ -15,7 +15,7 @@ class SFDownloadPreparer
 
 public:
 
-    enum State { PreProcess, ListChapterName, ListUrlList };
+    enum State { Prepared, ChapterNameListing, UrlListing, Done};
 
     explicit SFDownloadPreparer(QObject *parent = 0);
     
@@ -37,7 +37,6 @@ private slots:
 private:
 
     QNetworkAccessManager *_networkAccessManager;
-    bool _prepared;
 
     State _state;
 
@@ -48,7 +47,7 @@ private:
     QHash<QString, QStringList> _urlListHash;
 
     void initialize();
-    void preprocess(const QString &content);
+    void listChapterName(const QString &content);
 };
 
 #endif // SFDOWNLOADPREPARER_H
