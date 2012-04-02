@@ -6,7 +6,10 @@
 class QNetworkAccessManager;
 class QNetworkReply;
 
-class DownloaderController : public QObject
+class SFDownloadPreparer;
+
+class DownloaderController
+        :public QObject
 {
     Q_OBJECT
 
@@ -16,15 +19,17 @@ public:
     
 signals:
     
+    void finish();
 
 public slots:
 
-    void download(const QString &url, const QString &dirPath);
-    void done(QNetworkReply *reply);
+    void download(const QString &key, const QString &dirPath);
+    void onReply(QNetworkReply *reply);
 
 private:
 
     QNetworkAccessManager *_networkAccessManager;
+    SFDownloadPreparer *_downloadPreparer;
 };
 
 #endif // DOWNLOADERCONTROLLER_H

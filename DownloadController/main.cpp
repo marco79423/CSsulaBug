@@ -1,6 +1,7 @@
 #include <QtCore/QCoreApplication>
 #include <QTextCodec>
-#include "sfdownloadpreparer.h"
+#include <QEventLoop>
+#include "downloadercontroller.h"
 
 int main(int argc, char *argv[])
 {
@@ -11,7 +12,9 @@ int main(int argc, char *argv[])
     QTextCodec::setCodecForTr(codec);
     QTextCodec::setCodecForLocale(codec);
 
-    SFDownloadPreparer preparer;
-    preparer.download("DJWY");
-    return a.exec();
+    DownloaderController controller;
+    controller.download("DJWY", "C:/Users/Marco/Desktop");
+    QEventLoop loop;
+    QObject::connect(&controller, SIGNAL(finish()), &loop, SLOT(quit()));
+    loop.exec();
 }

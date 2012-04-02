@@ -28,7 +28,7 @@ signals:
 
 public slots:
     
-    void download(const QString &key);
+    void prepare(const QString &key);
 
 private slots:
 
@@ -45,6 +45,8 @@ private:
     QString _comicType;
 
     QHash<QString, QStringList> _urlListHash;
+
+    QStringList _checkList;
 
     void initialize();
     void listChapterName(const QString &content);

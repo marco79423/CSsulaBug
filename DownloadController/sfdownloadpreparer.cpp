@@ -23,7 +23,7 @@ QStringList SFDownloadPreparer::getUrlList(const QString &chapterName)
     return _urlListHash[chapterName];
 }
 
-void SFDownloadPreparer::download(const QString &key)
+void SFDownloadPreparer::prepare(const QString &key)
 {
     initialize();
 
@@ -83,6 +83,8 @@ void SFDownloadPreparer::initialize()
 
     _urlListHash.clear();
 
+    _checkList.clear();
+
     _state = Prepared;
 }
 
@@ -121,6 +123,7 @@ void SFDownloadPreparer::listChapterName(const QString &content)
 void SFDownloadPreparer::prepareListingUrl()
 {
     _state = UrlListing;
+    _checkList = _chapterNameList;
 
     foreach(QString chapter, _chapterNameList)
     {
@@ -153,4 +156,13 @@ void SFDownloadPreparer::listUrl(const QString &chapterName,
 
     qDebug() << "SFDownloadPreparer::取得 urlList "
              << _urlListHash[chapterName].join("\n");
+
+    //檢查下載是否完結
+    _checkList.removeAll(chapterName);
+    if(_checkList.empty())
+    {
+        qDebug() << "SFDownloadPreparer:: 準備完成！";
+        _state = Prepared;
+        emit finish();
+    }
 }
