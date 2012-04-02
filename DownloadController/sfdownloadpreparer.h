@@ -15,7 +15,7 @@ class SFDownloadPreparer
 
 public:
 
-    enum State { Prepared, ChapterNameListing, UrlListing, Done};
+    enum State { Prepared, ChapterNameListing, UrlListing};
 
     explicit SFDownloadPreparer(QObject *parent = 0);
     
@@ -48,6 +48,8 @@ private:
 
     void initialize();
     void listChapterName(const QString &content);
+    void prepareListingUrl();
+    void listUrl(const QString &chapterName, const QString &content);
 };
 
 #endif // SFDOWNLOADPREPARER_H
