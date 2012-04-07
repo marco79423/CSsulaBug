@@ -1,6 +1,8 @@
 #include <QApplication>
 #include <QTextCodec>
-#include "mainwindow.h"
+#include <QTextBrowser>
+
+#include "networkaccessor.h"
 
 int main(int argc, char *argv[])
 {
@@ -11,9 +13,17 @@ int main(int argc, char *argv[])
     QTextCodec::setCodecForTr(codec);
     QTextCodec::setCodecForLocale(codec);
 
-    MainWindow w;
-    w.show();
     
+    NetworkAccessor accessor;
+
+    QTextBrowser browser;
+    QObject::connect(&accessor, SIGNAL(oneReply(QString)),
+                     &browser, SLOT(append(QString)));
+    browser.show();
+    accessor.get(QList<QString>()<<"http://csbala.nba.nctu.edu.tw"
+                 <<"http://csbala.nba.nctu.edu.tw"
+                 <<"http://csbala.nba.nctu.edu.tw"
+                 );
 
 
     return a.exec();

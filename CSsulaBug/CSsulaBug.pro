@@ -10,15 +10,14 @@ TARGET = CSsulaBug
 TEMPLATE = app
 
 
-SOURCES += main.cpp\
-        mainwindow.cpp \
-    htmldownloader.cpp \
-    imagedownloader.cpp \
-    database.cpp
+SOURCES += main.cpp \
+    updatecontroller.cpp \
+    sfupdater.cpp \
+    networkaccessor.cpp
 
-HEADERS  += mainwindow.h \
-    htmldownloader.h \
-    imagedownloader.h \
-    database.h
+HEADERS  += \
+    updatecontroller.h \
+    sfupdater.h \
+    networkaccessor.h
 
-FORMS    += mainwindow.ui
+FORMS    +=
