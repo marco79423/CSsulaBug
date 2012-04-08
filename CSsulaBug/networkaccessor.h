@@ -15,12 +15,13 @@ public:
 
     explicit NetworkAccessor(QObject *parent = 0);
     
-    void get(const QList<QString> urlList);
+    void get(const QString &url);
+    void get(const QList<QString> &urlList);
 
 signals:
     
-    void oneReply(const QString url, const QString content);
-    void oneReply(const QString content);
+    void oneReply(const QString &url, const QString &content);
+    void oneReply(const QString &content);
     void finish();
 
 private slots:

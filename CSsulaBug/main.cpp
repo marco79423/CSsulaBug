@@ -2,7 +2,8 @@
 #include <QTextCodec>
 #include <QTextBrowser>
 
-#include "networkaccessor.h"
+#include "sfupdater.h"
+#include <QEventLoop>
 
 int main(int argc, char *argv[])
 {
@@ -13,18 +14,11 @@ int main(int argc, char *argv[])
     QTextCodec::setCodecForTr(codec);
     QTextCodec::setCodecForLocale(codec);
 
-    
-    NetworkAccessor accessor;
+    SFUpdater updater;
+    QEventLoop loop;
+    QObject::connect(&updater, SIGNAL(finish()), &loop,SLOT(quit()));
+    updater.update();
+    loop.exec();
 
-    QTextBrowser browser;
-    QObject::connect(&accessor, SIGNAL(oneReply(QString)),
-                     &browser, SLOT(append(QString)));
-    browser.show();
-    accessor.get(QList<QString>()<<"http://csbala.nba.nctu.edu.tw"
-                 <<"http://csbala.nba.nctu.edu.tw"
-                 <<"http://csbala.nba.nctu.edu.tw"
-                 );
-
-
-    return a.exec();
+    //return a.exec();
 }

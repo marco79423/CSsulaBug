@@ -96,7 +96,7 @@ void SFDownloadPreparer::listChapterName(const QString &content)
     _comicID = idExp.cap(1).toInt();
     qDebug() << "SFDownloadPreparer::取得 comicID " << _comicID;
 
-    //取得 漫畫類型
+    //取得 漫畫種類(網站自己的分法)
     QRegExp typeExp("<a href=\"http://([^\"]+).sfacg.com/AllComic");
     typeExp.indexIn(content);
     _comicType = typeExp.cap(1);
