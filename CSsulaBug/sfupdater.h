@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QStringList>
+#include <QHash>
 
 class NetworkAccessor;
 
@@ -15,9 +16,13 @@ public:
     enum State { Prepared, PageNumberGetting, ComicDataGetting };
     explicit SFUpdater(QObject *parent = 0);
     State getState() const;
+    QList<QHash<QString, QString> > getComicList() const;
+    int getCounts() const;
 
 signals:
-    
+
+    void comicInfo(const QHash<QString, QString> &comicInfo);
+    void count(const int& count);
     void finish();
 
 public slots:
@@ -33,10 +38,13 @@ private:
 
     NetworkAccessor *_networkAccessor;
     State _state;
+    int _count;
+    QList<QHash<QString, QString> > _comicInfoList;
 
     int getMaxPageNumber(const QString &content);
     QStringList getPageUrlList(const int &maxPageNumber);
 
+    void initialize();
     void processComicData(const QString &content);
 };
 

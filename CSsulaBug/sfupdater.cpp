@@ -4,7 +4,7 @@
 #include <QDebug>
 
 SFUpdater::SFUpdater(QObject *parent) :
-    QObject(parent), _state(Prepared)
+    QObject(parent), _state(Prepared), _count(0)
 {
     _networkAccessor = new NetworkAccessor(this);
     connect(_networkAccessor, SIGNAL(oneReply(const QString&)),
@@ -17,10 +17,23 @@ SFUpdater::State SFUpdater::getState() const
     return _state;
 }
 
+QList<QHash<QString, QString> > SFUpdater::getComicList() const
+{
+    return _comicInfoList;
+}
+
+int SFUpdater::getCounts() const
+{
+    if(_state != Prepared) qCritical() << "SFUpdater::isn't prepared";
+    return _count;
+}
+
 void SFUpdater::update()
 {
     qDebug() << "SFUpdate::update start ...";
     if(_state != Prepared) qCritical() << "SFUpdater::isn't prepared";
+
+    initialize();
 
     qDebug() << "SFUpdate::change state to PageNumberGetting";
     _state = PageNumberGetting;
@@ -55,7 +68,8 @@ void SFUpdater::onReplyFinish()
     if(_state == ComicDataGetting)
     {
         _state = Prepared;
-        qDebug() << "SFUpdater::finish";
+        qDebug() << "SFUpdater::finish, counts = " << _count;
+        emit count(_count);
         emit finish();
     }
 
@@ -101,62 +115,44 @@ QStringList SFUpdater::getPageUrlList(const int &maxPageNumber)
     return pageUrlList;
 }
 
+void SFUpdater::initialize()
+{
+    qDebug() << "QFUpdate::initialize start... ";
+    _count = 0;
+    _comicInfoList.clear();
+}
+
 void SFUpdater::processComicData(const QString &content)
 {
     qDebug() << "SFUpdater::processComicData start ...";
 
-    QRegExp regexp("(?:<a href=\"/HTML/)([^/]+)" //keyName
-                   ".+(?:orange_link2\">)([^<]+)" //name
-                   "(?:.|\n)+(?:Blue_link1\">)([^<]+)" //comicAuthor
-                   "(?:.|\n)+(?:Blue_link1\">)([^<]+)" //comicType
+    QRegExp regexp("<a href=\"/HTML/([^/]+)" //keyName
+                   "[^>]+>([^<]+)" //name
+                   "[^1]+1\">([^<]+)" //comicAuthor
+                   "[^\\]]+[^>]+>([^<]+)" //comicType
                    "</a> /([^/]+)+/" //lastUpdated
-                   " \\d+<br />\\s+([^<]+)"
+                   " \\d+<br />([^<]+)" //description
                    );
-    //(?:Blue_link1\">)([^<]+)
-                    //"(?:.|\n)+?(?:Blue_link1">)([^<]+) \/([^\/]+)
 
     int pos = 0;
     while ((pos = regexp.indexIn(content, pos)) != -1)
     {
-        qDebug() << regexp.cap(1) << regexp.cap(2) << regexp.cap(3)
-                 << regexp.cap(4) << regexp.cap(5) << regexp.cap(6);
+        QHash<QString, QString> info;
+        info["key"] = regexp.cap(1);
+        info["name"] = regexp.cap(2);
+        info["author"] = regexp.cap(3);
+        info["type"] =  regexp.cap(4);
+        info["lastUpdated"] = regexp.cap(5);
+        info["description"] = regexp.cap(6).simplified();
+
+        qDebug() << info;
+        _comicInfoList.append(info);
+        emit comicInfo(info);
+
         pos += regexp.matchedLength();
+        qDebug() << "count:" <<  ++_count;
     }
 }
 
 
-/*
-
-void SFUpdater::processKeyNameListing(const QString &content)
-{
-    qDebug() << "SFUpdater::processKeyNameList start ...";
-
-    //<li><strong class="F14PX"><a href="/HTML/XINF/"
-    QRegExp comicExp();
-    int pos = 0;
-    while ((pos = comicExp.indexIn(content, pos)) != -1)
-    {
-        const QString comicUrl =
-                "http://comic.sfacg.com/HTML/" + comicExp.cap(1);
-
-       // qDebug() << "SFUpdater:: get " << comicUrl;
-        _comicUrlList.append(comicUrl);
-
-        pos += comicExp.matchedLength();
-    }
-}
-
-void SFUpdater::processComicPageGetting(const QString &content)
-{
-    qDebug() << "SFUpdater::processComicPageGetting start ...";
-    QRegExp keyNameExp("var folderName = '([^']+)';");
-    QRegExp comicNameExp("<b class=\"F14PX\">([^>]+)</b>");
-    QRegExp comicTypeExp("<li>漫画类型：[^>]+>([^<]+)");
-    QRegExp comicAuthorExp("<li>作　　者：[^>]+>([^<]+)");
-    QRegExp lastUpdatedExp("<li>更新时间：([^<]+)");
-    QRegExp descriptionExp();
-
-}
-
-*/
 
