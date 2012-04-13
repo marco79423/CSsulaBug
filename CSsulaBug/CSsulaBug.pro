@@ -13,11 +13,15 @@ TEMPLATE = app
 SOURCES += main.cpp \
     updatecontroller.cpp \
     sfupdater.cpp \
-    networkaccessor.cpp
+    networkaccessor.cpp \
+    comicdatabase.cpp \
+    comicinfo.cpp
 
 HEADERS  += \
     updatecontroller.h \
     sfupdater.h \
-    networkaccessor.h
+    networkaccessor.h \
+    comicdatabase.h \
+    comicinfo.h
 
 FORMS    +=

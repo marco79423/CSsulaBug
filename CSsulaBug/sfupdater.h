@@ -3,7 +3,9 @@
 
 #include <QObject>
 #include <QStringList>
-#include <QHash>
+#include <QMap>
+
+#include "comicinfo.h"
 
 class NetworkAccessor;
 
@@ -13,15 +15,17 @@ class SFUpdater : public QObject
 
 public:
 
-    enum State { Prepared, PageNumberGetting, ComicDataGetting };
+    enum State { Prepared, PageNumberGetting,
+                 ComicDataGetting, CoverImageGetting};
+
     explicit SFUpdater(QObject *parent = 0);
     State getState() const;
-    QList<QHash<QString, QString> > getComicList() const;
+    QList<ComicInfo> getComicList() const;
     int getCounts() const;
 
 signals:
 
-    void comicInfo(const QHash<QString, QString> &comicInfo);
+    void comicInfo(const ComicInfo &comicInfo);
     void count(const int& count);
     void finish();
 
@@ -39,13 +43,15 @@ private:
     NetworkAccessor *_networkAccessor;
     State _state;
     int _count;
-    QList<QHash<QString, QString> > _comicInfoList;
+    QList<ComicInfo> _comicInfoList;
+    QMap<QString, int> _imageMap;
 
     int getMaxPageNumber(const QString &content);
     QStringList getPageUrlList(const int &maxPageNumber);
 
     void initialize();
     void processComicData(const QString &content);
+    void processCoverImage(const QString &content);
 };
 
 #endif // SFUPDATER_H

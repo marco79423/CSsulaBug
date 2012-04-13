@@ -3,6 +3,8 @@
 #include <QTextBrowser>
 
 #include "sfupdater.h"
+#include "comicdatabase.h"
+
 #include <QEventLoop>
 
 int main(int argc, char *argv[])
@@ -13,6 +15,8 @@ int main(int argc, char *argv[])
     QTextCodec::setCodecForCStrings(codec);
     QTextCodec::setCodecForTr(codec);
     QTextCodec::setCodecForLocale(codec);
+
+    //ComicDatabase db;
 
     SFUpdater updater;
     QEventLoop loop;

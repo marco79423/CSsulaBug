@@ -17,7 +17,7 @@ SFUpdater::State SFUpdater::getState() const
     return _state;
 }
 
-QList<QHash<QString, QString> > SFUpdater::getComicList() const
+QList<ComicInfo> SFUpdater::getComicList() const
 {
     return _comicInfoList;
 }
@@ -60,6 +60,10 @@ void SFUpdater::onOneReply(const QString &content)
     {
         processComicData(content);
     }
+    else if(_state == CoverImageGetting)
+    {
+        processCoverImage(content);
+    }
 }
 
 void SFUpdater::onReplyFinish()
@@ -69,10 +73,13 @@ void SFUpdater::onReplyFinish()
     {
         _state = Prepared;
         qDebug() << "SFUpdater::finish, counts = " << _count;
+
         emit count(_count);
         emit finish();
     }
-
+    else if(_state == CoverImageGetting)
+    {
+    }
 }
 
 
@@ -120,38 +127,45 @@ void SFUpdater::initialize()
     qDebug() << "QFUpdate::initialize start... ";
     _count = 0;
     _comicInfoList.clear();
+    _imageMap.clear();
 }
 
 void SFUpdater::processComicData(const QString &content)
 {
     qDebug() << "SFUpdater::processComicData start ...";
 
-    QRegExp regexp("<a href=\"/HTML/([^/]+)" //keyName
-                   "[^>]+>([^<]+)" //name
-                   "[^1]+1\">([^<]+)" //comicAuthor
-                   "[^\\]]+[^>]+>([^<]+)" //comicType
-                   "</a> /([^/]+)+/" //lastUpdated
-                   " \\d+<br />([^<]+)" //description
+    QRegExp regexp(//"<img src=\"([^\"])\""
+                   "[^<]+[^\"]F14PX\"><a href=\"/HTML/([^/]+)" //keyName
+                   //"[^>]+>([^<]+)" //name
+                   //"[^1]+1\">([^<]+)" //comicAuthor
+                   //"[^\\]]+[^>]+>([^<]+)" //comicType
+                   //"</a> /([^/]+)+/" //lastUpdated
+                   //" \\d+<br />([^<]+)" //description
                    );
 
     int pos = 0;
     while ((pos = regexp.indexIn(content, pos)) != -1)
     {
-        QHash<QString, QString> info;
-        info["key"] = regexp.cap(1);
-        info["name"] = regexp.cap(2);
-        info["author"] = regexp.cap(3);
-        info["type"] =  regexp.cap(4);
-        info["lastUpdated"] = regexp.cap(5);
-        info["description"] = regexp.cap(6).simplified();
+        ComicInfo info;
+        qDebug() << regexp.cap(1);
+        info.setKey(regexp.cap(2));
+        info.setName(regexp.cap(3));
+        info.setAuthor(regexp.cap(4));
+        info.setType(regexp.cap(5));
+        info.setLastUpdated(regexp.cap(6));
+        info.setDescription(regexp.cap(7).simplified());
 
-        qDebug() << info;
+        qDebug() << info.getInfo();
         _comicInfoList.append(info);
-        emit comicInfo(info);
+        //_imageMap
 
         pos += regexp.matchedLength();
         qDebug() << "count:" <<  ++_count;
     }
+}
+
+void SFUpdater::processCoverImage(const QString &content)
+{
 }
 
 
