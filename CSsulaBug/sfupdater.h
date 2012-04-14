@@ -21,12 +21,12 @@ public:
     explicit SFUpdater(QObject *parent = 0);
     State getState() const;
     QList<ComicInfo> getComicList() const;
-    int getCounts() const;
+    int getComicCounts() const;
+    int getCoverCounts() const;
 
 signals:
 
     void comicInfo(const ComicInfo &comicInfo);
-    void count(const int& count);
     void finish();
 
 public slots:
@@ -35,14 +35,16 @@ public slots:
 
 private slots:
 
-    void onOneReply(const QString &content);
+    void onOneReply(const QString &url, const QByteArray &content);
     void onReplyFinish();
 
 private:
 
     NetworkAccessor *_networkAccessor;
     State _state;
-    int _count;
+    int _comicCount;
+    int _coverCount;
+
     QList<ComicInfo> _comicInfoList;
     QMap<QString, int> _imageMap;
 
@@ -50,8 +52,8 @@ private:
     QStringList getPageUrlList(const int &maxPageNumber);
 
     void initialize();
-    void processComicData(const QString &content);
-    void processCoverImage(const QString &content);
+    void processComicData(const QByteArray &content);
+    void processCoverImage(const QString &url, const QByteArray &content);
 };
 
 #endif // SFUPDATER_H

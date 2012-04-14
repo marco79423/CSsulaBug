@@ -60,8 +60,7 @@ void NetworkAccessor::onReply(QNetworkReply *reply)
     }
 
     const QString url = reply->url().toString();
-    const QString content = reply->readAll();
-
+    const QByteArray content = reply->readAll();
 
     emit oneReply(url, content);
     emit oneReply(content);

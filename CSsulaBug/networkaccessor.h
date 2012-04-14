@@ -20,8 +20,8 @@ public:
 
 signals:
     
-    void oneReply(const QString &url, const QString &content);
-    void oneReply(const QString &content);
+    void oneReply(const QString &url, const QByteArray &content);
+    void oneReply(const QByteArray &content);
     void finish();
 
 private slots:

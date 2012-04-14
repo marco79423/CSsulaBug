@@ -4,11 +4,12 @@
 #include <QDebug>
 
 SFUpdater::SFUpdater(QObject *parent) :
-    QObject(parent), _state(Prepared), _count(0)
+    QObject(parent), _state(Prepared), _comicCount(0), _coverCount(0)
 {
     _networkAccessor = new NetworkAccessor(this);
-    connect(_networkAccessor, SIGNAL(oneReply(const QString&)),
-            SLOT(onOneReply(const QString&)));
+    connect(_networkAccessor,
+            SIGNAL(oneReply(const QString&, const QByteArray&)),
+            SLOT(onOneReply(const QString&, const QByteArray&)));
     connect(_networkAccessor, SIGNAL(finish()), SLOT(onReplyFinish()));
 }
 
@@ -22,10 +23,16 @@ QList<ComicInfo> SFUpdater::getComicList() const
     return _comicInfoList;
 }
 
-int SFUpdater::getCounts() const
+int SFUpdater::getComicCounts() const
 {
     if(_state != Prepared) qCritical() << "SFUpdater::isn't prepared";
-    return _count;
+    return _comicCount;
+}
+
+int SFUpdater::getCoverCounts() const
+{
+    if(_state != Prepared) qCritical() << "SFUpdater::isn't prepared";
+    return _coverCount;
 }
 
 void SFUpdater::update()
@@ -42,7 +49,7 @@ void SFUpdater::update()
     _networkAccessor->get("http://comic.sfacg.com/Catalog/");
 }
 
-void SFUpdater::onOneReply(const QString &content)
+void SFUpdater::onOneReply(const QString& url,const QByteArray &content)
 {
     qDebug() << "SFUpdate::onOneReply start ...";
 
@@ -62,7 +69,7 @@ void SFUpdater::onOneReply(const QString &content)
     }
     else if(_state == CoverImageGetting)
     {
-        processCoverImage(content);
+        processCoverImage(url, content);
     }
 }
 
@@ -71,14 +78,18 @@ void SFUpdater::onReplyFinish()
     qDebug() << "SFUpdater::onReplyFinish start ...";
     if(_state == ComicDataGetting)
     {
-        _state = Prepared;
-        qDebug() << "SFUpdater::finish, counts = " << _count;
-
-        emit count(_count);
+        _state = CoverImageGetting;
+        _networkAccessor->get(_imageMap.keys());
+        qDebug() << "SFUpdater:: comicCount = " << _comicCount;
         emit finish();
     }
     else if(_state == CoverImageGetting)
     {
+        _state = Prepared;
+        qDebug() << "SFUpdater:: coverCount = " << _coverCount;
+        qDebug() << "SFUpdater::finish, counts = " << _comicCount;
+
+        emit finish();
     }
 }
 
@@ -125,14 +136,16 @@ QStringList SFUpdater::getPageUrlList(const int &maxPageNumber)
 void SFUpdater::initialize()
 {
     qDebug() << "QFUpdate::initialize start... ";
-    _count = 0;
+    _comicCount = _coverCount = 0;
     _comicInfoList.clear();
     _imageMap.clear();
 }
 
-void SFUpdater::processComicData(const QString &content)
+void SFUpdater::processComicData(const QByteArray &content)
 {
     qDebug() << "SFUpdater::processComicData start ...";
+
+    const QString html(content);
 
     QRegExp regexp("<img src=\"([^\"]+)\"" //cover
                    "[^>]+></a></li>\\s+<li><strong class=\""
@@ -145,7 +158,7 @@ void SFUpdater::processComicData(const QString &content)
                    );
 
     int pos = 0;
-    while ((pos = regexp.indexIn(content, pos)) != -1)
+    while ((pos = regexp.indexIn(html, pos)) != -1)
     {
         ComicInfo info;
         qDebug() << regexp.cap(1);
@@ -156,18 +169,33 @@ void SFUpdater::processComicData(const QString &content)
         info.setLastUpdated(regexp.cap(6));
         info.setDescription(regexp.cap(7).simplified());
 
-        qDebug() << info.getInfo();
+        qDebug() << "SFUpdater::" << info.getInfo();
         _comicInfoList.append(info);
-        //_imageMap
+        _imageMap[regexp.cap(1)] = _comicInfoList.count() - 1;
 
         pos += regexp.matchedLength();
-        qDebug() << "count:" <<  ++_count;
+        qDebug() << "SFUpdater::comicCount:" <<  ++_comicCount;
     }
 }
 
-void SFUpdater::processCoverImage(const QString &content)
+void SFUpdater::processCoverImage(const QString &url,
+                                  const QByteArray &content)
 {
+    qDebug() << "SFUpdater::processCoverImage start ...";
+    QImage cover;
+    if(!cover.loadFromData(content))
+    {
+        qDebug() << "SFUpdater::cover loading failed";
+    }
+
+    ComicInfo info = _comicInfoList[_imageMap[url]];
+    info.setCover(cover);
+    _comicInfoList[_imageMap[url]] = info;
+    emit comicInfo(info);
+
+    qDebug() << "SFUpdater::coverCount:" << ++_coverCount;
 }
+
 
 
 
