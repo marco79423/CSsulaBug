@@ -134,13 +134,14 @@ void SFUpdater::processComicData(const QString &content)
 {
     qDebug() << "SFUpdater::processComicData start ...";
 
-    QRegExp regexp(//"<img src=\"([^\"])\""
-                   "[^<]+[^\"]F14PX\"><a href=\"/HTML/([^/]+)" //keyName
-                   //"[^>]+>([^<]+)" //name
-                   //"[^1]+1\">([^<]+)" //comicAuthor
-                   //"[^\\]]+[^>]+>([^<]+)" //comicType
-                   //"</a> /([^/]+)+/" //lastUpdated
-                   //" \\d+<br />([^<]+)" //description
+    QRegExp regexp("<img src=\"([^\"]+)\"" //cover
+                   "[^>]+></a></li>\\s+<li><strong class=\""
+                   "F14PX\"><a href=\"/HTML/([^/]+)" //keyName
+                   "[^>]+>([^<]+)" //name
+                   "[^1]+1\">([^<]+)" //comicAuthor
+                   "[^\\]]+[^>]+>([^<]+)" //comicType
+                   "</a> /([^/]+)+/" //lastUpdated
+                   " \\d+<br />([^<]+)" //description
                    );
 
     int pos = 0;
