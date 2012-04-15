@@ -4,6 +4,8 @@
 #include <QObject>
 #include <QHash>
 
+#include <comicinfo.h>
+
 class ComicDatabase : public QObject
 {
     Q_OBJECT
@@ -11,13 +13,13 @@ class ComicDatabase : public QObject
 public:
 
     explicit ComicDatabase(QObject *parent = 0);
-    
-signals:
-    
+
+    bool needUpdateCover() const;
+
 public slots:
 
-    void add(QHash<QString, QString> comicInfo);
-    
+    void update(QList<ComicInfo> comicInfo);
+
 };
 
 #endif // COMICDATABASE_H

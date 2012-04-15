@@ -17,9 +17,9 @@ int main(int argc, char *argv[])
     QTextCodec::setCodecForTr(codec);
     QTextCodec::setCodecForLocale(codec);
 
-    //ComicDatabase db;
+    ComicDatabase db;
 
-    SFUpdater updater;
+    /*SFUpdater updater;
     QEventLoop loop;
     QObject::connect(&updater, SIGNAL(finish()), &loop,SLOT(quit()));
     updater.update();
@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
     SFCoverUpdater coverUpdater;
     QObject::connect(&coverUpdater, SIGNAL(finish()), &loop,SLOT(quit()));
     coverUpdater.update(updater.getComicList());
-    loop.exec();
+    loop.exec();*/
 
     //return a.exec();
 }
