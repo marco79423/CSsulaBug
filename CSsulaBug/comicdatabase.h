@@ -3,8 +3,9 @@
 
 #include <QObject>
 #include <QHash>
+#include <QSqlQuery>
 
-#include <comicinfo.h>
+#include "comicinfo.h"
 
 class ComicDatabase : public QObject
 {
@@ -18,8 +19,12 @@ public:
 
 public slots:
 
-    void update(QList<ComicInfo> comicInfo);
+    void update(QList<ComicInfo> comicInfoList);
 
+
+private:
+
+    QSqlQuery doQuery(const QString &query, const QString &error);
 };
 
 #endif // COMICDATABASE_H
