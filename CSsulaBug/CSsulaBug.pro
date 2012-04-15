@@ -15,13 +15,15 @@ SOURCES += main.cpp \
     sfupdater.cpp \
     networkaccessor.cpp \
     comicdatabase.cpp \
-    comicinfo.cpp
+    comicinfo.cpp \
+    sfcoverupdater.cpp
 
 HEADERS  += \
     updatecontroller.h \
     sfupdater.h \
     networkaccessor.h \
     comicdatabase.h \
-    comicinfo.h
+    comicinfo.h \
+    sfcoverupdater.h
 
 FORMS    +=

@@ -15,6 +15,7 @@ public:
     QString getAuthor() const;
     QString getLastUpdated() const;
     QString getDescription() const;
+    QString getCoverUrl() const;
     QImage getCover() const;
 
     void setKey(const QString &key);
@@ -23,9 +24,12 @@ public:
     void setAuthor(const QString &author);
     void setLastUpdated(const QString &lastUpdated);
     void setDescription(const QString &description);
+    void setCoverUrl(const QString &url);
     void setCover(const QImage &cover);
 
     QString getInfo() const;
+
+    bool hasCover() const;
 
 private:
 
@@ -35,7 +39,10 @@ private:
     QString _author;
     QString _lastUpdated;
     QString _description;
+    QString _coverUrl;
     QImage _cover;
+
+    bool _hasCover;
 };
 
 #endif // COMICINFO_H

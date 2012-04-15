@@ -4,6 +4,7 @@
 
 #include "sfupdater.h"
 #include "comicdatabase.h"
+#include "sfcoverupdater.h"
 
 #include <QEventLoop>
 
@@ -22,6 +23,11 @@ int main(int argc, char *argv[])
     QEventLoop loop;
     QObject::connect(&updater, SIGNAL(finish()), &loop,SLOT(quit()));
     updater.update();
+    loop.exec();
+
+    SFCoverUpdater coverUpdater;
+    QObject::connect(&coverUpdater, SIGNAL(finish()), &loop,SLOT(quit()));
+    coverUpdater.update(updater.getComicList());
     loop.exec();
 
     //return a.exec();

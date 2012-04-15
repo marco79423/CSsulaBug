@@ -15,14 +15,12 @@ class SFUpdater : public QObject
 
 public:
 
-    enum State { Prepared, PageNumberGetting,
-                 ComicDataGetting, CoverImageGetting};
+    enum State { Prepared, PageNumberGetting, ComicDataGetting};
 
     explicit SFUpdater(QObject *parent = 0);
     State getState() const;
     QList<ComicInfo> getComicList() const;
     int getComicCounts() const;
-    int getCoverCounts() const;
 
 signals:
 
@@ -35,7 +33,7 @@ public slots:
 
 private slots:
 
-    void onOneReply(const QString &url, const QByteArray &content);
+    void onOneReply(const QByteArray &content);
     void onReplyFinish();
 
 private:
@@ -43,17 +41,14 @@ private:
     NetworkAccessor *_networkAccessor;
     State _state;
     int _comicCount;
-    int _coverCount;
 
     QList<ComicInfo> _comicInfoList;
-    QMap<QString, int> _imageMap;
 
     int getMaxPageNumber(const QString &content);
     QStringList getPageUrlList(const int &maxPageNumber);
 
     void initialize();
-    void processComicData(const QByteArray &content);
-    void processCoverImage(const QString &url, const QByteArray &content);
+    void processComicData(const QString &content);
 };
 
 #endif // SFUPDATER_H

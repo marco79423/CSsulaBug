@@ -1,6 +1,7 @@
 #include "comicinfo.h"
 
 ComicInfo::ComicInfo()
+    :_hasCover(false)
 {
 }
 
@@ -32,6 +33,11 @@ QString ComicInfo::getLastUpdated() const
 QString ComicInfo::getDescription() const
 {
     return _description;
+}
+
+QString ComicInfo::getCoverUrl() const
+{
+    return _coverUrl;
 }
 
 QImage ComicInfo::getCover() const
@@ -69,14 +75,29 @@ void ComicInfo::setDescription(const QString &description)
     _description = description;
 }
 
+void ComicInfo::setCoverUrl(const QString &url)
+{
+    _coverUrl = url;
+}
+
 void ComicInfo::setCover(const QImage &cover)
 {
-    _cover = cover;
+    if(!cover.isNull())
+    {
+        _hasCover = true;
+        _cover = cover;
+    }
 }
 
 QString ComicInfo::getInfo() const
 {
     return QString("key:%1, name:%2, type:%3, author:%4, lastUpdated:%5"
-                   ",description:%6").arg(_key).arg(_name).arg(_type)
-            .arg(_author).arg(_lastUpdated).arg(_description);
+                   ",description:%6, coverUrl: %7")
+            .arg(_key).arg(_name).arg(_type).arg(_author)
+            .arg(_lastUpdated).arg(_description).arg(_coverUrl);
+}
+
+bool ComicInfo::hasCover() const
+{
+    return _hasCover;
 }
