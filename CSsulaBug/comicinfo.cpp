@@ -5,6 +5,11 @@ ComicInfo::ComicInfo()
 {
 }
 
+QString ComicInfo::getSite() const
+{
+    return _site;
+}
+
 QString ComicInfo::getKey() const
 {
     return _key;
@@ -43,6 +48,11 @@ QString ComicInfo::getCoverUrl() const
 QImage ComicInfo::getCover() const
 {
     return _cover;
+}
+
+void ComicInfo::setSite(const QString &site)
+{
+    _site = site;
 }
 
 void ComicInfo::setKey(const QString &key)
@@ -91,9 +101,9 @@ void ComicInfo::setCover(const QImage &cover)
 
 QString ComicInfo::getInfo() const
 {
-    return QString("key:%1, name:%2, type:%3, author:%4, lastUpdated:%5"
-                   ",description:%6, coverUrl: %7")
-            .arg(_key).arg(_name).arg(_type).arg(_author)
+    return QString("site: %1, key:%2, name:%3, type:%4, author:%5,"
+                   "lastUpdated:%6, description:%7, coverUrl: %8")
+            .arg(_site).arg(_key).arg(_name).arg(_type).arg(_author)
             .arg(_lastUpdated).arg(_description).arg(_coverUrl);
 }
 

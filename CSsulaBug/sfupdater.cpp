@@ -138,6 +138,7 @@ void SFUpdater::processComicData(const QString &content)
     while ((pos = regexp.indexIn(content, pos)) != -1)
     {
         ComicInfo info;
+        info.setSite("SF");
         info.setCoverUrl(regexp.cap(1));
         info.setKey(regexp.cap(2));
         info.setName(regexp.cap(3));

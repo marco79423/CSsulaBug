@@ -24,7 +24,6 @@ public slots:
 
 private:
 
-    QSqlQuery doQuery(const QString &query, const QString &error);
 };
 
 #endif // COMICDATABASE_H

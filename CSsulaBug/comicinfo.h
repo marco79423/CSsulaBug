@@ -9,6 +9,7 @@ class ComicInfo
 public:
 
     ComicInfo();
+    QString getSite() const;
     QString getKey() const;
     QString getName() const;
     QString getType() const;
@@ -18,6 +19,7 @@ public:
     QString getCoverUrl() const;
     QImage getCover() const;
 
+    void setSite(const QString &site);
     void setKey(const QString &key);
     void setName(const QString &name);
     void setType(const QString &type);
@@ -33,6 +35,7 @@ public:
 
 private:
 
+    QString _site;
     QString _key;
     QString _name;
     QString _type;

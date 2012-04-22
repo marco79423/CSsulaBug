@@ -1,10 +1,7 @@
 #include <QApplication>
 #include <QTextCodec>
 #include <QTextBrowser>
-
-#include "sfupdater.h"
-#include "comicdatabase.h"
-#include "sfcoverupdater.h"
+#include "updatecontroller.h"
 
 #include <QEventLoop>
 
@@ -17,18 +14,11 @@ int main(int argc, char *argv[])
     QTextCodec::setCodecForTr(codec);
     QTextCodec::setCodecForLocale(codec);
 
-    ComicDatabase db;
-
-    /*SFUpdater updater;
+    UpdateController controller;
     QEventLoop loop;
-    QObject::connect(&updater, SIGNAL(finish()), &loop,SLOT(quit()));
-    updater.update();
+    QObject::connect(&controller, SIGNAL(finish()), &loop,SLOT(quit()));
+    controller.update();
     loop.exec();
-
-    SFCoverUpdater coverUpdater;
-    QObject::connect(&coverUpdater, SIGNAL(finish()), &loop,SLOT(quit()));
-    coverUpdater.update(updater.getComicList());
-    loop.exec();*/
 
     //return a.exec();
 }
