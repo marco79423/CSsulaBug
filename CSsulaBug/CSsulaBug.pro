@@ -16,7 +16,9 @@ SOURCES += main.cpp \
     networkaccessor.cpp \
     comicdatabase.cpp \
     comicinfo.cpp \
-    sfcoverupdater.cpp
+    sfcoverupdater.cpp \
+    mainwindow.cpp \
+    form.cpp
 
 HEADERS  += \
     updatecontroller.h \
@@ -24,6 +26,10 @@ HEADERS  += \
     networkaccessor.h \
     comicdatabase.h \
     comicinfo.h \
-    sfcoverupdater.h
+    sfcoverupdater.h \
+    mainwindow.h \
+    form.h
 
-FORMS    +=
+FORMS    += \
+    mainwindow.ui \
+    form.ui

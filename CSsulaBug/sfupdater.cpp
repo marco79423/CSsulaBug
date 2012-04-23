@@ -148,6 +148,7 @@ void SFUpdater::processComicData(const QString &content)
         info.setDescription(regexp.cap(7).simplified());
 
         qDebug() << "SFUpdater::" << info.getInfo();
+        emit comicInfo(info);
         _comicInfoList.append(info);
 
         pos += regexp.matchedLength();

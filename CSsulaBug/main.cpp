@@ -1,7 +1,7 @@
 #include <QApplication>
 #include <QTextCodec>
 #include <QTextBrowser>
-#include "updatecontroller.h"
+#include "mainwindow.h"
 
 #include <QEventLoop>
 
@@ -14,11 +14,8 @@ int main(int argc, char *argv[])
     QTextCodec::setCodecForTr(codec);
     QTextCodec::setCodecForLocale(codec);
 
-    UpdateController controller;
-    QEventLoop loop;
-    QObject::connect(&controller, SIGNAL(finish()), &loop,SLOT(quit()));
-    controller.update();
-    loop.exec();
 
-    //return a.exec();
+    MainWindow w;
+    w.show();
+    return a.exec();
 }
