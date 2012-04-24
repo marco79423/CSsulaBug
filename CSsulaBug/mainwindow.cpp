@@ -1,13 +1,21 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "form.h"
+#include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent)
-    :QMainWindow(parent), ui(new Ui::MainWindow)
+    :QMainWindow(parent), _ui(new Ui::MainWindow)
 {
-    ui->setupUi(this);
+    _ui->setupUi(this);
+    _form = new Form(this);
+    setCentralWidget(_form);
+    connect(_form, SIGNAL(stateChanged(const QString&)),
+            _ui->statusbar, SLOT(showMessage(const QString&)));
+
+    _form->update();
 }
 
 MainWindow::~MainWindow()
 {
-    delete ui;
+    delete _ui;
 }

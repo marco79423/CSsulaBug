@@ -21,13 +21,26 @@ public:
 
     ~Form();
     
+signals:
+
+    void stateChanged(const QString &state);
+
+public slots:
+
+    void update();
+    void download();
+
 private slots:
 
+    void setState(const QString &state);
     void updateOneEntry(const ComicInfo& comicInfo);
+    void done();
 
 private:
 
     Ui::Form *_ui;
+
+    QString _state;
     QStandardItemModel  *_model;
     SFUpdater *_updater;
 };

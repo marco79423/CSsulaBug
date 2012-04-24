@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created: Mon Apr 23 23:56:52 2012
+** Created: Tue Apr 24 15:13:37 2012
 **      by: Qt User Interface Compiler version 4.7.4
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -18,9 +18,7 @@
 #include <QtGui/QMainWindow>
 #include <QtGui/QMenuBar>
 #include <QtGui/QStatusBar>
-#include <QtGui/QVBoxLayout>
 #include <QtGui/QWidget>
-#include "form.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -28,8 +26,6 @@ class Ui_MainWindow
 {
 public:
     QWidget *centralwidget;
-    QVBoxLayout *verticalLayout;
-    Form *widget;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -40,13 +36,6 @@ public:
         MainWindow->resize(800, 600);
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
-        verticalLayout = new QVBoxLayout(centralwidget);
-        verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
-        widget = new Form(centralwidget);
-        widget->setObjectName(QString::fromUtf8("widget"));
-
-        verticalLayout->addWidget(widget);
-
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName(QString::fromUtf8("menubar"));

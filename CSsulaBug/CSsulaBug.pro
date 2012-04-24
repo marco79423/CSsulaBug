@@ -11,20 +11,16 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp \
-    updatecontroller.cpp \
     sfupdater.cpp \
     networkaccessor.cpp \
-    comicdatabase.cpp \
     comicinfo.cpp \
     sfcoverupdater.cpp \
     mainwindow.cpp \
     form.cpp
 
 HEADERS  += \
-    updatecontroller.h \
     sfupdater.h \
     networkaccessor.h \
-    comicdatabase.h \
     comicinfo.h \
     sfcoverupdater.h \
     mainwindow.h \
