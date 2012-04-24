@@ -6,6 +6,7 @@
 class QStandardItemModel;
 class ComicInfo;
 class SFUpdater;
+class DownloadController;
 
 namespace Ui {
 class Form;
@@ -43,6 +44,7 @@ private:
     QString _state;
     QStandardItemModel  *_model;
     SFUpdater *_updater;
+    DownloadController *_downloadController;
 };
 
 #endif // FORM_H

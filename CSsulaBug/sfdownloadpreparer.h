@@ -5,8 +5,7 @@
 #include <QStringList>
 #include <QHash>
 
-class QNetworkAccessManager;
-class QNetworkReply;
+class NetworkAccessor;
 
 class SFDownloadPreparer
     :public QObject
@@ -32,11 +31,12 @@ public slots:
 
 private slots:
 
-    void onReply(QNetworkReply *reply);
+    void onOneReply(const QString &url, const QByteArray &content);
+    void onReplyFinish();
 
 private:
 
-    QNetworkAccessManager *_networkAccessManager;
+    NetworkAccessor *_networkAccessor;
 
     State _state;
 
@@ -46,11 +46,8 @@ private:
 
     QHash<QString, QStringList> _urlListHash;
 
-    QStringList _checkList;
-
     void initialize();
     void listChapterName(const QString &content);
-    void prepareListingUrl();
     void listUrl(const QString &chapterName, const QString &content);
 };
 

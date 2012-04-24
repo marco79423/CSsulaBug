@@ -2,7 +2,7 @@
 #include <QTextCodec>
 #include <QTextBrowser>
 #include "mainwindow.h"
-
+#include "downloadercontroller.h"
 #include <QEventLoop>
 
 int main(int argc, char *argv[])
@@ -13,7 +13,6 @@ int main(int argc, char *argv[])
     QTextCodec::setCodecForCStrings(codec);
     QTextCodec::setCodecForTr(codec);
     QTextCodec::setCodecForLocale(codec);
-
 
     MainWindow w;
     w.show();

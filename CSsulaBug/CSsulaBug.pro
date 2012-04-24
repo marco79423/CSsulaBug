@@ -16,7 +16,9 @@ SOURCES += main.cpp \
     comicinfo.cpp \
     sfcoverupdater.cpp \
     mainwindow.cpp \
-    form.cpp
+    form.cpp \
+    sfdownloadpreparer.cpp \
+    downloadcontroller.cpp
 
 HEADERS  += \
     sfupdater.h \
@@ -24,7 +26,9 @@ HEADERS  += \
     comicinfo.h \
     sfcoverupdater.h \
     mainwindow.h \
-    form.h
+    form.h \
+    sfdownloadpreparer.h \
+    downloadcontroller.h
 
 FORMS    += \
     mainwindow.ui \
