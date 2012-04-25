@@ -11,6 +11,8 @@ MainWindow::MainWindow(QWidget *parent)
     setCentralWidget(_form);
     connect(_form, SIGNAL(stateChanged(const QString&)),
             _ui->statusbar, SLOT(showMessage(const QString&)));
+    connect(_form, SIGNAL(message(const QString&)),
+            _ui->statusbar, SLOT(showMessage(const QString&)));
 
     _form->update();
 }

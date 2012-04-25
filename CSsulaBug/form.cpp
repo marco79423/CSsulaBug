@@ -30,6 +30,8 @@ Form::Form(QWidget *parent)
     connect(_updater, SIGNAL(finish()), SLOT(done()));
 
     _downloadController = new DownloadController(this);
+    connect(_downloadController, SIGNAL(message(const QString&))
+            ,SIGNAL(message(const QString&)));
     connect(_downloadController, SIGNAL(finish()), SLOT(done()));
 }
 

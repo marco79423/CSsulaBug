@@ -74,6 +74,7 @@ void DownloadController::onOneReply(const QString& url,
     file.close();
 
     qDebug() << "DownloaderController:: downloaded " << filePath;
+    emit message( QString("have download ") + filePath);
     _downloadHash.remove(url);
 }
 

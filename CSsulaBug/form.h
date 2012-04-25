@@ -25,6 +25,7 @@ public:
 signals:
 
     void stateChanged(const QString &state);
+    void message(const QString &state);
 
 public slots:
 

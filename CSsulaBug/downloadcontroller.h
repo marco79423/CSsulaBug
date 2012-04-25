@@ -20,6 +20,7 @@ public:
 signals:
     
     void finish();
+    void message(const QString &);
 
 public slots:
 
