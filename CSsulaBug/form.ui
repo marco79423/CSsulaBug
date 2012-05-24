@@ -21,6 +21,9 @@
      </item>
      <item>
       <widget class="QPushButton" name="downloadButton">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="text">
         <string>Download</string>
        </property>

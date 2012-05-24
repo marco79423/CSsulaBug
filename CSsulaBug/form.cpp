@@ -85,6 +85,7 @@ void Form::done()
         setState("Prepared");
     if(_state == "Downloading")
         setState("Prepared");
+    _ui->downloadButton->setEnabled(true);
 }
 
 void Form::update()
@@ -100,6 +101,8 @@ void Form::download()
         qCritical() << "Form::isn't Prepared";
         return;
     }
+
+    _ui->downloadButton->setEnabled(false);
 
     setState("Downloading");
 
