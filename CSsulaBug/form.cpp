@@ -18,8 +18,7 @@ Form::Form(QWidget *parent)
     _model->setHeaderData(4, Qt::Horizontal, tr("LastUpdated"));
 
     _ui->tableView->setModel(_model);
-    _ui->tableView->setSelectionBehavior(QTableView::SelectRows);
-    _ui->tableView->setEditTriggers(QTableView::NoEditTriggers);
+
 
     connect(_ui->downloadButton, SIGNAL(clicked()), SLOT(download()));
 
@@ -59,7 +58,7 @@ void Form::updateOneEntry(const ComicInfo &comicInfo)
                          << (new QStandardItem(comicInfo.getAuthor()))
                          << (new QStandardItem(comicInfo.getLastUpdated()))
                       );
-    _ui->tableView->resizeColumnsToContents();
+    //_ui->tableView->resizeColumnsToContents();
 }
 
 void Form::done()
