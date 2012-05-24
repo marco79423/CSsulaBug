@@ -16,13 +16,13 @@ SFDownloadPreparer::SFDownloadPreparer(QObject *parent) :
 
 QStringList SFDownloadPreparer::getChapterNameList()
 {
-    if(!_state != Prepared) qCritical() << tr("SFDownloader:: isn't prepared");
+    if(_state != Prepared) qCritical() << tr("SFDownloader:: isn't prepared");
     return _chapterNameList;
 }
 
 QStringList SFDownloadPreparer::getUrlList(const QString &chapterName)
 {
-    if(!_state != Prepared) qCritical() << tr("SFDownloader:: isn't prepared");
+    if(_state != Prepared) qCritical() << tr("SFDownloader:: isn't prepared");
     return _urlListHash[chapterName];
 }
 
@@ -44,7 +44,7 @@ void SFDownloadPreparer::onOneReply(const QString &url,
     }
     else if(_state == UrlListing) //列出所有張圖
     {
-        QRegExp chapterExp("\\.sfacg\\.com/Utility/\\d+/(\\d+).js");
+        QRegExp chapterExp("\\.sfacg\\.com/Utility/\\d+/(\\d+j?).js");
         chapterExp.indexIn(url);
         QString chapterName = chapterExp.cap(1);
 

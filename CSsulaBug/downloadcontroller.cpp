@@ -30,6 +30,7 @@ void DownloadController::downloadImages()
     qDebug() << "DownloaderController::downloadImages start ...";
 
     QStringList chapterList = _downloadPreparer->getChapterNameList();
+
     foreach(QString chapterName, chapterList)
     {
         QString dirPath = _comicName + "/" + chapterName;
@@ -42,6 +43,7 @@ void DownloadController::downloadImages()
         }
 
         QStringList imageList = _downloadPreparer->getUrlList(chapterName);
+
         for(int i = 0; i < imageList.count(); i++)
         {
             QString filePath = QString("%1/%2.%3")
@@ -81,7 +83,9 @@ void DownloadController::onOneReply(const QString& url,
 void DownloadController::onReplyFinish()
 {
     if(_downloadHash.empty())
+    {
         emit finish();
+    }
 }
 
 

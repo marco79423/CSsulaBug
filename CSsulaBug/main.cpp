@@ -2,7 +2,6 @@
 #include <QTextCodec>
 #include <QTextBrowser>
 #include "mainwindow.h"
-#include "downloadercontroller.h"
 #include <QEventLoop>
 
 int main(int argc, char *argv[])
