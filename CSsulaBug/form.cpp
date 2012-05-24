@@ -3,11 +3,13 @@
 #include "sfupdater.h"
 #include "downloadcontroller.h"
 #include <QStandardItemModel>
+#include <QSortFilterProxyModel>
 #include <QDebug>
 
 Form::Form(QWidget *parent)
     :QWidget(parent), _ui(new Ui::Form)
 {
+    //UI
     _ui->setupUi(this);
     _model = new QStandardItemModel(this);
     _model->setColumnCount(5);
@@ -17,10 +19,19 @@ Form::Form(QWidget *parent)
     _model->setHeaderData(3, Qt::Horizontal, tr("Author"));
     _model->setHeaderData(4, Qt::Horizontal, tr("LastUpdated"));
 
-    _ui->tableView->setModel(_model);
+    //Filter
+    _proxyModel = new QSortFilterProxyModel(this);
+    _proxyModel->setSourceModel(_model);
+    _proxyModel->setDynamicSortFilter(true);
+
+    connect(_ui->lineEdit, SIGNAL(textChanged(QString)),
+            SLOT(setFilter(QString)));
+
+    _ui->tableView->setModel(_proxyModel);
 
     connect(_ui->downloadButton, SIGNAL(clicked()), SLOT(download()));
 
+    //Content
     _updater = new SFUpdater(this);
 
     connect(_updater, SIGNAL(comicInfo(const ComicInfo&)),
@@ -31,6 +42,8 @@ Form::Form(QWidget *parent)
     connect(_downloadController, SIGNAL(message(const QString&))
             ,SIGNAL(message(const QString&)));
     connect(_downloadController, SIGNAL(finish()), SLOT(done()));
+
+
 }
 
 Form::~Form()
@@ -58,6 +71,12 @@ void Form::updateOneEntry(const ComicInfo &comicInfo)
                          << (new QStandardItem(comicInfo.getLastUpdated()))
                       );
     _ui->tableView->resizeColumnsToContents();
+}
+
+void Form::setFilter(const QString &filter)
+{
+    QRegExp exp(filter, Qt::CaseInsensitive);
+    _proxyModel->setFilterRegExp(exp);
 }
 
 void Form::done()

@@ -4,6 +4,7 @@
 #include <QWidget>
 
 class QStandardItemModel;
+class QSortFilterProxyModel;
 class ComicInfo;
 class SFUpdater;
 class DownloadController;
@@ -36,6 +37,7 @@ private slots:
 
     void setState(const QString &state);
     void updateOneEntry(const ComicInfo& comicInfo);
+    void setFilter(const QString& filter);
     void done();
 
 private:
@@ -44,6 +46,7 @@ private:
 
     QString _state;
     QStandardItemModel  *_model;
+    QSortFilterProxyModel *_proxyModel;
     SFUpdater *_updater;
     DownloadController *_downloadController;
 };
