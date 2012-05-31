@@ -33,3 +33,16 @@ HEADERS  += \
 FORMS    += \
     mainwindow.ui \
     form.ui
+
+OTHER_FILES +=
+
+static {
+    QMAKE_LFLAGS += -static-libgcc
+    CONFIG += static
+    CONFIG += staticlib
+    DEFINES += STATIC
+    message(" static build ")
+}
+
+RESOURCES += \
+    resource.qrc

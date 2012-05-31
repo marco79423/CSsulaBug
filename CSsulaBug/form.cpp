@@ -4,6 +4,8 @@
 #include "downloadcontroller.h"
 #include <QStandardItemModel>
 #include <QSortFilterProxyModel>
+#include <QFile>
+#include <QDataStream>
 #include <QDebug>
 
 Form::Form(QWidget *parent)
@@ -43,7 +45,20 @@ Form::Form(QWidget *parent)
             ,SIGNAL(message(const QString&)));
     connect(_downloadController, SIGNAL(finish()), SLOT(done()));
 
+    //table
+    QFile convertz(":/convertz.res");
+    if(!convertz.open(QIODevice::ReadOnly))
+    {
+        qCritical() << "Form::can't open convertz" << convertz.errorString();
+        getchar();
+    }
 
+    QTextStream in(&convertz);
+    QString simplified = in.readLine();
+    QString traditional = in.readLine();
+
+    for(int i=0; i < simplified.size(); i++)
+        _convertTable[simplified[i]] = traditional[i];
 }
 
 Form::~Form()
@@ -64,11 +79,11 @@ void Form::setState(const QString &state)
 void Form::updateOneEntry(const ComicInfo &comicInfo)
 {
     _model->appendRow(QList<QStandardItem*>()
-                         << (new QStandardItem(comicInfo.getName()))
-                         << (new QStandardItem(comicInfo.getSite()))
-                         << (new QStandardItem(comicInfo.getType()))
-                         << (new QStandardItem(comicInfo.getAuthor()))
-                         << (new QStandardItem(comicInfo.getLastUpdated()))
+                         << (new QStandardItem(convertToTraditional(comicInfo.getName())))
+                         << (new QStandardItem(convertToTraditional(comicInfo.getSite())))
+                         << (new QStandardItem(convertToTraditional(comicInfo.getType())))
+                         << (new QStandardItem(convertToTraditional(comicInfo.getAuthor())))
+                         << (new QStandardItem(convertToTraditional(comicInfo.getLastUpdated())))
                       );
     _ui->tableView->resizeColumnsToContents();
 }
@@ -77,6 +92,14 @@ void Form::setFilter(const QString &filter)
 {
     QRegExp exp(filter, Qt::CaseInsensitive);
     _proxyModel->setFilterRegExp(exp);
+}
+
+QString Form::convertToTraditional(const QString &content)
+{
+    QString traditional;
+    foreach(QChar word, content)
+        traditional += _convertTable.value(word, word);
+    return traditional;
 }
 
 void Form::done()

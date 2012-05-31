@@ -2,6 +2,7 @@
 #define FORM_H
 
 #include <QWidget>
+#include <QHash>
 
 class QStandardItemModel;
 class QSortFilterProxyModel;
@@ -38,6 +39,7 @@ private slots:
     void setState(const QString &state);
     void updateOneEntry(const ComicInfo& comicInfo);
     void setFilter(const QString& filter);
+    QString convertToTraditional(const QString &content);
     void done();
 
 private:
@@ -49,6 +51,7 @@ private:
     QSortFilterProxyModel *_proxyModel;
     SFUpdater *_updater;
     DownloadController *_downloadController;
+    QHash<QChar, QChar> _convertTable;
 };
 
 #endif // FORM_H

@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>convertz.res</file>
+    </qresource>
+</RCC>
