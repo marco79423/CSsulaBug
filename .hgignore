@@ -1,5 +1,7 @@
 syntax: glob
-CSsulaBug/debug/
-DownloadController/debug/
-Lister/debug/
-CSsulaBug/object_script.
+*.o
+*ui_*
+*/debug/*
+*/Makefile*
+*moc_*
+*qrc_*
