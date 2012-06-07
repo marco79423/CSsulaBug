@@ -5,3 +5,4 @@ syntax: glob
 */Makefile*
 *moc_*
 *qrc_*
+*.pyc
