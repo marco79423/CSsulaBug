@@ -26,7 +26,7 @@ void NetworkAccessor::get(const QString &url)
     qDebug() << "NetworkAccessor::send request " << request.url();
 }
 
-void NetworkAccessor::get(const QList<QString> &urlList)
+void NetworkAccessor::get(const QStringList &urlList)
 {
     qDebug() << "NetworkAccessor::start get...";
 

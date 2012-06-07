@@ -2,6 +2,7 @@
 #define NETWORKACCESSOR_H
 
 #include <QObject>
+#include <QStringList>
 #include <QHash>
 
 class QNetworkAccessManager;
@@ -16,7 +17,7 @@ public:
     explicit NetworkAccessor(QObject *parent = 0);
     
     void get(const QString &url);
-    void get(const QList<QString> &urlList);
+    void get(const QStringList &urlList);
 
 signals:
     
