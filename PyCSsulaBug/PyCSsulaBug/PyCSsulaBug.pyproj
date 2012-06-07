@@ -28,6 +28,7 @@
     <Compile Include="misc.py" />
     <Compile Include="network.py" />
     <Compile Include="pycssulabug.py" />
+    <Compile Include="tools.py" />
     <Compile Include="views.py" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" />

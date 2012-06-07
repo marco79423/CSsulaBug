@@ -7,13 +7,13 @@ class Queue:
     def enqueue(self, item):
         self.qList.append(item)
 
-    def dequeue(self, item):
+    def dequeue(self):
         item = self.qList[0]
         self.qList = self.qList[1:]
         return item
 
     def top(self):
-        return qList[0]
+        return self.qList[0]
 
     def isEmpty(self):
         return len(self.qList) == 0
