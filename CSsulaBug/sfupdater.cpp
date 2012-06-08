@@ -39,7 +39,7 @@ void SFUpdater::update()
     _state = PageNumberGetting;
 
     qDebug() << "SFUpdate::get http://comic.sfacg.com/Catalog/";
-    _networkAccessor->get("http://comic.sfacg.com/Catalog/");
+    //_networkAccessor->get("http://comic.sfacg.com/Catalog/");
 }
 
 void SFUpdater::onOneReply(const QByteArray &content)
@@ -54,7 +54,7 @@ void SFUpdater::onOneReply(const QByteArray &content)
         const QStringList pagePageUrlList = getPageUrlList(maxPageNumber);
 
         _state = ComicDataGetting;
-        _networkAccessor->get(pagePageUrlList);
+        //_networkAccessor->get(pagePageUrlList);
     }
     else if(_state == ComicDataGetting)
     {

@@ -53,7 +53,7 @@ void SFCoverUpdater::update(const QList<ComicInfo> &comicInfoList)
     }
 
     if(!coverUrlList.isEmpty())
-        _networkAccessor->get(coverUrlList);
+       ;// _networkAccessor->get(coverUrlList);
 }
 
 

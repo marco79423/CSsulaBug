@@ -6,8 +6,25 @@ import tools
 
 logger = misc.getLogger()
 
-class Downloader:
-    pass
+class Downloader(QtCore.QObject):
+    def __init__(self, parent=None):
+        super(Downloader, self).__init__(parent)
+    
+    def download(self, task):
+        """
+        下載 task 任務
+        task['urlList'] 所要下載的內容
+        task['pair']['url'] 其對應的檔案路徑
+        """
+        id = self._networkAccessor.get(task['urlList'])
+        self._pairList[id] = task['pair']
+
+    def _initialize(self):
+        """
+        初始化變數
+        """
+        self._networkAccessor = NetworkAccessor(self)
+        self._pairList = dict()
 
 class ImageDownloader(Downloader):
     pass
@@ -25,13 +42,12 @@ class NetworkAccessor(QtCore.QObject):
 
     @QtCore.pyqtSlot(str)
     @QtCore.pyqtSlot(list)
-    def get(self, urlList):
+    def get(self, id, urlList):
         """
-        url 是要下載的網址，呼叫完後會回傳該任務的識別值 id
+        id 為識別值，url 是要下載的網址
         get 是決定將要下載的任務，實際的下載是由 _startAccess 操作
         """
-        self._idCount += 1
-        newTask = dict(id=self._idCount, urlList=[])
+        newTask = dict(id=id, urlList=[])
 
         if type(urlList) == str:
             url = urlList
@@ -46,8 +62,6 @@ class NetworkAccessor(QtCore.QObject):
         
         self._taskQueue.enqueue(newTask)
         self._startAccess()
-
-        return self._idCount
   
     def _initialize(self):
         """
@@ -108,6 +122,6 @@ if __name__ in "__main__":
     import sys
     app = QtCore.QCoreApplication(sys.argv)
     n = NetworkAccessor()
-    n.get("http://cssula.nba.nctu.edu.tw/~marco/DoNotPress.exe")
-    n.get(["http://cssula.nba.nctu.edu.tw/~marco/DoNotPress.exe", "http://cssula.nba.nctu.edu.tw/~marco/GameOfLife.exe"])
+    n.get(0, "http://cssula.nba.nctu.edu.tw/~marco/DoNotPress.exe")
+    n.get(1, ["http://cssula.nba.nctu.edu.tw/~marco/DoNotPress.exe", "http://cssula.nba.nctu.edu.tw/~marco/GameOfLife.exe"])
     sys.exit(app.exec_())

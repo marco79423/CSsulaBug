@@ -56,7 +56,7 @@ void DownloadController::downloadImages()
                 imageList.removeAll(imageList[i]);
         }
 
-        _networkAccessor->get(imageList);
+        //_networkAccessor->get(imageList);
     }
 }
 

@@ -32,7 +32,7 @@ void SFDownloadPreparer::prepare(const QString &key)
     initialize();
 
     _state = ChapterNameListing;
-    _networkAccessor->get(QString("http://comic.sfacg.com/HTML/%1/").arg(key));
+    //_networkAccessor->get(QString("http://comic.sfacg.com/HTML/%1/").arg(key));
 }
 
 void SFDownloadPreparer::onOneReply(const QString &url,
@@ -108,7 +108,7 @@ void SFDownloadPreparer::listChapterName(const QString &content)
     }
 
     _state = UrlListing;
-    _networkAccessor->get(chapterUrlList);
+    //_networkAccessor->get(chapterUrlList);
 }
 
 

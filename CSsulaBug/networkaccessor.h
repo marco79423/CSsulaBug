@@ -18,8 +18,8 @@ public:
 
     explicit NetworkAccessor(QObject *parent = 0);
     
-    int get(const QString &url);
-    int get(const QStringList &urlList);
+    void get(const int &id, const QString &url);
+    void get(const int &id, const QStringList &urlList);
 
 signals:
     
@@ -42,7 +42,6 @@ private:
     QQueue<Task> _taskQueue;
 
     bool _isAccessing;
-    int _idCount;
 
     void _initialize();
     void _startAccess();

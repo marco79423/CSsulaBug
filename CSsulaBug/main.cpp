@@ -18,8 +18,8 @@ int main(int argc, char *argv[])
     //w.show();
 
     NetworkAccessor n;
-    n.get("http://cssula.nba.nctu.edu.tw/~marco/DoNotPress.exe");
-    n.get(QStringList() << "http://cssula.nba.nctu.edu.tw/~marco/DoNotPress.exe"
+    n.get(0, "http://cssula.nba.nctu.edu.tw/~marco/DoNotPress.exe");
+    n.get(1, QStringList() << "http://cssula.nba.nctu.edu.tw/~marco/DoNotPress.exe"
               << "http://cssula.nba.nctu.edu.tw/~marco/GameOfLife.exe");
     return a.exec();
 }

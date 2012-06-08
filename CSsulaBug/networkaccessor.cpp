@@ -3,7 +3,7 @@
 #include <QDebug>
 
 NetworkAccessor::NetworkAccessor(QObject *parent) :
-    QObject(parent), _isAccessing(false), _idCount(0)
+    QObject(parent), _isAccessing(false)
 {
     _initialize();
 
@@ -11,34 +11,32 @@ NetworkAccessor::NetworkAccessor(QObject *parent) :
             SLOT(onManagerFinish(QNetworkReply*)));
 }
 
-int NetworkAccessor::get(const QString &url)
+void NetworkAccessor::get(const int &id, const QString &url)
 {
     /*
-    *   url 是要下載的網址，呼叫完後會回傳該任務的識別值 id
+    *   id 為識別值，url 是要下載的網址
     *   get 是決定將要下載的任務，實際的下載是由 _startAccess 操作
     */
 
     Task newTask;
-    newTask.id = ++_idCount;
+    newTask.id = id;
 
     newTask.urlList.append(url);
     qDebug() << "NetworkAccessor:get:準備下載 " << url;
 
     _taskQueue.enqueue(newTask);
     _startAccess();
-
-    return _idCount;
 }
 
-int NetworkAccessor::get(const QStringList &urlList)
+void NetworkAccessor::get(const int &id, const QStringList &urlList)
 {
     /*
-     *urlList 是要下載的網址清單，呼叫完後會回傳該任務的識別值 id
+     *id 為識別值，url 是要下載的網址urlList 是要下載的網址清單
      *get 是決定將要下載的任務，實際的下載是由 _startAccess 操作
      */
 
     Task newTask;
-    newTask.id = ++_idCount;
+    newTask.id = id;
 
     foreach(QString url, urlList)
     {
@@ -47,8 +45,6 @@ int NetworkAccessor::get(const QStringList &urlList)
     }
     _taskQueue.enqueue(newTask);
     _startAccess();
-
-    return _idCount;
 }
 
 
