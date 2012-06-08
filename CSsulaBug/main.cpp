@@ -3,6 +3,7 @@
 #include <QTextBrowser>
 #include "mainwindow.h"
 #include <QEventLoop>
+#include "downloader.h"
 #include "networkaccessor.h"
 
 int main(int argc, char *argv[])
@@ -17,9 +18,29 @@ int main(int argc, char *argv[])
     //MainWindow w;
     //w.show();
 
-    NetworkAccessor n;
-    n.get(0, "http://cssula.nba.nctu.edu.tw/~marco/DoNotPress.exe");
-    n.get(1, QStringList() << "http://cssula.nba.nctu.edu.tw/~marco/DoNotPress.exe"
-              << "http://cssula.nba.nctu.edu.tw/~marco/GameOfLife.exe");
+    QString url1 = "http://cssula.nba.nctu.edu.tw/~marco/DoNotPress.exe";
+    QString url2 = "http://cssula.nba.nctu.edu.tw/~marco/GameOfLife.exe";
+
+    /* for NetworkAccessor
+    NetworkAccessor accessor;
+    accessor.get(0, url1);
+    accessor.get(1, QStringList() << url1 << url2);
+    //*/
+
+    //* for Downloader
+    Downloader::Task task1;
+    task1.urlList.append(url1);
+    task1.pathList[url1] = "1a.exe";
+
+    Downloader::Task task2;
+    task2.urlList << url1 << url2;
+    task2.pathList[url1] = "2a.exe";
+    task2.pathList[url2] = "2b.exe";
+
+    Downloader d;
+    d.download(task1);
+    d.download(task2);
+    //*/
+
     return a.exec();
 }

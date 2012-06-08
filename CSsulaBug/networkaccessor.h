@@ -23,8 +23,8 @@ public:
 
 signals:
     
-    void reply(int id, QNetworkReply *networkReply);
-    void finish(int id);
+    void reply(const int &id, QNetworkReply *networkReply);
+    void finish(const int &id);
 
 private slots:
 

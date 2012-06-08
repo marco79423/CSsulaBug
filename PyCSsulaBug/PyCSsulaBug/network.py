@@ -22,6 +22,8 @@ class Downloader(QtCore.QObject):
         """
         self._taskIdCount += 1
         self._networkAccessor.get(self._taskIdCount, task['urlList'])
+        logger.info("Downloader:download: ¤U¸ü¥ô°È %d", self._taskIdCount)
+
         self._pathList[self._taskIdCount] = task['pathList']
 
     @QtCore.pyqtSlot(int, QtNetwork.QNetworkReply)

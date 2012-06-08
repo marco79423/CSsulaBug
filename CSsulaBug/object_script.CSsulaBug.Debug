@@ -8,6 +8,7 @@ INPUT(
 ./debug\form.o
 ./debug\sfdownloadpreparer.o
 ./debug\downloadcontroller.o
+./debug\downloader.o
 ./debug\moc_sfupdater.o
 ./debug\moc_networkaccessor.o
 ./debug\moc_sfcoverupdater.o
@@ -15,5 +16,6 @@ INPUT(
 ./debug\moc_form.o
 ./debug\moc_sfdownloadpreparer.o
 ./debug\moc_downloadcontroller.o
+./debug\moc_downloader.o
 ./debug\qrc_resource.o
 );

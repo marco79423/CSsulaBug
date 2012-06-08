@@ -1,0 +1,69 @@
+#include "downloader.h"
+#include "networkaccessor.h"
+#include <QNetworkReply>
+#include <QFile>
+#include <QDebug>
+
+Downloader::Downloader(QObject *parent) :
+    QObject(parent), _taskIdCount(0)
+{
+    _initialize();
+    connect(_networkAccessor, SIGNAL(reply(const int&,QNetworkReply*)),
+            SLOT(_onAccessorReply(const int&,QNetworkReply*)));
+    connect(_networkAccessor, SIGNAL(finish(const int&)),
+            SLOT(_onAccessorFinish(const int&)));
+}
+
+void Downloader::download(const Downloader::Task &task)
+{
+    /*
+      *下載 task 任務
+      * task.urlList 所要下載的內容
+      * task.pathList[url] 所對應的檔案路徑
+      */
+    _networkAccessor->get(++_taskIdCount, task.urlList);
+    qDebug() << "Downloader:download: 下載任務 " << _taskIdCount;
+
+    _pathList[_taskIdCount] = task.pathList;
+}
+
+void Downloader::_onAccessorReply(const int &id, QNetworkReply *networkReply)
+{
+    /*
+      *處理 NetworkAccessor 的回應，把內容寫至目標路徑
+      */
+    QString url = networkReply->url().toString();
+    QString path = _pathList[id][url];
+
+    QFile file(path);
+    if(!file.open(QFile::WriteOnly))
+    {
+        qCritical() << "Downloader:_onAccessorReply: 開啟 " << path << " 失敗";
+        return;
+    }
+
+    file.write(networkReply->readAll());
+    file.close();
+    qDebug() << "Downloader:_onAccessorReply: 已下載 " << path;
+
+    _pathList[id].remove(url);
+}
+
+void Downloader::_onAccessorFinish(const int &id)
+{
+    /*
+      * 當一項任務下載完後，刪除該任務資料
+      */
+
+    qDebug() << "Downloader:_onAccessorFinish: id " << id << " 下載完成";
+    _pathList.remove(id);
+}
+
+void Downloader::_initialize()
+{
+    /*
+      *初始化變數
+      */
+
+    _networkAccessor = new NetworkAccessor(this);
+}

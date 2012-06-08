@@ -8,6 +8,7 @@ INPUT(
 ./release\form.o
 ./release\sfdownloadpreparer.o
 ./release\downloadcontroller.o
+./release\downloader.o
 ./release\moc_sfupdater.o
 ./release\moc_networkaccessor.o
 ./release\moc_sfcoverupdater.o
@@ -15,5 +16,6 @@ INPUT(
 ./release\moc_form.o
 ./release\moc_sfdownloadpreparer.o
 ./release\moc_downloadcontroller.o
+./release\moc_downloader.o
 ./release\qrc_resource.o
 );

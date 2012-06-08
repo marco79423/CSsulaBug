@@ -37,7 +37,6 @@ void NetworkAccessor::get(const int &id, const QStringList &urlList)
 
     Task newTask;
     newTask.id = id;
-
     foreach(QString url, urlList)
     {
         newTask.urlList.append(url);
