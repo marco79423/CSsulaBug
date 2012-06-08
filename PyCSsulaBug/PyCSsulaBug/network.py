@@ -9,25 +9,53 @@ logger = misc.getLogger()
 class Downloader(QtCore.QObject):
     def __init__(self, parent=None):
         super(Downloader, self).__init__(parent)
-    
+        self._initialize()
+
+        self._networkAccessor.reply.connect(self._onAccessorReply)
+        self._networkAccessor.finish.connect(self._onAccessorFinish)
+
     def download(self, task):
         """
         下載 task 任務
         task['urlList'] 所要下載的內容
-        task['pair']['url'] 其對應的檔案路徑
+        task['pathList']['url'] 其對應的檔案路徑
         """
-        id = self._networkAccessor.get(task['urlList'])
-        self._pairList[id] = task['pair']
+        self._taskIdCount += 1
+        self._networkAccessor.get(self._taskIdCount, task['urlList'])
+        self._pathList[self._taskIdCount] = task['pathList']
+
+    def _onAccessorReply(self, id, networkReply):
+        """
+        處理 NetworkAccessor 的回應，把內容寫至目標路徑
+        """
+        url = str(networkReply.url().toString())
+        path = self._pathList[id][url]
+
+        file = QtCore.QFile(path)
+        if not file.open(QtCore.QFile.WriteOnly):
+            logger.error("Downloader:_onAccessorReply: 開啟 %s 失敗", path)
+            return
+        file.write(networkReply.readAll())
+        file.close()
+        logger.info("Downloader:_onAccessorReply: 已下載 %s", path)
+
+        del self._pathList[id][url]
+
+    def _onAccessorFinish(self, id):
+        """
+        當一項任務下載完後，刪除該任務資料
+        """
+        logger.info("Downloader:_onAccessorFinish: id %d 下載完成", id)
+        del self._pathList[id]
 
     def _initialize(self):
         """
         初始化變數
         """
         self._networkAccessor = NetworkAccessor(self)
-        self._pairList = dict()
+        self._pathList = dict()
+        self._taskIdCount = 0
 
-class ImageDownloader(Downloader):
-    pass
 
 class NetworkAccessor(QtCore.QObject):
 
@@ -35,7 +63,7 @@ class NetworkAccessor(QtCore.QObject):
     finish = QtCore.pyqtSignal(int)
 
     def __init__(self, parent=None):
-        super(NetworkAccessor, self).__init__(parent)
+        super(NetworkAccessor, self).__init__(parent) 
         self._initialize()
         
         self._networkAccessManager.finished.connect(self._onManagerFinish)
@@ -121,7 +149,15 @@ class NetworkAccessor(QtCore.QObject):
 if __name__ in "__main__":
     import sys
     app = QtCore.QCoreApplication(sys.argv)
-    n = NetworkAccessor()
-    n.get(0, "http://cssula.nba.nctu.edu.tw/~marco/DoNotPress.exe")
-    n.get(1, ["http://cssula.nba.nctu.edu.tw/~marco/DoNotPress.exe", "http://cssula.nba.nctu.edu.tw/~marco/GameOfLife.exe"])
+    
+    url1 = 'http://cssula.nba.nctu.edu.tw/~marco/DoNotPress.exe'
+    url2 = 'http://cssula.nba.nctu.edu.tw/~marco/GameOfLife.exe'
+
+    task1 = dict(urlList=[url1], pathList={url1:'1a.exe'})
+    task2 = dict(urlList=[url1, url2] , pathList={url1:'2a.exe', url2:'2b.exe'})
+
+    downloader = Downloader()
+    downloader.download(task1)
+    downloader.download(task2)
+
     sys.exit(app.exec_())
