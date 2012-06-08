@@ -11,11 +11,13 @@ MainController::MainController(QObject *parent) :
 void MainController::setUpdateHandler(UpdateHandler *updateHandler)
 {
     _updateHandler = updateHandler;
+    _updateHandler->setParent(this);
 }
 
 void MainController::setDownloadHandler(DownloadHandler *downloadHandler)
 {
     _downloadHandler = downloadHandler;
+    _downloadHandler->setParent(this);
 }
 
 void MainController::update()
@@ -30,12 +32,12 @@ void MainController::download(const QString &name, const QString &dstDir)
 
 void MainController::_setConnection()
 {
-    connect(_updateHandler, SIGNAL(updateInfo(const QHash<QString,QString>&)),
+    connect(_updateHandler, SIGNAL(info(const QHash<QString,QString>&)),
             SIGNAL(updateInfo(const QHash<QString,QString>&)));
-    connect(_updateHandler, SIGNAL(updateFinish()), SIGNAL(updateFinish()));
-    connect(_downloadHandler, SIGNAL(downloadInfo(const QHash<QString,QString>&)),
+    connect(_updateHandler, SIGNAL(finish()), SIGNAL(updateFinish()));
+    connect(_downloadHandler, SIGNAL(info(const QHash<QString,QString>&)),
             SIGNAL(downloadInfo(const QHash<QString,QString>&)));
-    connect(_downloadHandler, SIGNAL(downloadFinish()), SIGNAL(downloadFinish()));
+    connect(_downloadHandler, SIGNAL(finish()), SIGNAL(downloadFinish()));
 }
 
 

@@ -14,8 +14,8 @@ public:
     
 signals:
 
-    void downloadInfo(const QHash<QString, QString> &info);
-    void downloadFinish();
+    void info(const QHash<QString, QString> &info);
+    void finish();
 
 public slots:
 

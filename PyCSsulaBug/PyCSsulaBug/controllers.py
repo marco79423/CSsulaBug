@@ -21,9 +21,11 @@ class MainController(QtCore.QObject):
     @QtCore.pyqtSlot(handler.UpdateHandler)
     def setUpdateHandler(self, updateHandler):
         self._updateHandler = updateHandler
+        self._updateHandler.setParent(self)
 
     def setDownloadHandler(self, downloadHandler):
         self._downloadHandler = downloadHandler
+        self._downloadHandler.setParent(self)
 
     @QtCore.pyqtSlot(handler.DownloadHandler)    
     def update(self):
@@ -34,8 +36,8 @@ class MainController(QtCore.QObject):
         self._downloadHandler.download(name, dstDir)
 
     def _setConnection(self):
-        self._updateHandler.updateInfo.connect(self.updateInfo)
-        self._updateHandler.updateFinish.connect(self.udpateFinish)
+        self._updateHandler.info.connect(self.updateInfo)
+        self._updateHandler.finish.connect(self.udpateFinish)
 
-        self._downloadHandler.downloadInfo.connect(self.downloadInfo)
-        self._downloadHandler.downloadFinish.connect(self.downloadFinish)
+        self._downloadHandler.info.connect(self.downloadInfo)
+        self._downloadHandler.finish.connect(self.downloadFinish)
