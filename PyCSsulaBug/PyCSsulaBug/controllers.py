@@ -6,10 +6,10 @@ import handler
 class MainController(QtCore.QObject):
     
     updateInfo = QtCore.pyqtSignal(dict)
-    updateFinish = QtCore.pyqtSignal(dict)
+    updateFinish = QtCore.pyqtSignal()
 
     downloadInfo = QtCore.pyqtSignal(dict)
-    downloadFinish = QtCore.pyqtSignal(dict)
+    downloadFinish = QtCore.pyqtSignal()
     
     def __init__(self, parent=None):
         super(MainController, self).__init__(parent)
