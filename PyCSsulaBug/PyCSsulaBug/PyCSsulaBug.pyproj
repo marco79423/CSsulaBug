@@ -5,7 +5,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{c04c20f9-cc05-4bc0-b589-0e7611080338}</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>network.py</StartupFile>
+    <StartupFile>controllers.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -26,6 +26,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="controllers.py" />
+    <Compile Include="handler.py" />
     <Compile Include="misc.py" />
     <Compile Include="network.py" />
     <Compile Include="pycssulabug.py" />

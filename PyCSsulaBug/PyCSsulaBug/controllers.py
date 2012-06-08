@@ -1,66 +1,41 @@
 #-*- coding: cp950 -*-
 
 from PyQt4 import QtCore
-import network
+import handler
 
-class Controller(QtCore.QObject):
-
-    def __init__(self, handler, parent=None):
-        super(Controller, self).__init__(parent)
-        self._initialize()
-
-    def setHandler(self, handler):
-        self._handler = handler
-
-    def handler(self):
-        return self._handler
-
-    def _initialize(self):
-        self._handler = None
-
-class MainController(Controller):
-    
-    downloadInfo = QtCore.pyqtSignal(dict)
-    downloadFinish = QtCore.pyqtSignal(dict)
+class MainController(QtCore.QObject):
     
     updateInfo = QtCore.pyqtSignal(dict)
     updateFinish = QtCore.pyqtSignal(dict)
 
+    downloadInfo = QtCore.pyqtSignal(dict)
+    downloadFinish = QtCore.pyqtSignal(dict)
+    
     def __init__(self, parent=None):
         super(MainController, self).__init__(parent)
-        
-    @QtCore.pyqtSlot()    
+        self._updateHandler = None
+        self._downloadHandler = None
+
+        self._setConnection()
+
+    @QtCore.pyqtSlot(handler.UpdateHandler)
+    def setUpdateHandler(self, updateHandler):
+        self._updateHandler = updateHandler
+
+    def setDownloadHandler(self, downloadHandler):
+        self._downloadHandler = downloadHandler
+
+    @QtCore.pyqtSlot(handler.DownloadHandler)    
     def update(self):
-        self.handler().update()
+        self._updateHandler.update()
 
     @QtCore.pyqtSlot(str, str)
     def download(self, name, dstDir):
-        self.handler().download(name, dstDir)
+        self._downloadHandler.download(name, dstDir)
 
-    def _initialize(self):
-        self._updateController = UpdateController(self.handler().updaterHandler(), self)
+    def _setConnection(self):
+        self._updateHandler.updateInfo.connect(self.updateInfo)
+        self._updateHandler.updateFinish.connect(self.udpateFinish)
 
-class UpdateController(Controller):
-    
-    newItem = QtCore.pyqtSignal(dict)
-    finish = QtCore.pyqtSignal()
-
-    def __init__(self, parent=None):
-        super(UpdateController, self).__init__(parent)
-    
-    def update():
-        pass
-
-    def _initialize(self):
-        pass
-
-class DownloadController(Controller):
-    
-    def __init__(self, parent=None):
-        super(DownloadController, self).__init__(parent)
-    
-    def download(self, name, dstDir):
-        pass
-
-    def _initialize(self):
-        pass
+        self._downloadHandler.downloadInfo.connect(self.downloadInfo)
+        self._downloadHandler.downloadFinish.connect(self.downloadFinish)
