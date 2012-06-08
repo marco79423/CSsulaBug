@@ -12,7 +12,7 @@ class Queue:
         self.qList = self.qList[1:]
         return item
 
-    def top(self):
+    def head(self):
         return self.qList[0]
 
     def isEmpty(self):

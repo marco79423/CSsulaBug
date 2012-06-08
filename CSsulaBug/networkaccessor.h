@@ -3,10 +3,12 @@
 
 #include <QObject>
 #include <QStringList>
-#include <QHash>
+#include <QList>
+#include <QQueue>
 
 class QNetworkAccessManager;
 class QNetworkReply;
+class QNetworkRequest;
 
 class NetworkAccessor : public QObject
 {
@@ -16,24 +18,36 @@ public:
 
     explicit NetworkAccessor(QObject *parent = 0);
     
-    void get(const QString &url);
-    void get(const QStringList &urlList);
+    int get(const QString &url);
+    int get(const QStringList &urlList);
 
 signals:
     
-    void oneReply(const QString &url, const QByteArray &content);
-    void oneReply(const QByteArray &content);
-    void finish();
+    void reply(int id, QNetworkReply *networkReply);
+    void finish(int id);
 
 private slots:
 
-    void onReply(QNetworkReply *reply);
+    void onManagerFinish(QNetworkReply *networkReply);
 
 private:
 
+    struct Task
+    {
+        int id;
+        QList<QString> urlList;
+    };
+
     QNetworkAccessManager *_networkAccessManager;
-    QList<QString> _checkList;
-    
+    QQueue<Task> _taskQueue;
+
+    bool _isAccessing;
+    int _idCount;
+
+    void _initialize();
+    void _startAccess();
+    QNetworkRequest _makeRequest(const QString &url);
+
 };
 
 #endif // NETWORKACCESSOR_H

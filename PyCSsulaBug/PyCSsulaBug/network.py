@@ -14,7 +14,7 @@ class ImageDownloader(Downloader):
 
 class NetworkAccessor(QtCore.QObject):
 
-    reply = QtCore.pyqtSignal(QtNetwork.QNetworkReply)
+    reply = QtCore.pyqtSignal(int, QtNetwork.QNetworkReply)
     finish = QtCore.pyqtSignal(int)
 
     def __init__(self, parent=None):
@@ -61,7 +61,7 @@ class NetworkAccessor(QtCore.QObject):
     def _startAccess(self):
         if not self._isAccessing and not self._taskQueue.isEmpty():
             self._isAccessing = True
-            for url in list(self._taskQueue.top()['set']):
+            for url in list(self._taskQueue.head()['set']):
                 request = self._makeRequest(url)
                 self._networkAccessManager.get(request)
                 logger.info("NetworkAccessor:_startAccess:¶}©l¤U¸ü %s", url)
@@ -78,12 +78,13 @@ class NetworkAccessor(QtCore.QObject):
         
         if reply.error():
             logger.error("NetworkAccessor:_onManagerFinish: %s", url)
+            return
         
-        self._taskQueue.top()['set'].remove(url)
-        self.reply.emit(reply)
+        self._taskQueue.head()['set'].remove(url)
+        self.reply.emit(self._taskQueue.head()['id'], reply)
 
-        if len(self._taskQueue.top()['set']) == 0:
-            self.finish.emit(self._taskQueue.top()['id'])
+        if len(self._taskQueue.head()['set']) == 0:
+            self.finish.emit(self._taskQueue.head()['id'])
             if not self._taskQueue.isEmpty():
                 self._taskQueue.dequeue()
             self._isAccessing = False
