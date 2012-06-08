@@ -2,6 +2,7 @@
 
 from PyQt4 import QtCore, QtGui
 import views
+import controllers
 
 class MainWindow(QtGui.QMainWindow):
     
@@ -20,6 +21,7 @@ class MainWindow(QtGui.QMainWindow):
         初始化變數
         """
         self._mainView = views.MainView(self)
+        self._mainController = controllers.MainController(self)
 
 
 class ComicInfo:

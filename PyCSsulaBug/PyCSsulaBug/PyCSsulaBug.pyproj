@@ -25,6 +25,7 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="controllers.py" />
     <Compile Include="misc.py" />
     <Compile Include="network.py" />
     <Compile Include="pycssulabug.py" />

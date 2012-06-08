@@ -39,7 +39,7 @@ private:
     QHash<int, QHash<QString, QString> > _pathList;
     int _taskIdCount;
 
-    void _initialize();
+    void _setConnection();
 };
 
 #endif // DOWNLOADER_H

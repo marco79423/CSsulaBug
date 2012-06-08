@@ -5,10 +5,9 @@
 NetworkAccessor::NetworkAccessor(QObject *parent) :
     QObject(parent), _isAccessing(false)
 {
-    _initialize();
+    _networkAccessManager = new QNetworkAccessManager(this);
 
-    connect(_networkAccessManager, SIGNAL(finished(QNetworkReply*)),
-            SLOT(onManagerFinish(QNetworkReply*)));
+    _setConnection();
 }
 
 void NetworkAccessor::get(const int &id, const QString &url)
@@ -47,13 +46,14 @@ void NetworkAccessor::get(const int &id, const QStringList &urlList)
 }
 
 
-void NetworkAccessor::_initialize()
+void NetworkAccessor::_setConnection()
 {
     /*
-      *初始化變數
+      *設定連結
       */
 
-    _networkAccessManager = new QNetworkAccessManager(this);
+    connect(_networkAccessManager, SIGNAL(finished(QNetworkReply*)),
+            SLOT(onManagerFinish(QNetworkReply*)));
 }
 
 void NetworkAccessor::_startAccess()

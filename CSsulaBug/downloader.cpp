@@ -7,11 +7,9 @@
 Downloader::Downloader(QObject *parent) :
     QObject(parent), _taskIdCount(0)
 {
-    _initialize();
-    connect(_networkAccessor, SIGNAL(reply(const int&,QNetworkReply*)),
-            SLOT(_onAccessorReply(const int&,QNetworkReply*)));
-    connect(_networkAccessor, SIGNAL(finish(const int&)),
-            SLOT(_onAccessorFinish(const int&)));
+    _networkAccessor = new NetworkAccessor(this);
+
+    _setConnection();
 }
 
 void Downloader::download(const Downloader::Task &task)
@@ -59,11 +57,14 @@ void Downloader::_onAccessorFinish(const int &id)
     _pathList.remove(id);
 }
 
-void Downloader::_initialize()
+void Downloader::_setConnection()
 {
     /*
-      *初始化變數
+      *設定連結
       */
 
-    _networkAccessor = new NetworkAccessor(this);
+    connect(_networkAccessor, SIGNAL(reply(const int&,QNetworkReply*)),
+            SLOT(_onAccessorReply(const int&,QNetworkReply*)));
+    connect(_networkAccessor, SIGNAL(finish(const int&)),
+            SLOT(_onAccessorFinish(const int&)));
 }

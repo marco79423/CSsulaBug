@@ -1,6 +1,6 @@
 #-*- coding: cp950 -*-
 
-from PyQt4 import QtCore, QtGui, QtNetwork
+from PyQt4 import QtCore, QtNetwork
 import misc
 import tools
 
@@ -9,10 +9,12 @@ logger = misc.getLogger()
 class Downloader(QtCore.QObject):
     def __init__(self, parent=None):
         super(Downloader, self).__init__(parent)
-        self._initialize()
+        self._networkAccessor = NetworkAccessor(self)
+        self._pathList = dict()
+        self._taskIdCount = 0
 
-        self._networkAccessor.reply.connect(self._onAccessorReply)
-        self._networkAccessor.finish.connect(self._onAccessorFinish)
+        self._setConnection()
+        
 
     def download(self, task):
         """
@@ -52,13 +54,12 @@ class Downloader(QtCore.QObject):
         logger.info("Downloader:_onAccessorFinish: id %d 下載完成", id)
         del self._pathList[id]
 
-    def _initialize(self):
+    def _setConnection(self):
         """
-        初始化變數
+        設定連結
         """
-        self._networkAccessor = NetworkAccessor(self)
-        self._pathList = dict()
-        self._taskIdCount = 0
+        self._networkAccessor.reply.connect(self._onAccessorReply)
+        self._networkAccessor.finish.connect(self._onAccessorFinish)
 
 
 class NetworkAccessor(QtCore.QObject):
@@ -68,9 +69,13 @@ class NetworkAccessor(QtCore.QObject):
 
     def __init__(self, parent=None):
         super(NetworkAccessor, self).__init__(parent) 
-        self._initialize()
         
-        self._networkAccessManager.finished.connect(self._onManagerFinish)
+        self._networkAccessManager = QtNetwork.QNetworkAccessManager(self)
+        self._taskQueue = tools.Queue()
+        self._isAccessing = False
+        self._idCount = 0
+        
+        self._setConnection()
 
     @QtCore.pyqtSlot(str)
     @QtCore.pyqtSlot(list)
@@ -95,14 +100,11 @@ class NetworkAccessor(QtCore.QObject):
         self._taskQueue.enqueue(newTask)
         self._startAccess()
   
-    def _initialize(self):
+    def _setConnection(self):
         """
-        初始化變數
+        設定連結
         """
-        self._networkAccessManager = QtNetwork.QNetworkAccessManager(self)
-        self._taskQueue = tools.Queue()
-        self._isAccessing = False
-        self._idCount = 0
+        self._networkAccessManager.finished.connect(self._onManagerFinish)
 
     def _startAccess(self):
         """

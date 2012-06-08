@@ -43,7 +43,7 @@ private:
 
     bool _isAccessing;
 
-    void _initialize();
+    void _setConnection();
     void _startAccess();
     QNetworkRequest _makeRequest(const QString &url);
 

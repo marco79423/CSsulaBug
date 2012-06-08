@@ -1,4 +1,5 @@
 #-*- coding: cp950 -*-
+
 class Queue:
 
     def __init__(self):
