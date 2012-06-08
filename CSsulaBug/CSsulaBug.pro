@@ -18,7 +18,8 @@ SOURCES += main.cpp \
     mainwindow.cpp \
     form.cpp \
     sfdownloadpreparer.cpp \
-    downloadcontroller.cpp
+    downloadcontroller.cpp \
+    downloader.cpp
 
 HEADERS  += \
     sfupdater.h \
@@ -28,7 +29,8 @@ HEADERS  += \
     mainwindow.h \
     form.h \
     sfdownloadpreparer.h \
-    downloadcontroller.h
+    downloadcontroller.h \
+    downloader.h
 
 FORMS    += \
     mainwindow.ui \

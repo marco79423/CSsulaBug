@@ -24,6 +24,7 @@ class Downloader(QtCore.QObject):
         self._networkAccessor.get(self._taskIdCount, task['urlList'])
         self._pathList[self._taskIdCount] = task['pathList']
 
+    @QtCore.pyqtSlot(int, QtNetwork.QNetworkReply)
     def _onAccessorReply(self, id, networkReply):
         """
         處理 NetworkAccessor 的回應，把內容寫至目標路徑
@@ -41,6 +42,7 @@ class Downloader(QtCore.QObject):
 
         del self._pathList[id][url]
 
+    @QtCore.pyqtSlot(int)
     def _onAccessorFinish(self, id):
         """
         當一項任務下載完後，刪除該任務資料
