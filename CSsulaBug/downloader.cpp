@@ -53,6 +53,7 @@ void Downloader::_onAccessorFinish(const int &id)
       * 當一項任務下載完後，刪除該任務資料
       */
 
+    emit finish();
     qDebug() << "Downloader:_onAccessorFinish: id " << id << " 下載完成";
     _pathList.remove(id);
 }

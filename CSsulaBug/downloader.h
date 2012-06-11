@@ -24,6 +24,8 @@ public:
 
 signals:
     
+    void finish();
+
 public slots:
 
     void download(const Task &task);
