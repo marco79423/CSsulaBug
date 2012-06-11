@@ -33,51 +33,51 @@ class SFUpdateHandler(UpdateHandler):
     def __init__(self, parent=None):
         super(SFUpdateHandler, self).__init__(parent)
         self._networkAccessor = network.NetworkAccessor(self)
-        self._currentState = "NothingDoing"
+        self._currentState = u"NothingDoing"
         self._allPageUrlList = []
 
         self._setConnection()
 
     def update(self):
-        if self._currentState == "NothingDoing":
-            logger.info("SFUpdateHandler:update:開始更新")
-            self._startProcess("ALLPageUrlListGetting")
+        if self._currentState == u"NothingDoing":
+            logger.info(u"SFUpdateHandler:update:開始更新")
+            self._startProcess(u"ALLPageUrlListGetting")
         else:
-            logger.info("SFUpdateHandler:update:現在狀態是 %s，還不能更新", self._currentState)
+            logger.info(u"SFUpdateHandler:update:現在狀態是 %s，還不能更新", self._currentState)
 
     def _setConnection(self):
         self._networkAccessor.reply.connect(self._onAccessorReply)
         self._networkAccessor.finish.connect(self._onAccessorFinish)
 
     def _startProcess(self, state):
-        logger.info("SFUpdateHandler:_startProcess:開始執行 %s 狀態", state)
-        if state == "ALLPageUrlListGetting":
-            self._currentState = "ALLPageUrlListGetting"
+        logger.info(u"SFUpdateHandler:_startProcess:開始執行 %s 狀態", state)
+        if state == u"ALLPageUrlListGetting":
+            self._currentState = u"ALLPageUrlListGetting"
             self._networkAccessor.get(0, "http://comic.sfacg.com/Catalog/")
-        elif state == "ComicInfoGetting":
-            self._currentState = "ComicInfoGetting"
+        elif state == u"ComicInfoGetting":
+            self._currentState = u"ComicInfoGetting"
             self._networkAccessor.get(1, self._allPageUrlList)
         else:
-            logger.error("SFUpdateHandler:_startProcess:錯誤的狀態 %s", state)
+            logger.error(u"SFUpdateHandler:_startProcess:錯誤的狀態 %s", state)
         
     @QtCore.Slot(int, QtNetwork.QNetworkReply)
     def _onAccessorReply(self, id, networkReply):
         if self._currentState == "ALLPageUrlListGetting":
             self._allPageUrlList = self._getPageUrl(unicode(networkReply.readAll(), 'utf-8'))
-            logger.info("SFUpdateHandler:_onAccessorReply:取得 allPageUrlList")
+            logger.info(u"SFUpdateHandler:_onAccessorReply:取得 allPageUrlList")
         elif self._currentState == "ComicInfoGetting":
             self._getComicInfo(unicode(networkReply.readAll(), 'utf-8'))
-            logger.info("SFUpdateHandler:_onAccessorReply: 取得 %s 的資訊", unicode(networkReply.url().toString(), 'utf-8'))
+            logger.info(u"SFUpdateHandler:_onAccessorReply: 取得 %s 的資訊", networkReply.url().toString())
         else:
-            logger.error("SFUpdateHandler:_onAccessorReply:錯誤的狀態 %s", self._currentState)
+            logger.error(u"SFUpdateHandler:_onAccessorReply:錯誤的狀態 %s", self._currentState)
 
     @QtCore.Slot(int)
     def _onAccessorFinish(self, id):
         if self._currentState == "ALLPageUrlListGetting":
-            logger.info("SFUpdateHandler:_onAccessorFinish:進入 ComicInfoGetting 階段")
+            logger.info(u"SFUpdateHandler:_onAccessorFinish:進入 ComicInfoGetting 階段")
             self._startProcess("ComicInfoGetting")
         elif self._currentState == "ComicInfoGetting":
-            logger.info("SFUpdateHandler:_onAccessorFinish: 下載完成")
+            logger.info(u"SFUpdateHandler:_onAccessorFinish: 下載完成")
             self.finish.emit()
 
     def _getPageUrl(self, html):
@@ -90,7 +90,7 @@ class SFUpdateHandler(UpdateHandler):
         while True:
             pos = pageNumberExp.indexIn(html, pos)
             if pos == -1: break
-            captureNumber, isOk = pageNumberExp.cap(1).toInt()
+            captureNumber = int(pageNumberExp.cap(1))
             if captureNumber > maxPageNumber:
                 maxPageNumber = captureNumber
             pos += pageNumberExp.matchedLength()
@@ -122,15 +122,15 @@ class SFUpdateHandler(UpdateHandler):
              if pos == -1: break
              
              updateInfo = dict(site="SF",
-                               coverUrl=unicode(regexp.cap(1), 'utf-8'),
-                               key=unicode(regexp.cap(2), 'utf-8'),
-                               name=unicode(regexp.cap(3), 'utf-8'),
-                               author=unicode(regexp.cap(4), 'utf-8'),
-                               type=unicode(regexp.cap(5), 'utf-8'),
-                               lastUpdated=unicode(regexp.cap(6), 'utf-8'),
-                               description=unicode(regexp.cap(7).simplified(), 'utf-8'))
+                               coverUrl=regexp.cap(1),
+                               key=regexp.cap(2),
+                               name=regexp.cap(3),
+                               author=regexp.cap(4),
+                               type=regexp.cap(5),
+                               lastUpdated=regexp.cap(6).strip(),
+                               description=regexp.cap(7).strip())
              
-             logger.info(u"SFUpdateHandler:_getComicInfo:取得 updateInfo %s", unicode(updateInfo))
+             logger.info(u"SFUpdateHandler:_getComicInfo:取得 updateInfo %s", misc.comicInfoToString(updateInfo))
              self.info.emit(updateInfo)
 
              pos += regexp.matchedLength()
@@ -148,6 +148,10 @@ if __name__ == "__main__":
     QtCore.QTextCodec.setCodecForTr(codec)
     QtCore.QTextCodec.setCodecForLocale(codec)
 
+    def done():
+        print 'done'
+
     handler = SFUpdateHandler()
+    handler.finish.connect(done)
     handler.update()
     sys.exit(app.exec_())
