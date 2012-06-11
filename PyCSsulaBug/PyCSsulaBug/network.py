@@ -1,12 +1,15 @@
-#-*- coding: cp950 -*-
+ï»¿#-*- coding: utf-8 -*-
 
-from PyQt4 import QtCore, QtNetwork
+from PySide import QtCore, QtNetwork
 import misc
 import tools
 
 logger = misc.getLogger()
 
 class Downloader(QtCore.QObject):
+
+    finish = QtCore.Signal()
+
     def __init__(self, parent=None):
         super(Downloader, self).__init__(parent)
         self._networkAccessor = NetworkAccessor(self)
@@ -18,45 +21,46 @@ class Downloader(QtCore.QObject):
 
     def download(self, task):
         """
-        ¤U¸ü task ¥ô°È
-        task['urlList'] ©Ò­n¤U¸üªº¤º®e
-        task['pathList']['url'] ¨ä¹ïÀ³ªºÀÉ®×¸ô®|
+        ä¸‹è¼‰ task ä»»å‹™
+        task['urlList'] æ‰€è¦ä¸‹è¼‰çš„å…§å®¹
+        task['pathList']['url'] å…¶å°æ‡‰çš„æª”æ¡ˆè·¯å¾‘
         """
         self._taskIdCount += 1
         self._networkAccessor.get(self._taskIdCount, task['urlList'])
-        logger.info("Downloader:download: ¤U¸ü¥ô°È %d", self._taskIdCount)
+        logger.info(u"Downloader:download: ä¸‹è¼‰ä»»å‹™ %d", self._taskIdCount)
 
         self._pathList[self._taskIdCount] = task['pathList']
 
-    @QtCore.pyqtSlot(int, QtNetwork.QNetworkReply)
+    @QtCore.Slot(int, QtNetwork.QNetworkReply)
     def _onAccessorReply(self, id, networkReply):
         """
-        ³B²z NetworkAccessor ªº¦^À³¡A§â¤º®e¼g¦Ü¥Ø¼Ğ¸ô®|
+        è™•ç† NetworkAccessor çš„å›æ‡‰ï¼ŒæŠŠå…§å®¹å¯«è‡³ç›®æ¨™è·¯å¾‘
         """
-        url = str(networkReply.url().toString())
+        url = networkReply.url().toString()
         path = self._pathList[id][url]
 
         file = QtCore.QFile(path)
         if not file.open(QtCore.QFile.WriteOnly):
-            logger.error("Downloader:_onAccessorReply: ¶}±Ò %s ¥¢±Ñ", path)
+            logger.error(u"Downloader:_onAccessorReply: é–‹å•Ÿ %s å¤±æ•—", path)
             return
         file.write(networkReply.readAll())
         file.close()
-        logger.info("Downloader:_onAccessorReply: ¤w¤U¸ü %s", path)
+        logger.info(u"Downloader:_onAccessorReply: å·²ä¸‹è¼‰ %s", path)
 
         del self._pathList[id][url]
 
-    @QtCore.pyqtSlot(int)
+    @QtCore.Slot(int)
     def _onAccessorFinish(self, id):
         """
-        ·í¤@¶µ¥ô°È¤U¸ü§¹«á¡A§R°£¸Ó¥ô°È¸ê®Æ
+        ç•¶ä¸€é …ä»»å‹™ä¸‹è¼‰å®Œå¾Œï¼Œåˆªé™¤è©²ä»»å‹™è³‡æ–™
         """
-        logger.info("Downloader:_onAccessorFinish: id %d ¤U¸ü§¹¦¨", id)
+        self.finish.emit()
+        logger.info(u"Downloader:_onAccessorFinish: id %d ä¸‹è¼‰å®Œæˆ", id)
         del self._pathList[id]
 
     def _setConnection(self):
         """
-        ³]©w³sµ²
+        è¨­å®šé€£çµ
         """
         self._networkAccessor.reply.connect(self._onAccessorReply)
         self._networkAccessor.finish.connect(self._onAccessorFinish)
@@ -64,8 +68,8 @@ class Downloader(QtCore.QObject):
 
 class NetworkAccessor(QtCore.QObject):
 
-    reply = QtCore.pyqtSignal(int, QtNetwork.QNetworkReply)
-    finish = QtCore.pyqtSignal(int)
+    reply = QtCore.Signal(int, QtNetwork.QNetworkReply)
+    finish = QtCore.Signal(int)
 
     def __init__(self, parent=None):
         super(NetworkAccessor, self).__init__(parent) 
@@ -77,12 +81,12 @@ class NetworkAccessor(QtCore.QObject):
         
         self._setConnection()
 
-    @QtCore.pyqtSlot(str)
-    @QtCore.pyqtSlot(list)
+    @QtCore.Slot(str)
+    @QtCore.Slot(list)
     def get(self, id, urlList):
         """
-        id ¬°ÃÑ§O­È¡Aurl ¬O­n¤U¸üªººô§}
-        get ¬O¨M©w±N­n¤U¸üªº¥ô°È¡A¹ê»Úªº¤U¸ü¬O¥Ñ _startAccess ¾Ş§@
+        id ç‚ºè­˜åˆ¥å€¼ï¼Œurl æ˜¯è¦ä¸‹è¼‰çš„ç¶²å€
+        get æ˜¯æ±ºå®šå°‡è¦ä¸‹è¼‰çš„ä»»å‹™ï¼Œå¯¦éš›çš„ä¸‹è¼‰æ˜¯ç”± _startAccess æ“ä½œ
         """
         newTask = dict(id=id, urlList=[])
 
@@ -90,45 +94,45 @@ class NetworkAccessor(QtCore.QObject):
             url = urlList
             request = self._makeRequest(url)
             newTask['urlList'].append(url)
-            logger.info("NetworkAccessor:get:·Ç³Æ¤U¸ü %s", url)
+            logger.info(u"NetworkAccessor:get:æº–å‚™ä¸‹è¼‰ %s", url)
         else:
             for url in urlList:
                 request = self._makeRequest(url)
                 newTask['urlList'].append(url)
-                logger.info("NetworkAccessor:get:·Ç³Æ¤U¸ü %s", url)
+                logger.info(u"NetworkAccessor:get:æº–å‚™ä¸‹è¼‰ %s", url)
         
         self._taskQueue.enqueue(newTask)
         self._startAccess()
   
     def _setConnection(self):
         """
-        ³]©w³sµ²
+        è¨­å®šé€£çµ
         """
         self._networkAccessManager.finished.connect(self._onManagerFinish)
 
     def _startAccess(self):
         """
-        ­Y¬O²{¦b¨S¦³¹ê»Ú°õ¦æ¤U¸ü¥ô°È¡A«K¶}©l°õ¦æ¡C
+        è‹¥æ˜¯ç¾åœ¨æ²’æœ‰å¯¦éš›åŸ·è¡Œä¸‹è¼‰ä»»å‹™ï¼Œä¾¿é–‹å§‹åŸ·è¡Œã€‚
         """
         if not self._isAccessing and not self._taskQueue.isEmpty():
             self._isAccessing = True
             for url in list(self._taskQueue.head()['urlList']):
                 request = self._makeRequest(url)
                 self._networkAccessManager.get(request)
-                logger.info("NetworkAccessor:_startAccess:¶}©l¤U¸ü %s", url)
+                logger.info(u"NetworkAccessor:_startAccess:é–‹å§‹ä¸‹è¼‰ %s", url)
 
-    @QtCore.pyqtSlot(QtNetwork.QNetworkReply)
+    @QtCore.Slot(QtNetwork.QNetworkReply)
     def _onManagerFinish(self, reply):
         """
-        ·í NetWorkAcessManager finish ®É¡A
-        §R°£ _taskQueue ªº¦¹¶µ¡A¨Ã­t³dµo°e¥[¤W id ªº reply signal
-        ­Y¬Oµo²{¸Ó¥ô°È¤w¸gµ²§ô¤F¡A«Kµo°e finish
+        ç•¶ NetWorkAcessManager finish æ™‚ï¼Œ
+        åˆªé™¤ _taskQueue çš„æ­¤é …ï¼Œä¸¦è² è²¬ç™¼é€åŠ ä¸Š id çš„ reply signal
+        è‹¥æ˜¯ç™¼ç¾è©²ä»»å‹™å·²ç¶“çµæŸäº†ï¼Œä¾¿ç™¼é€ finish
         """
-        url = str(reply.url().toString())
-        logger.info("NetworkAccessor:_onManagerFinish: %s ¦¬¨ì", url)
+        url = reply.url().toString()
+        logger.info(u"NetworkAccessor:_onManagerFinish: %s æ”¶åˆ°", url.encode('utf-8'))
         
         if reply.error():
-            logger.error("NetworkAccessor:_onManagerFinish: %s", url)
+            logger.error(u"NetworkAccessor:_onManagerFinish: %s", url.encode('utf-8'))
             return
         
         self._taskQueue.head()['urlList'].remove(url)
@@ -143,7 +147,7 @@ class NetworkAccessor(QtCore.QObject):
 
     def _makeRequest(self, url):
         """
-        §Q¥Î url ¥[¤W¤@¨Ç¥²­nªº header ¼ÒÀÀÂsÄı¾¹ªº¦æ¬°»s§@ request 
+        åˆ©ç”¨ url åŠ ä¸Šä¸€äº›å¿…è¦çš„ header æ¨¡æ“¬ç€è¦½å™¨çš„è¡Œç‚ºè£½ä½œ request 
         """
         request = QtNetwork.QNetworkRequest(QtCore.QUrl(url))
         request.setRawHeader("User-Agent", 
@@ -162,7 +166,12 @@ if __name__ in "__main__":
     task1 = dict(urlList=[url1], pathList={url1:'1a.exe'})
     task2 = dict(urlList=[url1, url2] , pathList={url1:'2a.exe', url2:'2b.exe'})
 
+    def done():
+        print 'done'
+
     downloader = Downloader()
+    downloader.finish.connect(done)
+
     downloader.download(task1)
     downloader.download(task2)
 

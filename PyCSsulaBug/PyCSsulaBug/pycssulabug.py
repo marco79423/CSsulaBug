@@ -1,6 +1,6 @@
-#-*- coding: cp950 -*-
+ï»¿#-*- coding: utf-8 -*-
 
-from PyQt4 import QtCore, QtGui
+from PySide import QtCore, QtGui
 import views
 import controllers
 
@@ -11,17 +11,17 @@ class MainWindow(QtGui.QMainWindow):
         super(MainWindow, self).__init__(parent)
         self._initialize()
 
-        #ªì©l³]©w
+        #åˆå§‹è¨­å®š
         self.setCentralWidget(self._mainView)
 
-        #³sµ²¥\¯à
+        #é€£çµåŠŸèƒ½
 
     def _initialize(self):
         """
-        ªì©l¤ÆÅÜ¼Æ
+        åˆå§‹åŒ–è®Šæ•¸
         """
         self._mainView = views.MainView(self)
-        self._mainController = controllers.MainController(self)
+        #self._mainController = controllers.MainController(self)
 
 
 class ComicInfo:
@@ -51,7 +51,7 @@ if __name__ in "__main__":
     import sys
     app = QtGui.QApplication(sys.argv)
 
-    codec = QtCore.QTextCodec.codecForName("cp950")
+    codec = QtCore.QTextCodec.codecForName("utf-8")
     QtCore.QTextCodec.setCodecForCStrings(codec)
     QtCore.QTextCodec.setCodecForTr(codec)
     QtCore.QTextCodec.setCodecForLocale(codec)

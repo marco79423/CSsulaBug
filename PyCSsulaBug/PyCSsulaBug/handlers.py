@@ -1,6 +1,6 @@
-#-*- coding: cp950 -*-
+ï»¿#-*- coding: utf-8 -*-
 
-from PyQt4 import QtCore, QtNetwork
+from PySide import QtCore, QtNetwork
 import re
 import network
 import misc
@@ -9,23 +9,23 @@ logger = misc.getLogger()
 
 class UpdateHandler(QtCore.QObject):
 
-    info = QtCore.pyqtSignal(dict)
-    finish = QtCore.pyqtSignal()
+    info = QtCore.Signal(dict)
+    finish = QtCore.Signal()
 
     def update(self):
         pass
 
 class DownloadHandler(QtCore.QObject):
 
-    info = QtCore.pyqtSignal(dict)
-    finish = QtCore.pyqtSignal()
+    info = QtCore.Signal(dict)
+    finish = QtCore.Signal()
 
     def download(self, name, dstDir):
         pass
 
 """
-º©µeºô¯¸ SF 
-ºô§} http://comic.sky-fire.com
+æ¼«ç•«ç¶²ç«™ SF 
+ç¶²å€ http://comic.sky-fire.com
 """
 
 class SFUpdateHandler(UpdateHandler):
@@ -40,17 +40,17 @@ class SFUpdateHandler(UpdateHandler):
 
     def update(self):
         if self._currentState == "NothingDoing":
-            logger.info("SFUpdateHandler:update:¶}©l§ó·s")
+            logger.info("SFUpdateHandler:update:é–‹å§‹æ›´æ–°")
             self._startProcess("ALLPageUrlListGetting")
         else:
-            logger.info("SFUpdateHandler:update:²{¦bª¬ºA¬O %s¡AÁÙ¤£¯à§ó·s", self._currentState)
+            logger.info("SFUpdateHandler:update:ç¾åœ¨ç‹€æ…‹æ˜¯ %sï¼Œé‚„ä¸èƒ½æ›´æ–°", self._currentState)
 
     def _setConnection(self):
         self._networkAccessor.reply.connect(self._onAccessorReply)
         self._networkAccessor.finish.connect(self._onAccessorFinish)
 
     def _startProcess(self, state):
-        logger.info("SFUpdateHandler:_startProcess:¶}©l°õ¦æ %s ª¬ºA", state)
+        logger.info("SFUpdateHandler:_startProcess:é–‹å§‹åŸ·è¡Œ %s ç‹€æ…‹", state)
         if state == "ALLPageUrlListGetting":
             self._currentState = "ALLPageUrlListGetting"
             self._networkAccessor.get(0, "http://comic.sfacg.com/Catalog/")
@@ -58,26 +58,27 @@ class SFUpdateHandler(UpdateHandler):
             self._currentState = "ComicInfoGetting"
             self._networkAccessor.get(1, self._allPageUrlList)
         else:
-            logger.error("SFUpdateHandler:_startProcess:¿ù»~ªºª¬ºA %s", state)
+            logger.error("SFUpdateHandler:_startProcess:éŒ¯èª¤çš„ç‹€æ…‹ %s", state)
         
-    @QtCore.pyqtSlot(int, QtNetwork.QNetworkReply)
+    @QtCore.Slot(int, QtNetwork.QNetworkReply)
     def _onAccessorReply(self, id, networkReply):
         if self._currentState == "ALLPageUrlListGetting":
-            self._allPageUrlList = _self._getPageUrl(str(networkReply.readAll()))
-            logger.info("SFUpdateHandler:_onAccessorReply:¨ú±o allPageUrlList")
+            self._allPageUrlList = self._getPageUrl(unicode(networkReply.readAll(), 'utf-8'))
+            logger.info("SFUpdateHandler:_onAccessorReply:å–å¾— allPageUrlList")
         elif self._currentState == "ComicInfoGetting":
-            self._getComicInfo(str(networkReply.readAll()))
-            logger.info("SFUpdateHandler:_onAccessorReply: ¨ú±o %s ªº¸ê°T", str(reply.url().toString()))
+            self._getComicInfo(unicode(networkReply.readAll(), 'utf-8'))
+            logger.info("SFUpdateHandler:_onAccessorReply: å–å¾— %s çš„è³‡è¨Š", unicode(networkReply.url().toString(), 'utf-8'))
         else:
-            logger.error("SFUpdateHandler:_onAccessorReply:¿ù»~ªºª¬ºA %s", self._currentState)
+            logger.error("SFUpdateHandler:_onAccessorReply:éŒ¯èª¤çš„ç‹€æ…‹ %s", self._currentState)
 
-    @QtCore.pyqtSlot(int)
+    @QtCore.Slot(int)
     def _onAccessorFinish(self, id):
         if self._currentState == "ALLPageUrlListGetting":
-            logger.info("SFUpdateHandler:_onAccessorFinish:¶i¤J ComicInfoGetting ¶¥¬q")
-            self._startProccess("ComicInfoGetting")
+            logger.info("SFUpdateHandler:_onAccessorFinish:é€²å…¥ ComicInfoGetting éšæ®µ")
+            self._startProcess("ComicInfoGetting")
         elif self._currentState == "ComicInfoGetting":
-            pass
+            logger.info("SFUpdateHandler:_onAccessorFinish: ä¸‹è¼‰å®Œæˆ")
+            self.finish.emit()
 
     def _getPageUrl(self, html):
 
@@ -94,7 +95,7 @@ class SFUpdateHandler(UpdateHandler):
                 maxPageNumber = captureNumber
             pos += pageNumberExp.matchedLength()
 
-        #¦]¬°¦³ bug ¡A©Ò¥HÁÙ­n¦A¥[¤W¤@­¶
+        #å› ç‚ºæœ‰ bug ï¼Œæ‰€ä»¥é‚„è¦å†åŠ ä¸Šä¸€é 
         maxPageNumber += 1
                 
         allPageUrlList = []
@@ -104,7 +105,36 @@ class SFUpdateHandler(UpdateHandler):
         return allPageUrlList
 
     def _getComicInfo(self, html):
-        pass
+         
+         regexp = QtCore.QRegExp("<img src=\"([^\"]+)\"" #cover
+                                 "[^>]+></a></li>\\s+<li><strong class=\""
+                                 "F14PX\"><a href=\"/HTML/([^/]+)" #keyName
+                                 "[^>]+>([^<]+)" #name
+                                 "[^1]+1\">([^<]+)" #comicAuthor
+                                 "[^\\]]+[^>]+>([^<]+)" #comicType
+                                 "</a> /([^/]+)+/" #lastUpdated
+                                 " \\d+<br />([^<]+)" #description
+                                 )
+         
+         pos = 0
+         while True:
+             pos = regexp.indexIn(html, pos)
+             if pos == -1: break
+             
+             updateInfo = dict(site="SF",
+                               coverUrl=unicode(regexp.cap(1), 'utf-8'),
+                               key=unicode(regexp.cap(2), 'utf-8'),
+                               name=unicode(regexp.cap(3), 'utf-8'),
+                               author=unicode(regexp.cap(4), 'utf-8'),
+                               type=unicode(regexp.cap(5), 'utf-8'),
+                               lastUpdated=unicode(regexp.cap(6), 'utf-8'),
+                               description=unicode(regexp.cap(7).simplified(), 'utf-8'))
+             
+             logger.info(u"SFUpdateHandler:_getComicInfo:å–å¾— updateInfo %s", unicode(updateInfo))
+             self.info.emit(updateInfo)
+
+             pos += regexp.matchedLength()
+
 
 class DownloadHandler(DownloadHandler):
     pass
@@ -112,6 +142,11 @@ class DownloadHandler(DownloadHandler):
 if __name__ == "__main__":
     import sys
     app = QtCore.QCoreApplication(sys.argv)
+
+    codec = QtCore.QTextCodec.codecForName("utf-8")
+    QtCore.QTextCodec.setCodecForCStrings(codec)
+    QtCore.QTextCodec.setCodecForTr(codec)
+    QtCore.QTextCodec.setCodecForLocale(codec)
 
     handler = SFUpdateHandler()
     handler.update()

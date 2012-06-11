@@ -1,8 +1,12 @@
-#-*- coding: cp950 -*-
-from PyQt4 import QtCore, QtGui, uic
+﻿#-*- coding: utf-8 -*-
+from PySide import QtCore, QtGui, QtUiTools
 
 class MainView(QtGui.QWidget):
     def __init__(self, parent=None):
         super(MainView, self).__init__(parent)
-        uic.loadUi("MainView.ui", self)
+
+        layout = QtGui.QVBoxLayout(self)
+      
+        loader = QtUiTools.QUiLoader(self)
+        layout.addWidget(loader.load("MainView.ui", self))
 

@@ -1,4 +1,4 @@
-#-*- coding: cp950 -*-
+﻿#-*- coding: utf-8 -*-
 
 class Queue:
 

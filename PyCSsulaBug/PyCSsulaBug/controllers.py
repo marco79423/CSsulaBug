@@ -1,15 +1,15 @@
-#-*- coding: cp950 -*-
+﻿#-*- coding: utf-8 -*-
 
-from PyQt4 import QtCore
+from PySide import QtCore
 import handler
 
 class MainController(QtCore.QObject):
     
-    updateInfo = QtCore.pyqtSignal(dict)
-    updateFinish = QtCore.pyqtSignal()
+    updateInfo = QtCore.Signal(dict)
+    updateFinish = QtCore.Signal()
 
-    downloadInfo = QtCore.pyqtSignal(dict)
-    downloadFinish = QtCore.pyqtSignal()
+    downloadInfo = QtCore.Signal(dict)
+    downloadFinish = QtCore.Signal()
     
     def __init__(self, parent=None):
         super(MainController, self).__init__(parent)
@@ -18,7 +18,7 @@ class MainController(QtCore.QObject):
 
         self._setConnection()
 
-    @QtCore.pyqtSlot(handler.UpdateHandler)
+    @QtCore.Slot(handler.UpdateHandler)
     def setUpdateHandler(self, updateHandler):
         self._updateHandler = updateHandler
         self._updateHandler.setParent(self)
@@ -27,11 +27,11 @@ class MainController(QtCore.QObject):
         self._downloadHandler = downloadHandler
         self._downloadHandler.setParent(self)
 
-    @QtCore.pyqtSlot(handler.DownloadHandler)    
+    @QtCore.Slot(handler.DownloadHandler)    
     def update(self):
         self._updateHandler.update()
 
-    @QtCore.pyqtSlot(str, str)
+    @QtCore.Slot(str, str)
     def download(self, name, dstDir):
         self._downloadHandler.download(name, dstDir)
 
