@@ -19,6 +19,7 @@ signals:
 
 public slots:
 
+    virtual bool isReady() const { return true;}
     virtual void update(){}
 };
 

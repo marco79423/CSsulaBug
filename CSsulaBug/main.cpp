@@ -5,6 +5,7 @@
 #include <QEventLoop>
 #include "downloader.h"
 #include "networkaccessor.h"
+#include "sfupdatehandler.h"
 
 int main(int argc, char *argv[])
 {
@@ -27,7 +28,7 @@ int main(int argc, char *argv[])
     accessor.get(1, QStringList() << url1 << url2);
     //*/
 
-    //* for Downloader
+    /* for Downloader
     Downloader::Task task1;
     task1.urlList.append(url1);
     task1.pathList[url1] = "1a.exe";
@@ -41,6 +42,10 @@ int main(int argc, char *argv[])
     d.download(task1);
     d.download(task2);
     //*/
+
+    //* for SFUpdateHandler
+    SFUpdateHandler handler;
+    handler.update();
 
     return a.exec();
 }

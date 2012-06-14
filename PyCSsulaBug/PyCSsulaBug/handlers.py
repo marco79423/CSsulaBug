@@ -11,6 +11,9 @@ class UpdateHandler(QtCore.QObject):
     info = QtCore.Signal(dict)
     finish = QtCore.Signal()
 
+    def isReady(self):
+        return True
+
     def update(self):
         pass
 
@@ -28,7 +31,14 @@ class DownloadHandler(QtCore.QObject):
 """
 
 class SFUpdateHandler(UpdateHandler):
-       
+    """
+    SFUpdateHandler 總共有三種狀態，
+    分別是 NothingDoing 、 ALLPageUrlListGetting 和 ComicInfoGetting
+    若狀態為 NothingDoing 便可執行 update 更新線上內容，而其餘狀態下呼叫 update 不會有任何反應
+    而要查詢現在是否可以更新，可以使用 isReady() 來判斷。
+
+    更新的內容會以 signal 的形式回傳，形態是 dictionary
+    """
     def __init__(self, parent=None):
         super(SFUpdateHandler, self).__init__(parent)
         self._networkAccessor = network.NetworkAccessor(self)
@@ -37,7 +47,14 @@ class SFUpdateHandler(UpdateHandler):
 
         self._setConnection()
 
+    def isReady(self):
+        return self._currentState == u"NothingDoing"
+
     def update(self):
+        """
+        若狀態為 NothingDoing 就更新線上內容，並會以 signal 的形式回傳訊息，
+        若狀態不為 NothingDoing 便什麼也不做。
+        """
         if self._currentState == u"NothingDoing":
             config.logging.info(u"開始更新")
             self._startProcess(u"ALLPageUrlListGetting")
@@ -62,7 +79,7 @@ class SFUpdateHandler(UpdateHandler):
     @QtCore.Slot(int, QtNetwork.QNetworkReply)
     def _onAccessorReply(self, id, networkReply):
         if self._currentState == "ALLPageUrlListGetting":
-            self._allPageUrlList = self._getPageUrl(unicode(networkReply.readAll(), 'utf-8'))
+            self._getPageUrl(unicode(networkReply.readAll(), 'utf-8'))
             config.logging.info(u"取得 allPageUrlList")
         elif self._currentState == "ComicInfoGetting":
             self._getComicInfo(unicode(networkReply.readAll(), 'utf-8'))
@@ -96,12 +113,12 @@ class SFUpdateHandler(UpdateHandler):
 
         #因為有 bug ，所以還要再加上一頁
         maxPageNumber += 1
-                
-        allPageUrlList = []
+        
+        self._allPageUrlList = []     
         for i in range(1, maxPageNumber+1):
-            allPageUrlList.append("http://comic.sfacg.com/Catalog/Default.aspx?"
+            self._allPageUrlList.append("http://comic.sfacg.com/Catalog/Default.aspx?"
                                   "PageIndex=" + str(i))
-        return allPageUrlList
+  
 
     def _getComicInfo(self, html):
          
