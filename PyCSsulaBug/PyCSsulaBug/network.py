@@ -1,13 +1,13 @@
 ﻿#-*- coding: utf-8 -*-
 
 from PySide import QtCore, QtNetwork
+import config
 import misc
 import tools
 
-logger = misc.getLogger()
 
 class Downloader(QtCore.QObject):
-
+    
     finish = QtCore.Signal()
 
     def __init__(self, parent=None):
@@ -27,7 +27,7 @@ class Downloader(QtCore.QObject):
         """
         self._taskIdCount += 1
         self._networkAccessor.get(self._taskIdCount, task['urlList'])
-        logger.info(u"Downloader:download: 下載任務 %d", self._taskIdCount)
+        config.logging.info(u"下載任務 %d", self._taskIdCount)
 
         self._pathList[self._taskIdCount] = task['pathList']
 
@@ -41,11 +41,11 @@ class Downloader(QtCore.QObject):
 
         file = QtCore.QFile(path)
         if not file.open(QtCore.QFile.WriteOnly):
-            logger.error(u"Downloader:_onAccessorReply: 開啟 %s 失敗", path)
+            config.logging.error(u"開啟 %s 失敗", path)
             return
         file.write(networkReply.readAll())
         file.close()
-        logger.info(u"Downloader:_onAccessorReply: 已下載 %s", path)
+        config.logging.info(u"已下載 %s", path)
 
         del self._pathList[id][url]
 
@@ -55,7 +55,7 @@ class Downloader(QtCore.QObject):
         當一項任務下載完後，刪除該任務資料
         """
         self.finish.emit()
-        logger.info(u"Downloader:_onAccessorFinish: id %d 下載完成", id)
+        config.logging.info(u"id %d 下載完成", id)
         del self._pathList[id]
 
     def _setConnection(self):
@@ -94,12 +94,12 @@ class NetworkAccessor(QtCore.QObject):
             url = urlList
             request = self._makeRequest(url)
             newTask['urlList'].append(url)
-            logger.info(u"NetworkAccessor:get:準備下載 %s", url)
+            config.logging.info(u"準備下載 %s", url)
         else:
             for url in urlList:
                 request = self._makeRequest(url)
                 newTask['urlList'].append(url)
-                logger.info(u"NetworkAccessor:get:準備下載 %s", url)
+                config.logging.info(u"準備下載 %s", url)
         
         self._taskQueue.enqueue(newTask)
         self._startAccess()
@@ -119,7 +119,7 @@ class NetworkAccessor(QtCore.QObject):
             for url in list(self._taskQueue.head()['urlList']):
                 request = self._makeRequest(url)
                 self._networkAccessManager.get(request)
-                logger.info(u"NetworkAccessor:_startAccess:開始下載 %s", url)
+                config.logging.info(u"開始下載 %s", url)
 
     @QtCore.Slot(QtNetwork.QNetworkReply)
     def _onManagerFinish(self, reply):
@@ -129,10 +129,10 @@ class NetworkAccessor(QtCore.QObject):
         若是發現該任務已經結束了，便發送 finish
         """
         url = reply.url().toString()
-        logger.info(u"NetworkAccessor:_onManagerFinish: %s 收到", url.encode('utf-8'))
+        config.logging.info(u"%s 收到", url.encode('utf-8'))
         
         if reply.error():
-            logger.error(u"NetworkAccessor:_onManagerFinish: %s", url.encode('utf-8'))
+            config.logging.error(u"%s", url.encode('utf-8'))
             return
         
         self._taskQueue.head()['urlList'].remove(url)

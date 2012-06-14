@@ -1,7 +1,7 @@
 ﻿#-*- coding: utf-8 -*-
 
 from PySide import QtCore
-import handler
+import handlers
 
 class MainController(QtCore.QObject):
     
@@ -18,7 +18,7 @@ class MainController(QtCore.QObject):
 
         self._setConnection()
 
-    @QtCore.Slot(handler.UpdateHandler)
+    @QtCore.Slot(handlers.UpdateHandler)
     def setUpdateHandler(self, updateHandler):
         self._updateHandler = updateHandler
         self._updateHandler.setParent(self)
@@ -27,7 +27,7 @@ class MainController(QtCore.QObject):
         self._downloadHandler = downloadHandler
         self._downloadHandler.setParent(self)
 
-    @QtCore.Slot(handler.DownloadHandler)    
+    @QtCore.Slot(handlers.DownloadHandler)    
     def update(self):
         self._updateHandler.update()
 

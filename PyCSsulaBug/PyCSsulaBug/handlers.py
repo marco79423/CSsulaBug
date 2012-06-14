@@ -1,11 +1,10 @@
 ﻿#-*- coding: utf-8 -*-
 
 from PySide import QtCore, QtNetwork
+import config
 import re
 import network
 import misc
-
-logger = misc.getLogger()
 
 class UpdateHandler(QtCore.QObject):
 
@@ -29,7 +28,7 @@ class DownloadHandler(QtCore.QObject):
 """
 
 class SFUpdateHandler(UpdateHandler):
-    
+       
     def __init__(self, parent=None):
         super(SFUpdateHandler, self).__init__(parent)
         self._networkAccessor = network.NetworkAccessor(self)
@@ -40,17 +39,17 @@ class SFUpdateHandler(UpdateHandler):
 
     def update(self):
         if self._currentState == u"NothingDoing":
-            logger.info(u"SFUpdateHandler:update:開始更新")
+            config.logging.info(u"開始更新")
             self._startProcess(u"ALLPageUrlListGetting")
         else:
-            logger.info(u"SFUpdateHandler:update:現在狀態是 %s，還不能更新", self._currentState)
+            config.logging.info(u"現在狀態是 %s，還不能更新", self._currentState)
 
     def _setConnection(self):
         self._networkAccessor.reply.connect(self._onAccessorReply)
         self._networkAccessor.finish.connect(self._onAccessorFinish)
 
     def _startProcess(self, state):
-        logger.info(u"SFUpdateHandler:_startProcess:開始執行 %s 狀態", state)
+        config.logging.info(u"開始執行 %s 狀態", state)
         if state == u"ALLPageUrlListGetting":
             self._currentState = u"ALLPageUrlListGetting"
             self._networkAccessor.get(0, "http://comic.sfacg.com/Catalog/")
@@ -58,26 +57,26 @@ class SFUpdateHandler(UpdateHandler):
             self._currentState = u"ComicInfoGetting"
             self._networkAccessor.get(1, self._allPageUrlList)
         else:
-            logger.error(u"SFUpdateHandler:_startProcess:錯誤的狀態 %s", state)
+            config.logging.error(u"錯誤的狀態 %s", state)
         
     @QtCore.Slot(int, QtNetwork.QNetworkReply)
     def _onAccessorReply(self, id, networkReply):
         if self._currentState == "ALLPageUrlListGetting":
             self._allPageUrlList = self._getPageUrl(unicode(networkReply.readAll(), 'utf-8'))
-            logger.info(u"SFUpdateHandler:_onAccessorReply:取得 allPageUrlList")
+            config.logging.info(u"取得 allPageUrlList")
         elif self._currentState == "ComicInfoGetting":
             self._getComicInfo(unicode(networkReply.readAll(), 'utf-8'))
-            logger.info(u"SFUpdateHandler:_onAccessorReply: 取得 %s 的資訊", networkReply.url().toString())
+            config.logging.info(u"取得 %s 的資訊", networkReply.url().toString())
         else:
-            logger.error(u"SFUpdateHandler:_onAccessorReply:錯誤的狀態 %s", self._currentState)
+            config.logging.error(u"錯誤的狀態 %s", self._currentState)
 
     @QtCore.Slot(int)
     def _onAccessorFinish(self, id):
         if self._currentState == "ALLPageUrlListGetting":
-            logger.info(u"SFUpdateHandler:_onAccessorFinish:進入 ComicInfoGetting 階段")
+            config.logging.info(u"進入 ComicInfoGetting 階段")
             self._startProcess("ComicInfoGetting")
         elif self._currentState == "ComicInfoGetting":
-            logger.info(u"SFUpdateHandler:_onAccessorFinish: 下載完成")
+            config.logging.info(u" 下載完成")
             self.finish.emit()
 
     def _getPageUrl(self, html):
@@ -130,7 +129,7 @@ class SFUpdateHandler(UpdateHandler):
                                lastUpdated=regexp.cap(6).strip(),
                                description=regexp.cap(7).strip())
              
-             logger.info(u"SFUpdateHandler:_getComicInfo:取得 updateInfo %s", misc.comicInfoToString(updateInfo))
+             config.logging.info(u"取得 updateInfo %s", misc.comicInfoToString(updateInfo))
              self.info.emit(updateInfo)
 
              pos += regexp.matchedLength()
@@ -147,11 +146,24 @@ if __name__ == "__main__":
     QtCore.QTextCodec.setCodecForCStrings(codec)
     QtCore.QTextCodec.setCodecForTr(codec)
     QtCore.QTextCodec.setCodecForLocale(codec)
-
+    
     def done():
         print 'done'
 
+    count = 0
+    def add():
+        global count 
+        count += 1
+        print "count", count
+
     handler = SFUpdateHandler()
     handler.finish.connect(done)
+    handler.info.connect(add)
     handler.update()
     sys.exit(app.exec_())
+    
+    """
+    logger = misc.getLogger("test")
+    logger.info("test")           
+    raw_input()  
+    """              
