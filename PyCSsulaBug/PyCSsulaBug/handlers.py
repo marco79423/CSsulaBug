@@ -161,8 +161,9 @@ class SFDownloadHandler(DownloadHandler):
         self._downloader = network.Downloader(self)
         self._currentState = u"NothingDoing"
         self._task = dict(urlList=[], pathList=dict())
-        self._key = None
-        self._dstDir = None
+        self._key = ""
+        self._dstDir = ""
+        self._comicName = ""
         self._chapterUrlList = []
         self._setConnection()
 
@@ -197,7 +198,9 @@ class SFDownloadHandler(DownloadHandler):
     @QtCore.Slot(int, QtNetwork.QNetworkReply)
     def _onAccessorReply(self, id, networkReply):
         if self._currentState == "ChapterUrlListing":
-            self._listChapterName(unicode(networkReply.readAll(), 'utf-8'))
+            html = unicode(networkReply.readAll(), 'utf-8')
+            self._getComicName(html)
+            self._listChapterName(html)
         elif self._currentState == "TaskMaking":
             self._makeTask(networkReply)
         else:
@@ -215,6 +218,11 @@ class SFDownloadHandler(DownloadHandler):
         self._currentState = u"NothingDoing"
         self.finish.emit()
 
+    def _getComicName(self, html):
+        nameExp = QtCore.QRegExp("<b class=\"F14PX\">([^<]+)<\/b>")
+        nameExp.indexIn(html)
+        self._comicName = nameExp.cap(1)
+
     def _listChapterName(self, html):
         #取得 ID
         idExp = QtCore.QRegExp("comicCounterID = (\\d+)")
@@ -228,7 +236,7 @@ class SFDownloadHandler(DownloadHandler):
         comicType = typeExp.cap(1);
         config.logging.info(u"取得 comicType %s"%(comicType))
 
-        #取得 話數
+        #取得話數
         chapterExp = QtCore.QRegExp("<a href=\"http://%s.sfacg.com/AllComic/%s/(\\d+j?)/"%(comicType, comicID))
               
         pos = 0
@@ -259,8 +267,9 @@ class SFDownloadHandler(DownloadHandler):
             if pos == -1: break
             imageNum = int(urlExp.cap(1))
             imageUrl = urlExp.cap(2)
+            path = "%s/%s/%s/%03d.%s" %(self._dstDir, self._comicName, chapter, imageNum, imageUrl[-3:])
             self._task['urlList'].append(imageUrl)
-            self._task['pathList'][imageUrl] = "%s/%s/%03d.%s" %(self._dstDir, chapter, imageNum, imageUrl[-3:])
+            self._task['pathList'][imageUrl] = path
             pos += urlExp.matchedLength()
 
 
