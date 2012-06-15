@@ -8,6 +8,7 @@ import tools
 
 class Downloader(QtCore.QObject):
     
+    info = QtCore.Signal(dict)
     finish = QtCore.Signal()
 
     def __init__(self, parent=None):
@@ -39,13 +40,24 @@ class Downloader(QtCore.QObject):
         url = networkReply.url().toString()
         path = self._pathList[id][url]
 
-        file = QtCore.QFile(path)
-        if not file.open(QtCore.QFile.WriteOnly):
-            config.logging.error(u"開啟 %s 失敗", path)
-            return
-        file.write(networkReply.readAll())
-        file.close()
-        config.logging.info(u"已下載 %s", path)
+
+        fileInfo = QtCore.QFileInfo(path)
+        dir = fileInfo.absoluteDir()
+        if not fileInfo.exists():
+            if not dir.exists():
+                if not dir.mkpath(dir.absolutePath()):
+                    config.logging.error(u"資料夾 %s 建立失敗")
+                    return 
+        
+            file = QtCore.QFile(path)
+            if not file.open(QtCore.QFile.WriteOnly):
+                config.logging.error(u"開啟 %s 失敗", path)
+                return
+
+            file.write(networkReply.readAll())
+            file.close()
+            self.info.emit(dict(url=url, path=path))
+            config.logging.info(u"已下載 %s", path)
 
         del self._pathList[id][url]
 

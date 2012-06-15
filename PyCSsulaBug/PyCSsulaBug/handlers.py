@@ -22,7 +22,7 @@ class DownloadHandler(QtCore.QObject):
     info = QtCore.Signal(dict)
     finish = QtCore.Signal()
 
-    def download(self, name, dstDir):
+    def download(self, key, dstDir):
         pass
 
 """
@@ -78,10 +78,10 @@ class SFUpdateHandler(UpdateHandler):
         
     @QtCore.Slot(int, QtNetwork.QNetworkReply)
     def _onAccessorReply(self, id, networkReply):
-        if self._currentState == "ALLPageUrlListGetting":
+        if self._currentState == u"ALLPageUrlListGetting":
             self._getPageUrl(unicode(networkReply.readAll(), 'utf-8'))
             config.logging.info(u"取得 allPageUrlList")
-        elif self._currentState == "ComicInfoGetting":
+        elif self._currentState == u"ComicInfoGetting":
             self._getComicInfo(unicode(networkReply.readAll(), 'utf-8'))
             config.logging.info(u"取得 %s 的資訊", networkReply.url().toString())
         else:
@@ -89,10 +89,11 @@ class SFUpdateHandler(UpdateHandler):
 
     @QtCore.Slot(int)
     def _onAccessorFinish(self, id):
-        if self._currentState == "ALLPageUrlListGetting":
+        if self._currentState == u"ALLPageUrlListGetting":
             config.logging.info(u"進入 ComicInfoGetting 階段")
             self._startProcess("ComicInfoGetting")
-        elif self._currentState == "ComicInfoGetting":
+        elif self._currentState == u"ComicInfoGetting":
+            self._currentState = u"NothingDoing"
             config.logging.info(u" 下載完成")
             self.finish.emit()
 
@@ -152,8 +153,116 @@ class SFUpdateHandler(UpdateHandler):
              pos += regexp.matchedLength()
 
 
-class DownloadHandler(DownloadHandler):
-    pass
+class SFDownloadHandler(DownloadHandler):
+    
+    def __init__(self, parent=None):
+        super(SFDownloadHandler, self).__init__(parent)
+        self._networkAccessor = network.NetworkAccessor(self)
+        self._downloader = network.Downloader(self)
+        self._currentState = u"NothingDoing"
+        self._task = dict(urlList=[], pathList=dict())
+        self._key = None
+        self._dstDir = None
+        self._chapterUrlList = []
+        self._setConnection()
+
+    def download(self, key, dstDir):
+        if self._currentState == u"NothingDoing":
+            config.logging.info(u"開始下載 %s" % key)
+            self._key, self._dstDir = key, dstDir
+            self._startProcess(u"ChapterUrlListing")
+        else:
+            config.logging.info(u"現在狀態是 %s，還不能下載", self._currentState)
+
+    def _setConnection(self):
+        self._networkAccessor.reply.connect(self._onAccessorReply)
+        self._networkAccessor.finish.connect(self._onAccessorFinish)
+        self._downloader.info.connect(self.info)
+        self._downloader.finish.connect(self._onDownloaderFinish)
+
+    def _startProcess(self, state):
+        config.logging.info(u"開始執行 %s 狀態", state)
+        if state == u"ChapterUrlListing":
+            self._currentState = u"ChapterUrlListing"
+            self._networkAccessor.get(0, "http://comic.sfacg.com/HTML/%s/" % (self._key))
+        elif state == u"TaskMaking":
+            self._currentState = u"TaskMaking"
+            self._networkAccessor.get(1, self._chapterUrlList)
+        elif state == u"Downloading":
+            self._currentState = u"Downloading"
+            self._downloader.download(self._task)
+        else:
+            config.logging.error(u"錯誤的狀態 %s", state)
+
+    @QtCore.Slot(int, QtNetwork.QNetworkReply)
+    def _onAccessorReply(self, id, networkReply):
+        if self._currentState == "ChapterUrlListing":
+            self._listChapterName(unicode(networkReply.readAll(), 'utf-8'))
+        elif self._currentState == "TaskMaking":
+            self._makeTask(networkReply)
+        else:
+            config.logging.error(u"錯誤的狀態 %s", self._currentState)
+
+    @QtCore.Slot(int)
+    def _onAccessorFinish(self, id):
+        if self._currentState == u"ChapterUrlListing":
+            self._startProcess(u"TaskMaking")
+        elif self._currentState == u"TaskMaking":
+            self._startProcess(u"Downloading")
+
+    @QtCore.Slot()
+    def _onDownloaderFinish(self):
+        self._currentState = u"NothingDoing"
+        self.finish.emit()
+
+    def _listChapterName(self, html):
+        #取得 ID
+        idExp = QtCore.QRegExp("comicCounterID = (\\d+)")
+        idExp.indexIn(html)
+        comicID = int(idExp.cap(1))
+        config.logging.info(u"取得 comicID %d"%(comicID))
+
+        #取得 漫畫種類(網站自己的分法)
+        typeExp = QtCore.QRegExp("<a href=\"http://([^\"]+).sfacg.com/AllComic")
+        typeExp.indexIn(html);
+        comicType = typeExp.cap(1);
+        config.logging.info(u"取得 comicType %s"%(comicType))
+
+        #取得 話數
+        chapterExp = QtCore.QRegExp("<a href=\"http://%s.sfacg.com/AllComic/%s/(\\d+j?)/"%(comicType, comicID))
+              
+        pos = 0
+        while True:
+            pos = chapterExp.indexIn(html, pos)
+            if pos == -1: break
+            chapterUrl = "http://%s.sfacg.com/Utility/%s/%s.js" % (comicType, comicID, chapterExp.cap(1))
+            self._chapterUrlList.append(chapterUrl)
+            config.logging.info(u"取得 chapterUrl %s" %(chapterUrl))
+            pos += chapterExp.matchedLength()
+            
+    def _makeTask(self, networkReply):
+
+        url = networkReply.url().toString()
+        html = unicode(networkReply.readAll(), 'utf-8')
+
+        #取得 chapter
+        chapterExp = QtCore.QRegExp("\\.sfacg\\.com/Utility/\\d+/(\\d+j?).js");
+        chapterExp.indexIn(url);
+        chapter = chapterExp.cap(1);
+
+        #取得 imageUrl
+        urlExp = QtCore.QRegExp("picAy\\[(\\d+)\\] = \"([^\"]+)\"");
+
+        pos = 0
+        while True:
+            pos = urlExp.indexIn(html, pos)
+            if pos == -1: break
+            imageNum = int(urlExp.cap(1))
+            imageUrl = urlExp.cap(2)
+            self._task['urlList'].append(imageUrl)
+            self._task['pathList'][imageUrl] = "%s/%s/%03d.%s" %(self._dstDir, chapter, imageNum, imageUrl[-3:])
+            pos += urlExp.matchedLength()
+
 
 if __name__ == "__main__":
     import sys
@@ -173,14 +282,15 @@ if __name__ == "__main__":
         count += 1
         print "count", count
 
+    """
     handler = SFUpdateHandler()
     handler.finish.connect(done)
     handler.info.connect(add)
     handler.update()
+    """
+
+    handler = SFDownloadHandler()
+    handler.download("FSJII", u"漫畫")
     sys.exit(app.exec_())
     
-    """
-    logger = misc.getLogger("test")
-    logger.info("test")           
-    raw_input()  
-    """              
+              

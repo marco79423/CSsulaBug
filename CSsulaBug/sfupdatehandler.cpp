@@ -61,6 +61,7 @@ void SFUpdateHandler::_onAccessorFinish(const int &id)
         _startProcess(ComicInfoGetting);
         break;
     case ComicInfoGetting:
+        _currentState = NothingDoing
         qDebug() << "下載完成";
         emit finish();
         break;
