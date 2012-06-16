@@ -44,17 +44,19 @@ class SiteHandler(QtCore.QObject):
         self._updateHandler = None
         self._downloadHandler = None
 
-        self._setConnection()
-
     @QtCore.Slot(UpdateHandler)
     def setUpdateHandler(self, updateHandler):
         self._updateHandler = updateHandler
         self._updateHandler.setParent(self)
+        self._updateHandler.info.connect(self.updateInfo)
+        self._updateHandler.finish.connect(self.updateFinish)
 
     @QtCore.Slot(DownloadHandler)
     def setDownloadHandler(self, downloadHandler):
         self._downloadHandler = downloadHandler
         self._downloadHandler.setParent(self)
+        self._downloadHandler.info.connect(self.downloadInfo)
+        self._downloadHandler.finish.connect(self.downloadFinish)
 
     @QtCore.Slot()
     def update(self):
@@ -64,12 +66,8 @@ class SiteHandler(QtCore.QObject):
     def download(self, name, dstDir):
         self._downloadHandler.download(name, dstDir)
 
-    def _setConnection(self):
-        self._updateHandler.info.connect(self.updateInfo)
-        self._updateHandler.finish.connect(self.udpateFinish)
 
-        self._downloadHandler.info.connect(self.downloadInfo)
-        self._downloadHandler.finish.connect(self.downloadFinish)
+        
 """
 漫畫網站 SF 
 網址 http://comic.sky-fire.com
