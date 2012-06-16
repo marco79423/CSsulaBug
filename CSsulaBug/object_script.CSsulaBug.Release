@@ -13,6 +13,7 @@ INPUT(
 ./release\updatehandler.o
 ./release\downloadhandler.o
 ./release\sfupdatehandler.o
+./release\sfdownloadhandler.o
 ./release\moc_sfupdater.o
 ./release\moc_networkaccessor.o
 ./release\moc_sfcoverupdater.o
@@ -25,5 +26,6 @@ INPUT(
 ./release\moc_updatehandler.o
 ./release\moc_downloadhandler.o
 ./release\moc_sfupdatehandler.o
+./release\moc_sfdownloadhandler.o
 ./release\qrc_resource.o
 );

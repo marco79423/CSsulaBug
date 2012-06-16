@@ -42,12 +42,11 @@ class Downloader(QtCore.QObject):
 
 
         fileInfo = QtCore.QFileInfo(path)
-        dir = fileInfo.absoluteDir()
         if not fileInfo.exists():
-            if not dir.exists():
-                if not dir.mkpath(dir.absolutePath()):
-                    config.logging.error(u"資料夾 %s 建立失敗")
-                    return 
+            dir = fileInfo.absoluteDir()
+            if not dir.exists() and not dir.mkpath(dir.absolutePath()):
+                config.logging.error(u"資料夾 %s 建立失敗", dir.absolutePath())
+                return 
         
             file = QtCore.QFile(path)
             if not file.open(QtCore.QFile.WriteOnly):

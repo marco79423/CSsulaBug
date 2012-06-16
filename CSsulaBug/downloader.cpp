@@ -2,7 +2,9 @@
 #include "networkaccessor.h"
 #include <QNetworkReply>
 #include <QFile>
+#include <QDir>
 #include <QDebug>
+#include <QFileInfo>
 
 Downloader::Downloader(QObject *parent) :
     QObject(parent), _taskIdCount(0)
@@ -33,18 +35,36 @@ void Downloader::_onAccessorReply(const int &id, QNetworkReply *networkReply)
     QString url = networkReply->url().toString();
     QString path = _pathList[id][url];
 
-    QFile file(path);
-    if(!file.open(QFile::WriteOnly))
+    QFileInfo fileInfo(path);
+    if(!fileInfo.exists())
     {
-        qCritical() << "Downloader:_onAccessorReply: 開啟 " << path << " 失敗";
-        return;
+        QDir dir = fileInfo.absoluteDir();
+        if(!dir.exists() && !dir.mkpath(dir.absolutePath()))
+        {
+            qCritical() << "Downloader:_onAccessorReply:資料夾"
+                        << dir.absolutePath()
+                        << "建立失敗";
+        }
+
+        QFile file(path);
+        if(!file.open(QFile::WriteOnly))
+        {
+            qCritical() << "Downloader:_onAccessorReply: 開啟 " << path << " 失敗";
+            return;
+        }
+
+        file.write(networkReply->readAll());
+        file.close();
+
+        QHash<QString, QString> downloadInfo;
+        downloadInfo["url"] = url;
+        downloadInfo["path"] = path;
+        emit info(downloadInfo);
+        qDebug() << "Downloader:_onAccessorReply: 已下載 " << path;
+
+        _pathList[id].remove(url);
     }
 
-    file.write(networkReply->readAll());
-    file.close();
-    qDebug() << "Downloader:_onAccessorReply: 已下載 " << path;
-
-    _pathList[id].remove(url);
 }
 
 void Downloader::_onAccessorFinish(const int &id)

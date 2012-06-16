@@ -61,7 +61,7 @@ void SFUpdateHandler::_onAccessorFinish(const int &id)
         _startProcess(ComicInfoGetting);
         break;
     case ComicInfoGetting:
-        _currentState = NothingDoing
+        _currentState = NothingDoing;
         qDebug() << "下載完成";
         emit finish();
         break;
@@ -93,6 +93,7 @@ void SFUpdateHandler::_startProcess(const State &state)
         break;
     default:
         qCritical() << "SFUpdateHandler:_startProcess:錯誤的狀態 " << state;
+        break;
     }
 }
 

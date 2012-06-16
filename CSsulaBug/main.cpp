@@ -6,6 +6,7 @@
 #include "downloader.h"
 #include "networkaccessor.h"
 #include "sfupdatehandler.h"
+#include "sfdownloadhandler.h"
 
 int main(int argc, char *argv[])
 {
@@ -43,9 +44,15 @@ int main(int argc, char *argv[])
     d.download(task2);
     //*/
 
-    //* for SFUpdateHandler
+    /* for SFUpdateHandler
     SFUpdateHandler handler;
     handler.update();
+    //*/
+
+    //* for SFDownloadHandler
+    SFDownloadHandler handler;
+    handler.download("FSJII", "漫畫");
+    //*/
 
     return a.exec();
 }

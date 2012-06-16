@@ -19,7 +19,8 @@ signals:
 
 public slots:
 
-    virtual void download(const QString &name, const QString &dstDir){}
+    virtual bool isReady() const { return true;}
+    virtual void download(const QString &key, const QString &dstDir){}
 };
 
 #endif // DOWNLOADHANDLER_H

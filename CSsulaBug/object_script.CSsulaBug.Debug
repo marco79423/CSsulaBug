@@ -13,6 +13,7 @@ INPUT(
 ./debug\updatehandler.o
 ./debug\downloadhandler.o
 ./debug\sfupdatehandler.o
+./debug\sfdownloadhandler.o
 ./debug\moc_sfupdater.o
 ./debug\moc_networkaccessor.o
 ./debug\moc_sfcoverupdater.o
@@ -25,5 +26,6 @@ INPUT(
 ./debug\moc_updatehandler.o
 ./debug\moc_downloadhandler.o
 ./debug\moc_sfupdatehandler.o
+./debug\moc_sfdownloadhandler.o
 ./debug\qrc_resource.o
 );

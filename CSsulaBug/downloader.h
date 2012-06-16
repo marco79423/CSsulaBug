@@ -24,6 +24,7 @@ public:
 
 signals:
     
+    void info(const QHash<QString, QString> &downloadInfo);
     void finish();
 
 public slots:

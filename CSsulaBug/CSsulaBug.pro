@@ -23,7 +23,8 @@ SOURCES += main.cpp \
     maincontroller.cpp \
     updatehandler.cpp \
     downloadhandler.cpp \
-    sfupdatehandler.cpp
+    sfupdatehandler.cpp \
+    sfdownloadhandler.cpp
 
 HEADERS  += \
     sfupdater.h \
@@ -38,7 +39,8 @@ HEADERS  += \
     maincontroller.h \
     updatehandler.h \
     downloadhandler.h \
-    sfupdatehandler.h
+    sfupdatehandler.h \
+    sfdownloadhandler.h
 
 FORMS    += \
     mainwindow.ui \

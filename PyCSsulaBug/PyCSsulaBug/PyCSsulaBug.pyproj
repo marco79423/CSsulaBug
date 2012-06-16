@@ -29,6 +29,7 @@
     <Compile Include="controllers.py" />
     <Compile Include="handlers.py" />
     <Compile Include="misc.py" />
+    <Compile Include="models.py" />
     <Compile Include="network.py" />
     <Compile Include="pycssulabug.py" />
     <Compile Include="tools.py" />
