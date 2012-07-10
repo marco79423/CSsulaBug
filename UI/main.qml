@@ -2,7 +2,7 @@ import QtQuick 1.1
 
 Rectangle {
     id: mainView
-    width: 900
+    width: 910
     height: 600
     gradient: Gradient {
         GradientStop {
@@ -119,21 +119,20 @@ Rectangle {
     }
 
     GridView {
-        id: comicList
-        cellWidth: 400
-        cellHeight: 120
-        contentWidth: 100
-        keyNavigationWraps: false
 
-        flickableDirection: Flickable.AutoFlickDirection
+        id: comicList
+        x: 74
+        y: 52
+
+        cellWidth: 410
+        cellHeight: 130
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: 10
         anchors.right: parent.right
-        anchors.rightMargin: 10
         anchors.left: leftSideBar.right
-        anchors.leftMargin: 10
         anchors.top: topRow.bottom
-        anchors.topMargin: 10
+        anchors.margins: 10
+        snapMode: SnapToRow
+
         delegate: Comic {
             cover: model.cover
             name: model.name
@@ -143,6 +142,186 @@ Rectangle {
             lastUpdated: model.lastUpdated
         }
         model: ListModel {
+            ListElement {
+                cover: "http://comic.sfacg.com/Logo/bleach.jpg"
+                name: "死神"
+                site: "SF"
+                type: "熱血類"
+                author: "久保帶人"
+                lastUpdated: "500英文[未完成]"
+            }
+
+            ListElement {
+                cover: "http://comic.sfacg.com/Logo/Naruto.jpg"
+                name: "火影忍者"
+                site: "SF"
+                type: "熱血類"
+                author: "岸本齊使"
+                lastUpdated: "593话[未完结]"
+            }
+
+            ListElement {
+                cover: "http://comic.sfacg.com/Logo/OnePiece.jpg"
+                name: "海贼王/One Piece"
+                site: "SF"
+                type: "熱血類"
+                author: "尾田荣一郎"
+                lastUpdated: "674话[未完结]"
+            }
+
+            ListElement {
+                cover: "http://comic.sfacg.com/Logo/e6ec812f-7007-4375-98b2-70e1325e7f87.jpg"
+                name: "红Kure-Nai"
+                site: "SF"
+                type: "社會類"
+                author: "片山宪太朗"
+                lastUpdated: "051话[未完结] "
+            }
+
+            ListElement {
+                cover: "http://comic.sfacg.com/Logo/bleach.jpg"
+                name: "死神"
+                site: "SF"
+                type: "熱血類"
+                author: "久保帶人"
+                lastUpdated: "500英文[未完成]"
+            }
+
+            ListElement {
+                cover: "http://comic.sfacg.com/Logo/Naruto.jpg"
+                name: "火影忍者"
+                site: "SF"
+                type: "熱血類"
+                author: "岸本齊使"
+                lastUpdated: "593话[未完结]"
+            }
+
+            ListElement {
+                cover: "http://comic.sfacg.com/Logo/OnePiece.jpg"
+                name: "海贼王/One Piece"
+                site: "SF"
+                type: "熱血類"
+                author: "尾田荣一郎"
+                lastUpdated: "674话[未完结]"
+            }
+
+            ListElement {
+                cover: "http://comic.sfacg.com/Logo/e6ec812f-7007-4375-98b2-70e1325e7f87.jpg"
+                name: "红Kure-Nai"
+                site: "SF"
+                type: "社會類"
+                author: "片山宪太朗"
+                lastUpdated: "051话[未完结] "
+            }
+
+            ListElement {
+                cover: "http://comic.sfacg.com/Logo/bleach.jpg"
+                name: "死神"
+                site: "SF"
+                type: "熱血類"
+                author: "久保帶人"
+                lastUpdated: "500英文[未完成]"
+            }
+
+            ListElement {
+                cover: "http://comic.sfacg.com/Logo/Naruto.jpg"
+                name: "火影忍者"
+                site: "SF"
+                type: "熱血類"
+                author: "岸本齊使"
+                lastUpdated: "593话[未完结]"
+            }
+
+            ListElement {
+                cover: "http://comic.sfacg.com/Logo/OnePiece.jpg"
+                name: "海贼王/One Piece"
+                site: "SF"
+                type: "熱血類"
+                author: "尾田荣一郎"
+                lastUpdated: "674话[未完结]"
+            }
+
+            ListElement {
+                cover: "http://comic.sfacg.com/Logo/e6ec812f-7007-4375-98b2-70e1325e7f87.jpg"
+                name: "红Kure-Nai"
+                site: "SF"
+                type: "社會類"
+                author: "片山宪太朗"
+                lastUpdated: "051话[未完结] "
+            }
+
+            ListElement {
+                cover: "http://comic.sfacg.com/Logo/bleach.jpg"
+                name: "死神"
+                site: "SF"
+                type: "熱血類"
+                author: "久保帶人"
+                lastUpdated: "500英文[未完成]"
+            }
+
+            ListElement {
+                cover: "http://comic.sfacg.com/Logo/Naruto.jpg"
+                name: "火影忍者"
+                site: "SF"
+                type: "熱血類"
+                author: "岸本齊使"
+                lastUpdated: "593话[未完结]"
+            }
+
+            ListElement {
+                cover: "http://comic.sfacg.com/Logo/OnePiece.jpg"
+                name: "海贼王/One Piece"
+                site: "SF"
+                type: "熱血類"
+                author: "尾田荣一郎"
+                lastUpdated: "674话[未完结]"
+            }
+
+            ListElement {
+                cover: "http://comic.sfacg.com/Logo/e6ec812f-7007-4375-98b2-70e1325e7f87.jpg"
+                name: "红Kure-Nai"
+                site: "SF"
+                type: "社會類"
+                author: "片山宪太朗"
+                lastUpdated: "051话[未完结] "
+            }
+
+            ListElement {
+                cover: "http://comic.sfacg.com/Logo/bleach.jpg"
+                name: "死神"
+                site: "SF"
+                type: "熱血類"
+                author: "久保帶人"
+                lastUpdated: "500英文[未完成]"
+            }
+
+            ListElement {
+                cover: "http://comic.sfacg.com/Logo/Naruto.jpg"
+                name: "火影忍者"
+                site: "SF"
+                type: "熱血類"
+                author: "岸本齊使"
+                lastUpdated: "593话[未完结]"
+            }
+
+            ListElement {
+                cover: "http://comic.sfacg.com/Logo/OnePiece.jpg"
+                name: "海贼王/One Piece"
+                site: "SF"
+                type: "熱血類"
+                author: "尾田荣一郎"
+                lastUpdated: "674话[未完结]"
+            }
+
+            ListElement {
+                cover: "http://comic.sfacg.com/Logo/e6ec812f-7007-4375-98b2-70e1325e7f87.jpg"
+                name: "红Kure-Nai"
+                site: "SF"
+                type: "社會類"
+                author: "片山宪太朗"
+                lastUpdated: "051话[未完结] "
+            }
+
             ListElement {
                 cover: "http://comic.sfacg.com/Logo/bleach.jpg"
                 name: "死神"
