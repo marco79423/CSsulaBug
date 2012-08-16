@@ -2,8 +2,8 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>Comic.qml</file>
-        <file>Header.qml</file>
         <file>LeftSideBar.qml</file>
         <file>ComicModel.qml</file>
+        <file>FunctionBar.qml</file>
     </qresource>
 </RCC>

@@ -183,7 +183,7 @@ class SFUpdateHandler(UpdateHandler):
              if pos == -1: break
              
              updateInfo = dict(site="SF",
-                               coverUrl=regexp.cap(1),
+                               cover=regexp.cap(1),
                                key=regexp.cap(2),
                                name=regexp.cap(3),
                                author=regexp.cap(4),

@@ -3,7 +3,49 @@
 from PySide import QtCore, QtGui
 import handlers
 
+class ComicModel(QtCore.QAbstractListModel):
 
+    def __init__(self, parent=None):
+        super(ComicModel, self).__init__(parent)
+        self._roles = dict(enumerate(["cover", "name", "site", "type", "author", "lastUpdated"]))
+        self._comics = []
+        self._siteHandler = handlers.SiteHandler(self)
+        
+        #initialize
+        self.setRoleNames(self._roles)
+
+        #SiteHandler
+        self._siteHandler.setUpdateHandler(handlers.SFUpdateHandler())
+        self._siteHandler.setDownloadHandler(handlers.SFDownloadHandler())
+
+        self._setConnection()
+
+    @QtCore.Slot()
+    def update(self):
+        self._siteHandler.update()
+
+    def rowCount(self, parent = QtCore.QModelIndex()):
+        return len(self._comics)
+    
+    def data(self, index, role=QtCore.Qt.DisplayRole):
+        if index.row() < 0 or index.row() >= len(self._comics):
+            return None 
+        comic = self._comics[index.row()]
+        
+        infoType = []
+        return comic[self._roles[role]]
+        
+    @QtCore.Slot()
+    def _insertOneEntry(self, info):
+        self.beginInsertRows(QtCore.QModelIndex(), self.rowCount(), self.rowCount())
+        self._comics.append(info)
+        self.endInsertRows()
+    
+    def _setConnection(self):
+        self._siteHandler.updateInfo.connect(self._insertOneEntry)
+
+
+"""
 class SiteModel(QtCore.QObject):
 
     def __init__(self, parent=None):
@@ -48,7 +90,7 @@ class SiteModel(QtCore.QObject):
         entry.append(QtGui.QStandardItem(info["author"]))
         entry.append(QtGui.QStandardItem(info["lastUpdated"]))
         self._model.appendRow(entry)
-    
+"""    
 
 if __name__ == "__main__":
     from PySide import QtGui

@@ -6,8 +6,8 @@ OTHER_FILES += \
     main.qml \
     Comic.qml \
     LeftSideBar.qml \
-    Header.qml \
-    ComicModel.qml
+    ComicModel.qml \
+    FunctionBar.qml
 
 RESOURCES += \
     resource.qrc

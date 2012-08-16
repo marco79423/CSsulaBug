@@ -21,7 +21,7 @@ Item {
             anchors.left: parent.left
         }
 
-        Header{
+        FunctionBar {
             id: header
             z:1
             anchors.top: parent.top
@@ -32,6 +32,15 @@ Item {
         GridView {
 
             id: comicList
+            x: 89
+            y: 83
+            width: 823
+            height: 500
+            keyNavigationWraps: false
+            flow: GridView.LeftToRight
+            boundsBehavior: Flickable.DragAndOvershootBounds
+            anchors.rightMargin: 38
+            anchors.bottomMargin: 17
             cellWidth: 410
             cellHeight: 140
             anchors.top: header.bottom
