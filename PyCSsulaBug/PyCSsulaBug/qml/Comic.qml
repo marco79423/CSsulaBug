@@ -2,11 +2,10 @@ import QtQuick 1.1
 
 Rectangle {
     id: comicInfo
-    width: 380
+    width: 500
     height: 120
-    color: "#9e9595"
-    radius: 10
-    border.width: 3
+    color: "#958b8b"
+    border.width: 2
     border.color: "#ffffff"
 
     property string cover
@@ -19,7 +18,8 @@ Rectangle {
     Image {
         id:comicCover
         source: cover
-        height: comicInfo.height - 20
+        width: height * 0.8
+        height: parent.height * 0.8
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left
         anchors.margins: 10

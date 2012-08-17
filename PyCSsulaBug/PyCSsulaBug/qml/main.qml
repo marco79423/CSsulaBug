@@ -1,18 +1,26 @@
 import QtQuick 1.1
 
-Item {
+Rectangle {
     id: mainView
-    width: 500
+    width: 400
     height: 600
+    gradient: Gradient {
+        GradientStop {
+            position: 0
+            color: "#463260"
+        }
 
-    Rectangle{
-        id: background
-        anchors.fill: parent
-        gradient: Gradient {
-            GradientStop { position: 0; color: "#714f9c"}
-            GradientStop { position: 1; color: "#0e0a11"}
+        GradientStop {
+            position: 0.460
+            color: "#5e4382"
+        }
+
+        GradientStop {
+            position: 1
+            color: "#0e0a11"
         }
     }
+
 
     Header{
         id: header
