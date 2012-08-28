@@ -25,26 +25,32 @@ Rectangle {
     Header{
         id: header
         z:1
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.right: parent.right
+        anchors {
+            top : parent.top
+            left: parent.left
+            right: parent.right
+        }
     }
 
     ComicList {
         id: comicList
-        anchors.top: header.bottom
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: footer.top
+        anchors{
+            top: header.bottom
+            left: parent.left
+            right: parent.right
+            bottom: footer.top
+        }
     }
 
     Footer {
         id: footer
         z:1
 
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
+        anchors {
+            left: parent.left
+            right: parent.right
+            bottom: parent.bottom
+        }
     }
 }
 

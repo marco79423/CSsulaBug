@@ -3,6 +3,7 @@ import QtQuick 1.1
 
 Rectangle {
 
+    id: footer
     width: 400
     height: 60
     radius: 0
@@ -24,90 +25,85 @@ Rectangle {
     }
 
 
-    Rectangle {
-        id: exploreButton
-        width: (parent.width / 3) * 0.8
-        height: parent.height * 0.6
-        radius: 10
-        gradient: Gradient {
-            GradientStop { position: 0; color: "#714f9c"}
-            GradientStop { position: 0.500; color: "#312b3e"}
-            GradientStop { position: 1; color: "#714f9c"}
+    Row {
+
+        anchors.centerIn: parent
+        spacing: 20
+
+        Rectangle {
+            id: exploreButton
+            width: (footer.width / 3) * 0.8
+            height: footer.height * 0.6
+            radius: 10
+            gradient: Gradient {
+                GradientStop { position: 0; color: "#714f9c"}
+                GradientStop { position: 0.500; color: "#312b3e"}
+                GradientStop { position: 1; color: "#714f9c"}
+            }
+
+            Text {
+                id: exploreText
+                color: "#b5b5b5"
+                text: "瀏覽漫畫"
+                font.family: "微軟正黑體"
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
+                font.bold: false
+                anchors.fill: parent
+                font.pixelSize: 21
+            }
+
         }
 
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.left: parent.left
-        anchors.leftMargin: 20
+        Rectangle {
+            id: settingButton
+            width: (footer.width / 3) * 0.8
+            height: footer.height * 0.6
+            radius: 10
 
-        Text {
-            id: exploreText
-            color: "#b5b5b5"
-            text: "瀏覽漫畫"
-            font.family: "微軟正黑體"
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
-            font.bold: false
-            anchors.fill: parent
-            font.pixelSize: 21
+            gradient: Gradient {
+                GradientStop { position: 0; color: "#714f9c"}
+                GradientStop { position: 0.500; color: "#312b3e"}
+                GradientStop { position: 1; color: "#714f9c"}
+            }
+
+            Text {
+                id: settingText
+                color:"#b5b5b5"
+                text: "設定選項"
+                font.family: "微軟正黑體"
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
+                font.bold: false
+                anchors.fill: parent
+                font.pixelSize: 21
+            }
         }
 
-    }
+        Rectangle {
+            id: aboutButton
+            width: (footer.width / 3) * 0.8
+            height: footer.height * 0.6
+            radius: 10
 
-    Rectangle {
-        id: settingButton
-        width: (parent.width / 3) * 0.8
-        height: parent.height * 0.6
-        radius: 10
+            gradient: Gradient {
+                GradientStop { position: 0; color: "#714f9c"}
+                GradientStop { position: 0.500; color: "#312b3e"}
+                GradientStop { position: 1; color: "#714f9c"}
+            }
 
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.horizontalCenter: parent.horizontalCenter
+            Text {
+                id: aboutText
+                color:"#b5b5b5"
+                text: "關於軟體"
+                font.family: "微軟正黑體"
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
+                font.bold: false
+                anchors.fill: parent
+                font.pixelSize: 21
+            }
 
-        gradient: Gradient {
-            GradientStop { position: 0; color: "#714f9c"}
-            GradientStop { position: 0.500; color: "#312b3e"}
-            GradientStop { position: 1; color: "#714f9c"}
         }
-
-        Text {
-            id: settingText
-            color:"#b5b5b5"
-            text: "設定選項"
-            font.family: "微軟正黑體"
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
-            font.bold: false
-            anchors.fill: parent
-            font.pixelSize: 21
-        }
-    }
-
-    Rectangle {
-        id: aboutButton
-        width: (parent.width / 3) * 0.8
-        height: parent.height * 0.6
-        radius: 10
-
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.right: parent.right
-        anchors.rightMargin: 20
-
-        gradient: Gradient {
-            GradientStop { position: 0; color: "#714f9c"}
-            GradientStop { position: 0.500; color: "#312b3e"}
-            GradientStop { position: 1; color: "#714f9c"}
-        }
-
-        Text {
-            id: aboutText
-            color:"#b5b5b5"
-            text: "關於軟體"
-            font.family: "微軟正黑體"
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
-            font.bold: false
-            anchors.fill: parent
-            font.pixelSize: 21
-        }
-
     }
 }

@@ -68,9 +68,9 @@ Rectangle{
         //color: "#823a8d"
 
         gradient: Gradient {
-            GradientStop { position: 0; color: "#714f9c"}
-            GradientStop { position: 0.5; color: "#383244"}
-            GradientStop { position: 1; color: "#714f9c"}
+            GradientStop { id: gradientstop1; position: 0; color: "#714f9c"}
+            GradientStop { id: gradientstop2; position: 0.5; color: "#383244"}
+            GradientStop { id: gradientstop3; position: 1; color: "#714f9c"}
         }
 
         Text {
@@ -89,11 +89,39 @@ Rectangle{
             id: downloadMouseArea
             hoverEnabled: true
             anchors.fill: parent
-            onClicked: {}
+            onClicked:{}
         }
 
 
     }
+    states: [
+        State {
+            name: "clicked"
+
+            PropertyChanges {
+                target: gradientstop1
+                position: 0
+                color: "#714f9c"
+            }
+
+            PropertyChanges {
+                target: gradientstop2
+                position: 0.500
+                color: "#60448f"
+            }
+
+            PropertyChanges {
+                target: gradientstop3
+                position: 1
+                color: "#714f9c"
+            }
+
+            PropertyChanges {
+                target: textInput
+                anchors.topMargin: 5
+            }
+        }
+    ]
 }
 
 

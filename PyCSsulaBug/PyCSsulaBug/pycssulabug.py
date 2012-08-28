@@ -13,9 +13,6 @@ if __name__ in "__main__":
     QtCore.QTextCodec.setCodecForTr(codec)
     QtCore.QTextCodec.setCodecForLocale(codec)
 
-    #m = MainWindow()
-    #m.show()
-
     view = QtDeclarative.QDeclarativeView()
     
     model = models.ComicModel()

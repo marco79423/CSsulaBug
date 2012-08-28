@@ -1,26 +1,17 @@
 import QtQuick 1.1
 
-ListView {
-    //width: 100; height: 100
-    delegate: Rectangle {
-        height: 100
-        width: 100
-        Text {
-            text: modelData
-        }
+Rectangle {
+  width: 200
+  height: 200
+  Text {
+    x: 66
+    y: SequentialAnimation { // new animation
+      running: true
+      repeat: true
+      NumberAnimation { to: 150; easing: "easeOutBounce"; duration: 2000 }
+      PauseAnimation { duration: 1000 }
+      NumberAnimation { to: 50; easing: "easeOutQuad"; duration: 1000 }
     }
-    model: comicModel
+    text: "Hello World"
+  }
 }
-/*
-ListView {
-     width: 100; height: 100
-     anchors.fill: parent
-
-     model: myModel
-     delegate: Rectangle {
-         height: 25
-         width: 100
-         Text { text: modelData }
-     }
- }
-*/

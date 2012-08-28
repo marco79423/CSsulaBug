@@ -17,4 +17,5 @@ HEADERS  +=
 FORMS    +=
 
 OTHER_FILES += \
-    test.qml
+    test.qml \
+    SimpleButton.qml
