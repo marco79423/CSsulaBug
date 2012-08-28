@@ -3,18 +3,18 @@
 class Queue:
 
     def __init__(self):
-        self.m_list = []
+        self._list = []
     
     def enqueue(self, item):
-        self.m_list.append(item)
+        self._list.append(item)
 
     def dequeue(self):
-        item = self.m_list[0]
-        self.m_list = self.m_list[1:]
+        item = self._list[0]
+        self._list = self._list[1:]
         return item
 
     def head(self):
-        return self.m_list[0]
+        return self._list[0]
 
     def isEmpty(self):
-        return len(self.m_list) == 0
+        return len(self._list) == 0
