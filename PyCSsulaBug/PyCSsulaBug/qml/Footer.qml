@@ -4,7 +4,8 @@ import QtQuick 1.1
 Rectangle {
 
     id: footer
-    width: 400
+    anchors.bottom: parent.bottom
+    width: parent.width
     height: 60
     radius: 0
     gradient: Gradient {

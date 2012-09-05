@@ -2,7 +2,7 @@ import QtQuick 1.1
 
 Rectangle {
     id: comicInfo
-    width: 500
+    width: parent.width
     height: 120
     color: "#958b8b"
     border.width: 2

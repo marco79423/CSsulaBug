@@ -3,8 +3,11 @@ import QtQuick 1.1
 
 Rectangle{
 
-    width: 400
+    id: header
+    anchors.top: parent.top
+    width: parent.width
     height: 60
+    y: -height
 
     gradient: Gradient {
         GradientStop {
@@ -94,34 +97,7 @@ Rectangle{
 
 
     }
-    states: [
-        State {
-            name: "clicked"
 
-            PropertyChanges {
-                target: gradientstop1
-                position: 0
-                color: "#714f9c"
-            }
-
-            PropertyChanges {
-                target: gradientstop2
-                position: 0.500
-                color: "#60448f"
-            }
-
-            PropertyChanges {
-                target: gradientstop3
-                position: 1
-                color: "#714f9c"
-            }
-
-            PropertyChanges {
-                target: textInput
-                anchors.topMargin: 5
-            }
-        }
-    ]
 }
 
 

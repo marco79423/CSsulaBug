@@ -21,36 +21,10 @@ Rectangle {
         }
     }
 
+    ComicList {}
 
-    Header{
-        id: header
-        z:1
-        anchors {
-            top : parent.top
-            left: parent.left
-            right: parent.right
-        }
-    }
+    Header{}
 
-    ComicList {
-        id: comicList
-        anchors{
-            top: header.bottom
-            left: parent.left
-            right: parent.right
-            bottom: footer.top
-        }
-    }
-
-    Footer {
-        id: footer
-        z:1
-
-        anchors {
-            left: parent.left
-            right: parent.right
-            bottom: parent.bottom
-        }
-    }
+    Footer {}
 }
 

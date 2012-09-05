@@ -4,7 +4,8 @@ import QtQuick 1.1
 ListView {
 
     id: comicList
-    height: 480
+    height: parent.height
+    width: parent.width
 
     keyNavigationWraps: false
     boundsBehavior: Flickable.DragAndOvershootBounds
