@@ -26,6 +26,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="config.py" />
+    <Compile Include="core.py" />
     <Compile Include="handlers.py" />
     <Compile Include="misc.py" />
     <Compile Include="models.py" />

@@ -29,44 +29,6 @@ class DownloadHandler(QtCore.QObject):
     @QtCore.Slot(str, str)
     def download(self, key, dstDir):
         pass
-
-
-class SiteHandler(QtCore.QObject):
-
-    updateInfo = QtCore.Signal(dict)
-    updateFinish = QtCore.Signal()
-
-    downloadInfo = QtCore.Signal(dict)
-    downloadFinish = QtCore.Signal()
-    
-    def __init__(self, parent=None):
-        super(SiteHandler, self).__init__(parent)
-        self._updateHandler = None
-        self._downloadHandler = None
-
-    @QtCore.Slot(UpdateHandler)
-    def setUpdateHandler(self, updateHandler):
-        self._updateHandler = updateHandler
-        self._updateHandler.setParent(self)
-        self._updateHandler.info.connect(self.updateInfo)
-        self._updateHandler.finish.connect(self.updateFinish)
-
-    @QtCore.Slot(DownloadHandler)
-    def setDownloadHandler(self, downloadHandler):
-        self._downloadHandler = downloadHandler
-        self._downloadHandler.setParent(self)
-        self._downloadHandler.info.connect(self.downloadInfo)
-        self._downloadHandler.finish.connect(self.downloadFinish)
-
-    @QtCore.Slot()
-    def update(self):
-        self._updateHandler.update()
-
-    @QtCore.Slot(str, str)
-    def download(self, name, dstDir):
-        self._downloadHandler.download(name, dstDir)
-
-
         
 """
 漫畫網站 SF 

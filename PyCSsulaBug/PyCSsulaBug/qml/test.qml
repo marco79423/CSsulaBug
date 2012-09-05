@@ -2,15 +2,21 @@ import QtQuick 1.1
 
 Rectangle{
 
+    width: 200; height: 250
+    color: "lightblue"
     ListView {
-         width: 200; height: 250
-         anchors.fill: parent
+        anchors.fill: parent
 
-         model: comicModel
-         delegate: Text { text: "Comic: " + Name + ", " + Name }
+        delegate: Text { text: "Comic: " + name + ", " + type }
+        model: comicModel
     }
 
+    MouseArea {
+
+        anchors.fill:  parent
+        onClicked: {
+            console.log("update")
+            core.update()
+        }
+    }
 }
-
-
-

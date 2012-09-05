@@ -8,27 +8,19 @@ class ComicModel(QtCore.QAbstractListModel):
     updateInfo = QtCore.Signal(dict)
     updateFinish = QtCore.Signal()
 
-    downloadInfo = QtCore.Signal(dict)
-    downloadFinish = QtCore.Signal()
-
     def __init__(self, parent=None):
         super(ComicModel, self).__init__(parent)
         self._roles = dict(enumerate(["cover", "name", "site", "type", "author", "lastUpdated"]))
         self._comics = []
-        self._siteHandler = handlers.SiteHandler(self)
+        self._updateHandler = handlers.SFUpdateHandler(self)
         
         #initialize
         self.setRoleNames(self._roles)
-
-        #SiteHandler
-        self._siteHandler.setUpdateHandler(handlers.SFUpdateHandler())
-        self._siteHandler.setDownloadHandler(handlers.SFDownloadHandler())
-
         self._setConnection()
 
     @QtCore.Slot()
     def update(self):
-        self._siteHandler.update()
+        self._updateHandler.update()
 
     def rowCount(self, parent = QtCore.QModelIndex()):
         return len(self._comics)
@@ -48,10 +40,9 @@ class ComicModel(QtCore.QAbstractListModel):
         self.endInsertRows()
     
     def _setConnection(self):
-        self._siteHandler.updateInfo.connect(self._insertOneEntry)
-        self._siteHandler.updateInfo.connect(self.updateInfo)
-        self._siteHandler.downloadInfo.connect(self.downloadInfo)
-        self._siteHandler.downloadFinish.connect(self.downloadFinish)
+        self._updateHandler.info.connect(self._insertOneEntry)
+        self._updateHandler.info.connect(self.updateInfo)
+        self._updateHandler.finish.connect(self.updateFinish)
 
 if __name__ == "__main__":
     from PySide import QtGui

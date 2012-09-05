@@ -1,7 +1,8 @@
 ﻿#-*- coding: utf-8 -*-
 
 from PySide import QtCore, QtGui, QtDeclarative
-import handlers
+import core
+#import handlers
 import models
 
 if __name__ in "__main__":
@@ -14,12 +15,12 @@ if __name__ in "__main__":
     QtCore.QTextCodec.setCodecForLocale(codec)
 
     view = QtDeclarative.QDeclarativeView()
+    core = core.Core()
+  
+    view.rootContext().setContextProperty('core', core)
+    view.rootContext().setContextProperty('comicModel', core.model())
     
-    model = models.ComicModel()
-    model.update()
-
-    view.rootContext().setContextProperty('comicModel', model)
-    view.setSource(QtCore.QUrl("qml/main.qml"))
+    view.setSource(QtCore.QUrl("qml/MainView.qml"))
     view.show()
 
     sys.exit(app.exec_())
