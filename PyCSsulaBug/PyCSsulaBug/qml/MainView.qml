@@ -24,10 +24,17 @@ Rectangle {
         }
     }
 
-    ComicList {}
+    ComicList {
+        id: comicList
+        anchors { top: header.bottom; bottom: footer.top }
+    }
 
-    Header{}
+    Header{
+        id: header
+    }
 
-    Footer {}
+    Footer {
+        id: footer
+    }
 }
 

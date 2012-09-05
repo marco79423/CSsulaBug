@@ -10,7 +10,7 @@ class ComicModel(QtCore.QAbstractListModel):
 
     def __init__(self, parent=None):
         super(ComicModel, self).__init__(parent)
-        self._roles = dict(enumerate(["cover", "name", "site", "type", "author", "lastUpdated"]))
+        self._roles = dict(enumerate(["cover", "name", "key", "site", "type", "author", "lastUpdated"]))
         self._comics = []
         self._updateHandler = handlers.SFUpdateHandler(self)
         

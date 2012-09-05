@@ -10,8 +10,22 @@ ListView {
     keyNavigationWraps: false
     boundsBehavior: Flickable.DragAndOvershootBounds
 
+
+    highlight:  Component {
+        Rectangle {
+            width: 400
+            height: 120
+            color: "white"
+            radius: 5
+            z: 10
+            opacity: 0.5
+            y: comicList.currentItem.y
+        }
+    }
+
     delegate: Comic {
         cover: model.cover
+        key: model.key
         name: model.name
         site: model.site
         type: model.type
@@ -20,4 +34,6 @@ ListView {
     }
 
     model: comicModel
+    highlightFollowsCurrentItem: false
+    focus: true
 }

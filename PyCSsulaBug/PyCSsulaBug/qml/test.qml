@@ -2,21 +2,27 @@ import QtQuick 1.1
 
 Rectangle{
 
-    width: 200; height: 250
-    color: "lightblue"
-    ListView {
-        anchors.fill: parent
+    width: childrenRect.width
+    height: childrenRect.height
 
-        delegate: Text { text: "Comic: " + name + ", " + type }
-        model: comicModel
+    Component {
+        id: highlight
+        Rectangle {
+            width: parent.width; height: 10
+            color: "lightsteelblue"; radius: 5
+            y: list.currentItem.y
+
+        }
     }
 
-    MouseArea {
+    ListView {
+        id: list
+        width: 180; height: 200
+        model: 10
+        delegate: Text { text: index }
 
-        anchors.fill:  parent
-        onClicked: {
-            console.log("update")
-            core.update()
-        }
+        highlight: highlight
+        highlightFollowsCurrentItem: false
+        focus: true
     }
 }

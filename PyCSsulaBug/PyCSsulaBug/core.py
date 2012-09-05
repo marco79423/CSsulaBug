@@ -19,15 +19,18 @@ class Core(QtCore.QObject):
 
         self._setConnection()
 
-        #self.update()
-
     @QtCore.Slot()
     def update(self):
         self._model.update()
 
     @QtCore.Slot(str, str)
-    def download(self, name, dstDir):
-        self._downloadHandler.download(name, dstDir)
+    def download(self, key, dstDir):
+        print type(key), type(dstDir)
+        
+        def print_(d):
+            print d
+        self._downloadHandler.info.connect(print_)
+        self._downloadHandler.download(str(key), dstDir)
 
     @QtCore.Slot()
     def model(self):

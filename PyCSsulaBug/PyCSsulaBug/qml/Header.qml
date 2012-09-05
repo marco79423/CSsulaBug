@@ -92,7 +92,11 @@ Rectangle{
             id: downloadMouseArea
             hoverEnabled: true
             anchors.fill: parent
-            onClicked:{}
+            onClicked:{
+                console.log("download")
+                var key = comicList.currentItem.key;
+                core.download(key, ".")
+            }
         }
 
 

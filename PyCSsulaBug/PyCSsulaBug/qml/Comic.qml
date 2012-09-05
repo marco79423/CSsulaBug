@@ -9,6 +9,7 @@ Rectangle {
     border.color: "#ffffff"
 
     property string cover
+    property string key
     property string name
     property string site
     property string type
