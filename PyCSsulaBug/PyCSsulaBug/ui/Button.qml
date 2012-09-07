@@ -13,7 +13,7 @@ Item {
 
     Image {
         id: image
-        source: parent.state == "" ? "images/button.png" : "images/button_press.png"
+        source: parent.state == "" ? "images/button.gif" : "images/button_press.gif"
     }
 
     MouseArea {

@@ -25,10 +25,6 @@ class Core(QtCore.QObject):
 
     @QtCore.Slot(str, str)
     def download(self, key, dstDir):
-        print type(key), type(dstDir)
-        
-        def print_(d):
-            print d
         self._downloadHandler.info.connect(print_)
         self._downloadHandler.download(str(key), dstDir)
 

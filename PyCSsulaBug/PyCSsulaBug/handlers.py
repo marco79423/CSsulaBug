@@ -178,7 +178,6 @@ class SFDownloadHandler(DownloadHandler):
 
     @QtCore.Slot(str, str)
     def download(self, key, dstDir):
-        print "handler", key, dstDir
         if self._currentState == u"NothingDoing":
             config.logging.info(u"開始下載 %s" % key)
             self._key, self._dstDir = key, dstDir
@@ -273,7 +272,6 @@ class SFDownloadHandler(DownloadHandler):
 
         #取得 imageUrl
         urlExp = QtCore.QRegExp("picAy\\[(\\d+)\\] = \"([^\"]+)\"");
-
         pos = 0
         while True:
             pos = urlExp.indexIn(html, pos)
@@ -313,7 +311,9 @@ if __name__ == "__main__":
 
     handler = SFDownloadHandler()
     #handler.download("FSJII", u"漫畫")
-    handler.download("ARISA", u".")
+    #handler.download("ARISA", u".")
+    handler.download("HYYS", u".")
+    
     sys.exit(app.exec_())
     
               

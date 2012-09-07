@@ -15,8 +15,7 @@ Rectangle {
     width: 400
     height: 130
     color: "#958b8b"
-    border.width: 2
-    border.color: "#ffffff"
+    border { width: 2 ; color: "#ffffff" }
 
     Image {
         id:comicCover

@@ -20,7 +20,7 @@ if __name__ in "__main__":
     view.rootContext().setContextProperty('core', core)
     view.rootContext().setContextProperty('comicModel', core.model())
     
-    view.setSource(QtCore.QUrl("qml/MainView.qml"))
+    view.setSource(QtCore.QUrl("ui/MainView.qml"))
     view.show()
 
     sys.exit(app.exec_())

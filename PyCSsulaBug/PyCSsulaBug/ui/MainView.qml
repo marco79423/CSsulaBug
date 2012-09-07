@@ -3,14 +3,20 @@ import QtQuick 1.1
 
 Item {
 
+    Component.onCompleted: core.update()
+
     id: mainView
     width: 400 ; height: 600
 
-    Button {
-        text: "下載"
-        disabled: false
+    Rectangle {
+        color: "#6c48a6"
+        anchors.fill: parent
+
     }
-    //FunctionPanel {}
-    //ContentView {}
-    //Menu {}
+    ExplorePanel {
+
+    }
+    Menu {
+        anchors.bottom: parent.bottom
+    }
 }
