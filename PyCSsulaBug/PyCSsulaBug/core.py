@@ -17,6 +17,7 @@ class Core(QtCore.QObject):
         self._model = models.ComicModel(self)
         self._downloadHandler = handlers.SFDownloadHandler(self)
 
+        self._finishSize = 0
         self._setConnection()
 
     @QtCore.Slot()
@@ -25,16 +26,26 @@ class Core(QtCore.QObject):
 
     @QtCore.Slot(str, str)
     def download(self, key, dstDir):
-        self._downloadHandler.info.connect(print_)
+        self._finishSize = 0
         self._downloadHandler.download(str(key), dstDir)
+
+    @QtCore.Slot()
+    def progress(self):
+        return float(self._finishSize) / self._downloadHandler.taskSize() * 100
 
     @QtCore.Slot()
     def model(self):
         return self._model
 
+    @QtCore.Slot(dict)
+    def _onDownloadInfo(self, info):
+        self._finishSize += 1
+        self.downloadInfo.emit(info)
+
     def _setConnection(self):
         self._model.updateInfo.connect(self.updateInfo)
         self._model.updateFinish.connect(self.updateFinish)
 
-        self._downloadHandler.info.connect(self.downloadInfo)
+        #self._downloadHandler.info.connect(self.downloadInfo)
+        self._downloadHandler.info.connect(self._onDownloadInfo)
         self._downloadHandler.finish.connect(self.downloadFinish)

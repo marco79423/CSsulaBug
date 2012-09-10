@@ -176,6 +176,9 @@ class SFDownloadHandler(DownloadHandler):
     def isReady(self):
         return self._currentState == u"NothingDoing"
 
+    def taskSize(self):
+        return len(self._task["urlList"])
+
     @QtCore.Slot(str, str)
     def download(self, key, dstDir):
         if self._currentState == u"NothingDoing":
