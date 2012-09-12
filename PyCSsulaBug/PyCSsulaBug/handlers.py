@@ -8,8 +8,8 @@ import misc
 
 class UpdateHandler(QtCore.QObject):
 
-    info = QtCore.Signal(dict)
-    finish = QtCore.Signal()
+    updateInfo = QtCore.Signal(dict)
+    updateFinish = QtCore.Signal()
 
     @QtCore.Slot()
     def isReady(self):
@@ -20,8 +20,8 @@ class UpdateHandler(QtCore.QObject):
 
 class DownloadHandler(QtCore.QObject):
 
-    info = QtCore.Signal(dict)
-    finish = QtCore.Signal()
+    downloadInfo = QtCore.Signal(dict)
+    downloadFinish = QtCore.Signal()
 
     def isReady(self):
         return True
@@ -40,7 +40,7 @@ class SFUpdateHandler(UpdateHandler):
     SFUpdateHandler 總共有三種狀態，
     分別是 NothingDoing 、 ALLPageUrlListGetting 和 ComicInfoGetting
     若狀態為 NothingDoing 便可執行 update 更新線上內容，而其餘狀態下呼叫 update 不會有任何反應
-    而要查詢現在是否可以更新，可以使用 isReady() 來判斷。
+    而要查詢現在是否可以更新，可以使用 isReady() 來判斷，另外 progress 可以取得更新進度。
 
     更新的內容會以 signal 的形式回傳，形態是 dictionary
     """
@@ -49,9 +49,10 @@ class SFUpdateHandler(UpdateHandler):
         self._networkAccessor = network.NetworkAccessor(self)
         self._currentState = u"NothingDoing"
         self._allPageUrlList = []
-
+        
         self._setConnection()
   
+    @QtCore.Slot()
     def isReady(self):
         return self._currentState == u"NothingDoing"
 
@@ -61,11 +62,12 @@ class SFUpdateHandler(UpdateHandler):
         若狀態為 NothingDoing 就更新線上內容，並會以 signal 的形式回傳訊息，
         若狀態不為 NothingDoing 便什麼也不做。
         """
-        if self._currentState == u"NothingDoing":
-            config.logging.info(u"開始更新")
-            self._startProcess(u"ALLPageUrlListGetting")
-        else:
+        if not self.isReady():
             config.logging.info(u"現在狀態是 %s，還不能更新", self._currentState)
+            return
+
+        config.logging.info(u"開始更新")
+        self._startProcess(u"ALLPageUrlListGetting")    
 
     def _setConnection(self):
         self._networkAccessor.reply.connect(self._onAccessorReply)
@@ -101,7 +103,7 @@ class SFUpdateHandler(UpdateHandler):
         elif self._currentState == u"ComicInfoGetting":
             self._currentState = u"NothingDoing"
             config.logging.info(u" 下載完成")
-            self.finish.emit()
+            self.updateFinish.emit()
 
     def _getPageUrl(self, html):
 
@@ -154,7 +156,7 @@ class SFUpdateHandler(UpdateHandler):
                                description=regexp.cap(7).strip())
              
              config.logging.info(u"取得 updateInfo %s", misc.comicInfoToString(updateInfo))
-             self.info.emit(updateInfo)
+             self.updateInfo.emit(updateInfo)
 
              pos += regexp.matchedLength()
 
@@ -171,27 +173,27 @@ class SFDownloadHandler(DownloadHandler):
         self._dstDir = ""
         self._comicName = ""
         self._chapterUrlList = []
+        
         self._setConnection()
 
+    @QtCore.Slot()
     def isReady(self):
         return self._currentState == u"NothingDoing"
-
-    def taskSize(self):
-        return len(self._task["urlList"])
-
+    
     @QtCore.Slot(str, str)
     def download(self, key, dstDir):
-        if self._currentState == u"NothingDoing":
-            config.logging.info(u"開始下載 %s" % key)
-            self._key, self._dstDir = key, dstDir
-            self._startProcess(u"ChapterUrlListing")
-        else:
+        if self.isReady():
             config.logging.info(u"現在狀態是 %s，還不能下載", self._currentState)
+            
+        config.logging.info(u"開始下載 %s" % key)
+        self._key, self._dstDir = key, dstDir
+        self._doneThingSize = 0
+        self._startProcess(u"ChapterUrlListing")
 
     def _setConnection(self):
         self._networkAccessor.reply.connect(self._onAccessorReply)
         self._networkAccessor.finish.connect(self._onAccessorFinish)
-        self._downloader.info.connect(self.info)
+        self._downloader.info.connect(self.downloadInfo)
         self._downloader.finish.connect(self._onDownloaderFinish)
 
     def _startProcess(self, state):
@@ -233,7 +235,7 @@ class SFDownloadHandler(DownloadHandler):
     @QtCore.Slot()
     def _onDownloaderFinish(self):
         self._currentState = u"NothingDoing"
-        self.finish.emit()
+        self.downloadFinish.emit()
 
     def _getComicName(self, html):
         nameExp = QtCore.QRegExp("<b class=\"F14PX\">([^<]+)</b>")

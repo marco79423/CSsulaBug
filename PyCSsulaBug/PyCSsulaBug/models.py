@@ -40,9 +40,9 @@ class ComicModel(QtCore.QAbstractListModel):
         self.endInsertRows()
     
     def _setConnection(self):
-        self._updateHandler.info.connect(self._insertOneEntry)
-        self._updateHandler.info.connect(self.updateInfo)
-        self._updateHandler.finish.connect(self.updateFinish)
+        self._updateHandler.updateInfo.connect(self._insertOneEntry)
+        self._updateHandler.updateInfo.connect(self.updateInfo)
+        self._updateHandler.updateFinish.connect(self.updateFinish)
 
 if __name__ == "__main__":
     from PySide import QtGui

@@ -72,6 +72,13 @@ Item {
                 highlightFollowsCurrentItem: false
                 focus: true
             }
+
+            AnimatedImage {
+                id: loading
+                anchors.centerIn: parent
+                scale: 0.2
+                source: "images/loading.gif"
+            }
         }
 
         Item {
@@ -79,10 +86,10 @@ Item {
             width: parent.width / 3
             height: parent.height
 
-            Connections {
+            /*Connections {
                 target: core
-                onDownloadInfo: console.log(core.progress())
-            }
+                //onDownloadInfo: console.log(core.progress())
+            }*/
         }
 
         Item {
@@ -108,5 +115,17 @@ Item {
                 font { pointSize: 24}
             }
         }
+    }
+
+    states: [
+        State {
+            name: "updateCompleted"
+            PropertyChanges { target: loading ; opacity: 0}
+        }
+    ]
+
+    Connections {
+        target: core
+        onUpdateFinish: state = "updateCompleted"
     }
 }
