@@ -1,12 +1,17 @@
 #include <QApplication>
 #include <QTextCodec>
-#include <QTextBrowser>
-#include "mainwindow.h"
+#include <QtDeclarative>
+#include "core.h"
+#include "comicmodel.h"
+
+/*
 #include <QEventLoop>
+#include "mainwindow.h"
 #include "downloader.h"
 #include "networkaccessor.h"
 #include "sfupdatehandler.h"
 #include "sfdownloadhandler.h"
+*/
 
 int main(int argc, char *argv[])
 {
@@ -17,11 +22,17 @@ int main(int argc, char *argv[])
     QTextCodec::setCodecForTr(codec);
     QTextCodec::setCodecForLocale(codec);
 
-    //MainWindow w;
-    //w.show();
+    QDeclarativeView view;
+    Core core;
+    ComicModel *model = core.model();
+    view.rootContext()->setContextProperty("core", &core);
+    view.rootContext()->setContextProperty("comicModel", model);
+    view.setSource(QUrl("qrc:ui/MainView.qml"));
+    view.show();
 
-    QString url1 = "http://cssula.nba.nctu.edu.tw/~marco/DoNotPress.exe";
-    QString url2 = "http://cssula.nba.nctu.edu.tw/~marco/GameOfLife.exe";
+
+    //QString url1 = "http://cssula.nba.nctu.edu.tw/~marco/DoNotPress.exe";
+    //QString url2 = "http://cssula.nba.nctu.edu.tw/~marco/GameOfLife.exe";
 
     /* for NetworkAccessor
     NetworkAccessor accessor;
@@ -50,8 +61,8 @@ int main(int argc, char *argv[])
     //*/
 
     //* for SFDownloadHandler
-    SFDownloadHandler handler;
-    handler.download("FSJII", "漫畫");
+    //SFDownloadHandler handler;
+    //handler.download("FSJII", "漫畫");
     //*/
 
     return a.exec();

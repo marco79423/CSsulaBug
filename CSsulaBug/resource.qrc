@@ -1,5 +1,15 @@
 <RCC>
     <qresource prefix="/">
         <file>convertz.res</file>
+        <file>ui/Button.qml</file>
+        <file>ui/Comic.qml</file>
+        <file>ui/ContentView.qml</file>
+        <file>ui/MainView.qml</file>
+        <file>ui/images/button.gif</file>
+        <file>ui/images/button.png</file>
+        <file>ui/images/button_press.gif</file>
+        <file>ui/images/button_press.png</file>
+        <file>ui/images/lazchi.png</file>
+        <file>ui/images/loading.gif</file>
     </qresource>
 </RCC>
