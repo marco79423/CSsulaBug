@@ -1,25 +1,27 @@
 import QtQuick 1.1
 
 Rectangle {
-    id: comicInfo
-    width: 380
-    height: 120
-    color: "#9e9595"
-    radius: 10
-    border.width: 3
-    border.color: "#ffffff"
 
-    property string cover
+    id: comic
+
+    property string coverUrl
+    property string key
     property string name
     property string site
     property string type
     property string author
     property string lastUpdated
 
+    width: 400
+    height: 130
+    color: "#958b8b"
+    border { width: 2 ; color: "#ffffff" }
+
     Image {
         id:comicCover
-        source: cover
-        height: comicInfo.height - 20
+        source: coverUrl
+        width: height * 0.8
+        height: parent.height * 0.8
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left
         anchors.margins: 10

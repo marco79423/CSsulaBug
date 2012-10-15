@@ -11,11 +11,7 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp \
-    sfupdater.cpp \
     networkaccessor.cpp \
-    comicinfo.cpp \
-    sfdownloadpreparer.cpp \
-    downloadcontroller.cpp \
     downloader.cpp \
     updatehandler.cpp \
     downloadhandler.cpp \
@@ -25,11 +21,7 @@ SOURCES += main.cpp \
     comicmodel.cpp
 
 HEADERS  += \
-    sfupdater.h \
     networkaccessor.h \
-    comicinfo.h \
-    sfdownloadpreparer.h \
-    downloadcontroller.h \
     downloader.h \
     updatehandler.h \
     downloadhandler.h \
@@ -38,9 +30,7 @@ HEADERS  += \
     core.h \
     comicmodel.h
 
-FORMS    += \
-    mainwindow.ui \
-    form.ui
+FORMS    +=
 
 OTHER_FILES += \
     ui/MainView.qml \
