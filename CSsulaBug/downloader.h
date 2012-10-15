@@ -38,7 +38,7 @@ private slots:
 private:
 
     NetworkAccessor *_networkAccessor;
-    QHash<int, Task> _taskList;
+    QHash<int, Task> _taskHash;
 };
 
 #endif // DOWNLOADER_H

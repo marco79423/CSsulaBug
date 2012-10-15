@@ -59,8 +59,8 @@ void NetworkAccessor::_startAccess()
         foreach(QString url, _currentTask.urlList)
         {
             QNetworkRequest request = _makeRequest(url);
-            _networkAccessManager->get(request);
             qDebug() << "NetworkAccessor:_startAccess:開始下載 " << url;
+            _networkAccessManager->get(request);
         }
     }
 }

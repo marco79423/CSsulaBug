@@ -27,7 +27,7 @@ int Downloader::download(const Downloader::Task &task)
     int id = _networkAccessor->get(task.keys());
     qDebug() << "Downloader:download: 下載任務 " << id;
 
-    _taskList[id] = task;
+    _taskHash[id] = task;
 
     return id;
 }
@@ -38,7 +38,11 @@ void Downloader::_onAccessorReply(const int &id, QNetworkReply *networkReply)
       *處理 NetworkAccessor 的回應，把內容寫至目標路徑
       */
     QString url = networkReply->url().toString();
-    QString path = _taskList[id][url];
+    QString path = _taskHash[id][url];
+
+    QHash<QString, QString> downloadInfo;
+    downloadInfo["url"] = url;
+    downloadInfo["path"] = path;
 
     QFileInfo fileInfo(path);
     if(!fileInfo.exists())
@@ -60,16 +64,11 @@ void Downloader::_onAccessorReply(const int &id, QNetworkReply *networkReply)
 
         file.write(networkReply->readAll());
         file.close();
-
-        QHash<QString, QString> downloadInfo;
-        downloadInfo["url"] = url;
-        downloadInfo["path"] = path;
-        emit info(downloadInfo);
-        qDebug() << "Downloader:_onAccessorReply: 已下載 " << path;
-
-        _taskList[id].remove(url);
     }
 
+    qDebug() << "Downloader:_onAccessorReply: 已下載 " << path;
+    emit info(downloadInfo);
+    _taskHash[id].remove(url);
 }
 
 void Downloader::_onAccessorFinish(const int &id)
@@ -78,9 +77,10 @@ void Downloader::_onAccessorFinish(const int &id)
       * 當一項任務下載完後，刪除該任務資料
       */
 
-    emit finish();
+    _taskHash.remove(id);
+
     qDebug() << "Downloader:_onAccessorFinish: id " << id << " 下載完成";
-    _taskList.remove(id);
+    emit finish();
 }
 
 void Downloader::d_test()
