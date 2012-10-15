@@ -18,6 +18,8 @@ public:
     bool isReady();
     void update();
 
+    void d_test();
+
 private slots:
 
     void _onAccessorReply(const int &id, QNetworkReply *networkReply);

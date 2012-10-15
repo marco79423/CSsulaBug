@@ -3,57 +3,46 @@
 #include <QDebug>
 
 NetworkAccessor::NetworkAccessor(QObject *parent) :
-    QObject(parent), _isAccessing(false)
+    QObject(parent), _idCount(0), _isAccessing(false)
 {
     _networkAccessManager = new QNetworkAccessManager(this);
 
-    _setConnection();
+    connect(_networkAccessManager, SIGNAL(finished(QNetworkReply*)),
+            SLOT(_onManagerFinish(QNetworkReply*)));
 }
 
-void NetworkAccessor::get(const int &id, const QString &url)
+int NetworkAccessor::get(const QString &url)
 {
     /*
     *   id 為識別值，url 是要下載的網址
     *   get 是決定將要下載的任務，實際的下載是由 _startAccess 操作
     */
 
-    Task newTask;
-    newTask.id = id;
-
+    _Task newTask;
+    newTask.id = _idCount++;
     newTask.urlList.append(url);
-    qDebug() << "NetworkAccessor:get:準備下載 " << url;
 
     _taskQueue.enqueue(newTask);
     _startAccess();
+
+    return newTask.id;
 }
 
-void NetworkAccessor::get(const int &id, const QStringList &urlList)
+int NetworkAccessor::get(const QStringList &urlList)
 {
     /*
      *id 為識別值，url 是要下載的網址urlList 是要下載的網址清單
      *get 是決定將要下載的任務，實際的下載是由 _startAccess 操作
      */
 
-    Task newTask;
-    newTask.id = id;
-    foreach(QString url, urlList)
-    {
-        newTask.urlList.append(url);
-        qDebug() << "NetworkAccessor:get:準備下載 " << url;
-    }
+    _Task newTask;
+    newTask.id = _idCount++;
+    newTask.urlList = urlList;
+
     _taskQueue.enqueue(newTask);
     _startAccess();
-}
 
-
-void NetworkAccessor::_setConnection()
-{
-    /*
-      *設定連結
-      */
-
-    connect(_networkAccessManager, SIGNAL(finished(QNetworkReply*)),
-            SLOT(onManagerFinish(QNetworkReply*)));
+    return newTask.id;
 }
 
 void NetworkAccessor::_startAccess()
@@ -65,7 +54,9 @@ void NetworkAccessor::_startAccess()
     if(!_isAccessing && !_taskQueue.isEmpty())
     {
         _isAccessing = true;
-        foreach(QString url, _taskQueue.head().urlList)
+        _currentTask = _taskQueue.dequeue();
+
+        foreach(QString url, _currentTask.urlList)
         {
             QNetworkRequest request = _makeRequest(url);
             _networkAccessManager->get(request);
@@ -74,12 +65,11 @@ void NetworkAccessor::_startAccess()
     }
 }
 
-void NetworkAccessor::onManagerFinish(QNetworkReply *networkReply)
+void NetworkAccessor::_onManagerFinish(QNetworkReply *networkReply)
 {
     /*
-      *當 NetWorkAcessManager finish 時，
-      *刪除 _taskQueue 的此項，並負責發送加上 id 的 reply signal
-      *若是發現該任務已經結束了，便發送 finish
+      * 當 NetWorkAcessManager finish 時，若沒問題，就發送完成任務的訊號，
+      * 若是發現還有其他的任務，就會繼續執行
       */
 
     const QString url = networkReply->url().toString();
@@ -92,15 +82,13 @@ void NetworkAccessor::onManagerFinish(QNetworkReply *networkReply)
         return;
     }
 
-     _taskQueue.head().urlList.removeOne(url);
-    emit reply(_taskQueue.head().id, networkReply);
+    _currentTask.urlList.removeOne(url);
+    emit reply(_currentTask.id, networkReply);
     networkReply->deleteLater();
 
-    if(_taskQueue.head().urlList.isEmpty())
+    if(_currentTask.urlList.isEmpty())
     {
-        emit finish(_taskQueue.head().id);
-        if(!_taskQueue.isEmpty())
-            _taskQueue.dequeue();
+        emit finish(_currentTask.id);
         _isAccessing = false;
         _startAccess();
     }
@@ -119,3 +107,15 @@ QNetworkRequest NetworkAccessor::_makeRequest(const QString &url)
     return request;
 }
 
+void NetworkAccessor::d_test()
+{
+    /*
+      * 測試
+      */
+
+    const QString url1 = "http://cssula.nba.nctu.edu.tw/~marco/DoNotPress.exe";
+    const QString url2 = "http://cssula.nba.nctu.edu.tw/~marco/GameOfLife.exe";
+
+    get(url1);
+    get(QStringList() << url1 << url2);
+}

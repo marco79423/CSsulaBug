@@ -11,6 +11,7 @@ SFDownloadHandler::SFDownloadHandler(QObject *parent) :
     _setConnection();
 }
 
+
 bool SFDownloadHandler::isReady() const
 {
     return _currentState == NothingDoing;
@@ -94,12 +95,12 @@ void SFDownloadHandler::_startProcess(const SFDownloadHandler::State &state)
     {
     case ChapterUrlListing:
         _currentState = ChapterUrlListing;
-        _networkAccessor->get(0, QString("http://comic.sfacg.com/HTML/%1/")
+        _networkAccessor->get(QString("http://comic.sfacg.com/HTML/%1/")
                               .arg(_key));
         break;
     case TaskMaking:
         _currentState = TaskMaking;
-        _networkAccessor->get(1, _chapterUrlList);
+        _networkAccessor->get(_chapterUrlList);
         break;
     case Downloading:
         _currentState = Downloading;
@@ -168,8 +169,17 @@ void SFDownloadHandler::_makeTask(const QString &url, const QString &html)
                 .arg(_dstDir).arg(_comicName).arg(chapter)
                 .arg(imageNum, 3, 10, QChar('0'))
                 .arg(imageUrl.right(3));
-        _task.urlList.append(imageUrl);
-        _task.pathList[imageUrl] = path;
+
+        _task[imageUrl] = path;
         pos += urlExp.matchedLength();
     }
+}
+
+
+void SFDownloadHandler::d_test()
+{
+    /*
+      * 測試
+      */
+    download("FSJII", "漫畫");
 }

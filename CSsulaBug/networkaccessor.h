@@ -3,7 +3,6 @@
 
 #include <QObject>
 #include <QStringList>
-#include <QList>
 #include <QQueue>
 
 class QNetworkAccessManager;
@@ -18,8 +17,10 @@ public:
 
     explicit NetworkAccessor(QObject *parent = 0);
     
-    void get(const int &id, const QString &url);
-    void get(const int &id, const QStringList &urlList);
+    int get(const QString &url);
+    int get(const QStringList &urlList);
+
+    void d_test();
 
 signals:
     
@@ -28,22 +29,22 @@ signals:
 
 private slots:
 
-    void onManagerFinish(QNetworkReply *networkReply);
+    void _onManagerFinish(QNetworkReply *networkReply);
 
 private:
 
-    struct Task
+    struct _Task
     {
         int id;
-        QList<QString> urlList;
+        QStringList urlList;
     };
 
     QNetworkAccessManager *_networkAccessManager;
-    QQueue<Task> _taskQueue;
-
+    int _idCount;
     bool _isAccessing;
+    QQueue<_Task> _taskQueue;
+    _Task _currentTask;
 
-    void _setConnection();
     void _startAccess();
     QNetworkRequest _makeRequest(const QString &url);
 

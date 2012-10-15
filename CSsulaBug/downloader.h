@@ -14,13 +14,12 @@ class Downloader : public QObject
 
 public:
 
-    struct Task
-    {
-        QStringList urlList;
-        QHash<QString, QString> pathList;
-    };
+    //Task => (Url, FilePath)
+    typedef QHash<QString, QString> Task;
 
     explicit Downloader(QObject *parent = 0);
+
+    void d_test();
 
 signals:
     
@@ -29,7 +28,7 @@ signals:
 
 public slots:
 
-    void download(const Task &task);
+    int download(const Task &task);
 
 private slots:
 
@@ -39,10 +38,7 @@ private slots:
 private:
 
     NetworkAccessor *_networkAccessor;
-    QHash<int, QHash<QString, QString> > _pathList;
-    int _taskIdCount;
-
-    void _setConnection();
+    QHash<int, Task> _taskList;
 };
 
 #endif // DOWNLOADER_H

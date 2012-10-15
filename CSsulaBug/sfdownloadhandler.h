@@ -14,6 +14,8 @@ public:
 
     explicit SFDownloadHandler(QObject *parent = 0);
 
+    void d_test();
+
 public slots:
 
     virtual bool isReady() const;

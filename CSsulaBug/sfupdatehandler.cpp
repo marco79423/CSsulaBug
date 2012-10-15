@@ -34,6 +34,7 @@ void SFUpdateHandler::update()
     }
 }
 
+
 void SFUpdateHandler::_onAccessorReply(const int &id, QNetworkReply *networkReply)
 {
     switch(_currentState)
@@ -85,11 +86,11 @@ void SFUpdateHandler::_startProcess(const State &state)
     {
     case ALLPageUrlListGetting:
         _currentState = ALLPageUrlListGetting;
-        _networkAccessor->get(0, "http://comic.sfacg.com/Catalog/");
+        _networkAccessor->get("http://comic.sfacg.com/Catalog/");
         break;
     case ComicInfoGetting:
         _currentState = ComicInfoGetting;
-        _networkAccessor->get(1, _allPageUrlList);
+        _networkAccessor->get(_allPageUrlList);
         break;
     default:
         qCritical() << "SFUpdateHandler:_startProcess:錯誤的狀態 " << state;
@@ -155,4 +156,13 @@ void SFUpdateHandler::_getComicInfo(const QString &html)
 
         pos += regexp.matchedLength();
     }
+}
+
+
+void SFUpdateHandler::d_test()
+{
+    /*
+      * 測試
+      */
+    update();
 }
