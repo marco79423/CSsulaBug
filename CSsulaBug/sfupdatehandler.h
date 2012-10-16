@@ -14,11 +14,13 @@ class SFUpdateHandler : public UpdateHandler
 public:
 
     explicit SFUpdateHandler(QObject *parent = 0);
-
     bool isReady();
-    void update();
 
     void d_test();
+
+public slots:
+
+    void update();
 
 private slots:
 
@@ -27,12 +29,12 @@ private slots:
 
 private:
 
-    enum State { NothingDoing, ALLPageUrlListGetting, ComicInfoGetting};
+    enum State { NothingDoing, ALLPageUrlListGetting, ComicInfoGetting, Finishing};
     State _currentState;
     NetworkAccessor *_networkAccessor;
     QStringList _allPageUrlList;
 
-    void _setConnection();
+    void _clear();
     void _startProcess(const State &state);
     void _getPageUrl(const QString &html);
     void _getComicInfo(const QString &html);

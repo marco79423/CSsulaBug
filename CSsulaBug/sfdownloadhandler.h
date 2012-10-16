@@ -13,12 +13,12 @@ class SFDownloadHandler : public DownloadHandler
 public:
 
     explicit SFDownloadHandler(QObject *parent = 0);
+    virtual bool isReady() const;
 
     void d_test();
 
 public slots:
 
-    virtual bool isReady() const;
     virtual void download(const QString &key, const QString &dstDir);
 
 private slots:

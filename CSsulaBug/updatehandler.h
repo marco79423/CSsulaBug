@@ -11,6 +11,7 @@ class UpdateHandler : public QObject
 public:
 
     explicit UpdateHandler(QObject *parent = 0):QObject(parent){}
+    virtual bool isReady() const { return true;}
     
 signals:
     
@@ -19,7 +20,6 @@ signals:
 
 public slots:
 
-    virtual bool isReady() const { return true;}
     virtual void update(){}
 };
 

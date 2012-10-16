@@ -7,15 +7,15 @@
 ComicModel::ComicModel(QObject *parent) :
     QAbstractListModel(parent)
 {
+    _updateHandler = new SFUpdateHandler(this);
+
     QStringList tempRoleNames;
     tempRoleNames << "coverUrl" << "name" << "key"
                   << "site" << "type" << "author"
                   << "lastUpdated";
     for(int i=0; i < tempRoleNames.size(); i++)
-        _roles[i] = tempRoleNames[i].toUtf8();
-    setRoleNames(_roles);
-
-    _updateHandler = new SFUpdateHandler(this);
+        _roleHash[i] = tempRoleNames[i].toUtf8();
+    setRoleNames(_roleHash);
 
     connect(_updateHandler, SIGNAL(info(const QHash<QString,QString>)),
             SLOT(_insertOneEntry(const QHash<QString,QString>)));
@@ -24,17 +24,18 @@ ComicModel::ComicModel(QObject *parent) :
 
 int ComicModel::rowCount(const QModelIndex &parent) const
 {
-    return _comics.size();
+    return _comicList.size();
 }
 
 QVariant ComicModel::data(const QModelIndex &index, int role) const
 {
-    if(index.row() < 0 || index.row() >= _comics.size())
+    if(index.row() < 0 || index.row() >= _comicList.size())
         return QVariant();
 
-    QHash<QString, QString> comicInfo = _comics[index.row()];
-    return comicInfo[_roles[role]];
+    QHash<QString, QString> comicInfo = _comicList[index.row()];
+    return comicInfo[_roleHash[role]];
 }
+
 
 void ComicModel::update()
 {
@@ -44,6 +45,14 @@ void ComicModel::update()
 void ComicModel::_insertOneEntry(const QHash<QString, QString> &info)
 {
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
-    _comics << info;
+    _comicList << info;
     endInsertRows();
+}
+
+void ComicModel::d_test()
+{
+    /*
+      * 測試
+      */
+    update();
 }

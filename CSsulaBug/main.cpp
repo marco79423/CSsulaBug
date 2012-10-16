@@ -4,14 +4,6 @@
 #include "core.h"
 #include "comicmodel.h"
 
-
-#include <QEventLoop>
-#include "downloader.h"
-#include "networkaccessor.h"
-#include "sfupdatehandler.h"
-#include "sfdownloadhandler.h"
-
-
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
@@ -32,10 +24,12 @@ int main(int argc, char *argv[])
     view.rootContext()->setContextProperty("comicModel", core.model());
     view.setSource(QUrl("qrc:ui/MainView.qml"));
     view.show();
-    */
+    //*/
 
-    SFDownloadHandler tester;
+    //*
+    ComicModel tester;
     tester.d_test();
+    //*/
 
     return a.exec();
 }

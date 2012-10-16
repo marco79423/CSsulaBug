@@ -16,6 +16,8 @@ public:
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     QVariant data(const QModelIndex &index, int role) const;
 
+    void d_test();
+
 signals:
     
     void updateFinish();
@@ -30,8 +32,8 @@ private slots:
 
 private:
 
-    QHash<int, QByteArray> _roles;
-    QList< QHash<QString, QString> > _comics;
+    QHash<int, QByteArray> _roleHash;
+    QList< QHash<QString, QString> > _comicList;
 
     UpdateHandler *_updateHandler;
 };

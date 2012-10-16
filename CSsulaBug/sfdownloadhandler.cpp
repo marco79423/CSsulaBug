@@ -25,7 +25,7 @@ bool SFDownloadHandler::isReady() const
 
 void SFDownloadHandler::download(const QString &key, const QString &dstDir)
 {
-    if(_currentState == NothingDoing)
+    if(isReady())
     {
         qDebug() << "SFDownloadHandler:download:開始下載" << key;
         _clear();

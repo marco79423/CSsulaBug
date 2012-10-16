@@ -8,7 +8,11 @@ SFUpdateHandler::SFUpdateHandler(QObject *parent) :
     UpdateHandler(parent), _currentState(NothingDoing)
 {
     _networkAccessor = new NetworkAccessor(this);
-    _setConnection();
+
+    connect(_networkAccessor, SIGNAL(reply(const int&,QNetworkReply*)),
+            SLOT(_onAccessorReply(const int&,QNetworkReply*)));
+    connect(_networkAccessor, SIGNAL(finish(const int&)),
+            SLOT(_onAccessorFinish(const int&)));
 }
 
 bool SFUpdateHandler::isReady()
@@ -22,31 +26,25 @@ void SFUpdateHandler::update()
       *若狀態為 NothingDoing 就更新線上內容，並會以 signal 的形式回傳訊息，
       *若狀態不為 NothingDoing 便什麼也不做。
       */
-    switch(_currentState)
+    if(isReady())
     {
-    case NothingDoing:
         qDebug() << "SFUpdateHandler:update:開始更新";
+        _clear();
         _startProcess(ALLPageUrlListGetting);
-        break;
-    default:
-        qDebug() << "SFUpdateHandler:update:現在狀態還不能更新";
-        break;
     }
+    else
+        qDebug() << "SFUpdateHandler:update:現在狀態還不能更新";
 }
 
 
 void SFUpdateHandler::_onAccessorReply(const int &id, QNetworkReply *networkReply)
 {
+    const QString html = networkReply->readAll();
+
     switch(_currentState)
     {
-    case ALLPageUrlListGetting:
-        _getPageUrl(networkReply->readAll());
-        qDebug() << "SFUpdateHandler:_onAccessorReply:取得 allPageUrlList";
-        break;
-    case ComicInfoGetting:
-        _getComicInfo(networkReply->readAll());
-        qDebug() << "SFUpdateHandler:_onAccessorReply:取得 " << networkReply->url() << "的資訊";
-        break;
+    case ALLPageUrlListGetting: _getPageUrl(html); break;
+    case ComicInfoGetting: _getComicInfo(html); break;
     default:
         qCritical() << "SFUpdateHandler:_onAccessorReply:錯誤的狀態" << _currentState;
         break;
@@ -57,40 +55,35 @@ void SFUpdateHandler::_onAccessorFinish(const int &id)
 {
     switch(_currentState)
     {
-    case ALLPageUrlListGetting:
-        qDebug() << "SFUpdateHandler:_onAccessorFinish:進入 ComicInfoGetting 階段";
-        _startProcess(ComicInfoGetting);
-        break;
-    case ComicInfoGetting:
-        _currentState = NothingDoing;
-        qDebug() << "下載完成";
-        emit finish();
-        break;
-    default:
-        break;
+    case ALLPageUrlListGetting: _startProcess(ComicInfoGetting); break;
+    case ComicInfoGetting: _startProcess(Finishing); break;
+    default: break;
     }
 }
 
-void SFUpdateHandler::_setConnection()
+void SFUpdateHandler::_clear()
 {
-    connect(_networkAccessor, SIGNAL(reply(const int&,QNetworkReply*)),
-            SLOT(_onAccessorReply(const int&,QNetworkReply*)));
-    connect(_networkAccessor, SIGNAL(finish(const int&)),
-            SLOT(_onAccessorFinish(const int&)));
+    _allPageUrlList.clear();
 }
 
 void SFUpdateHandler::_startProcess(const State &state)
 {
-    qDebug() << "SFUpdateHandler:_startProcess:開始執行 " << state << "狀態";
+    qDebug() << "SFUpdateHandler:_startProcess:開始 " << state << "狀態";
+
+    _currentState = state;
     switch(state)
     {
     case ALLPageUrlListGetting:
-        _currentState = ALLPageUrlListGetting;
         _networkAccessor->get("http://comic.sfacg.com/Catalog/");
         break;
     case ComicInfoGetting:
-        _currentState = ComicInfoGetting;
         _networkAccessor->get(_allPageUrlList);
+        break;
+    case Finishing:
+        _clear();
+        _currentState = NothingDoing;
+        qDebug() << "SFUpdateHandler:_startProcess:下載完成";
+        emit finish();
         break;
     default:
         qCritical() << "SFUpdateHandler:_startProcess:錯誤的狀態 " << state;
@@ -100,6 +93,7 @@ void SFUpdateHandler::_startProcess(const State &state)
 
 void SFUpdateHandler::_getPageUrl(const QString &html)
 {
+    qDebug() << "SFUpdateHandler::_getPageUrl: 截取所有頁數的 url";
     int maxPageNumber = 0;
 
     QRegExp pageNumExp("http://comic.sfacg.com/Catalog/"
@@ -118,16 +112,15 @@ void SFUpdateHandler::_getPageUrl(const QString &html)
     //因為有bug，所以還要再加一頁
     maxPageNumber += 1;
 
-    _allPageUrlList.clear();
+    const QString pattern("http://comic.sfacg.com/Catalog/Default.aspx?PageIndex=%1");
     for(int i = 1; i <= maxPageNumber; i++)
-    {
-        _allPageUrlList.append("http://comic.sfacg.com/Catalog/Default.aspx?"
-                       "PageIndex=" + QString::number(i));
-    }
+        _allPageUrlList.append(pattern.arg(i));
 }
 
 void SFUpdateHandler::_getComicInfo(const QString &html)
 {
+    qDebug() << "SFUpdateHandler:_getComicInfo: 截取頁面上所有漫畫資訊";
+
     QRegExp regexp("<img src=\"([^\"]+)\"" //cover
                    "[^>]+></a></li>\\s+<li><strong class=\""
                    "F14PX\"><a href=\"/HTML/([^/]+)" //keyName
@@ -149,7 +142,7 @@ void SFUpdateHandler::_getComicInfo(const QString &html)
         updateInfo["author"] = regexp.cap(4);
         updateInfo["type"] = regexp.cap(5);
         updateInfo["lastUpdated"] = regexp.cap(6);
-        updateInfo["description"] = regexp.cap(7).simplified();
+        //updateInfo["description"] = regexp.cap(7).simplified();
 
         qDebug() << "SFUpdater::_getComicInfo:取得" << updateInfo;
         emit info(updateInfo);
