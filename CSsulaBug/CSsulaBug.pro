@@ -13,8 +13,6 @@ TEMPLATE = app
 SOURCES += main.cpp \
     networkaccessor.cpp \
     downloader.cpp \
-    updatehandler.cpp \
-    downloadhandler.cpp \
     sfupdatehandler.cpp \
     sfdownloadhandler.cpp \
     core.cpp \

@@ -8,7 +8,13 @@ SFDownloadHandler::SFDownloadHandler(QObject *parent) :
 {
     _networkAccessor = new NetworkAccessor(this);
     _downloader = new Downloader(this);
-    _setConnection();
+
+    connect(_networkAccessor, SIGNAL(reply(const int&,QNetworkReply*)),
+            SLOT(_onAccessorReply(const int&,QNetworkReply*)));
+    connect(_networkAccessor, SIGNAL(finish(const int&)),
+            SLOT(_onAccessorFinish(const int&)));
+    connect(_downloader, SIGNAL(info(const QHash<QString,QString>&)),
+            SLOT(_onDownloaderInfo(const QHash<QString,QString>&)));
 }
 
 
@@ -19,18 +25,16 @@ bool SFDownloadHandler::isReady() const
 
 void SFDownloadHandler::download(const QString &key, const QString &dstDir)
 {
-    switch(_currentState)
+    if(_currentState == NothingDoing)
     {
-    case NothingDoing:
         qDebug() << "SFDownloadHandler:download:開始下載" << key;
-        _key = key;
-        _dstDir = dstDir;
+        _clear();
+        _taskInfo["key"] = key;
+        _taskInfo["dstDir"] = dstDir;
         _startProcess(ChapterUrlListing);
-        break;
-    default:
-        qDebug() << "SFDownloadHandler:download:錯誤的狀態" << _currentState;
-        break;
     }
+    else
+        qDebug() << "SFDownloadHandler:download:暫時不能下載" << _currentState;
 }
 
 void SFDownloadHandler::_onAccessorReply(const int &id,
@@ -41,13 +45,9 @@ void SFDownloadHandler::_onAccessorReply(const int &id,
 
     switch(_currentState)
     {
-    case ChapterUrlListing:
-        _getComicName(html);
-        _listChapters(html);
-        break;
-    case TaskMaking:
-        _makeTask(url, html);
-        break;
+    case ChapterUrlListing: _getComicName(html); _listChapters(html); break;
+    case TaskMaking: _makeTask(url, html); break;
+    case Downloading: break;
     default:
         qDebug() << "SFDownloadHandler:_onAccessorReply:錯誤的狀態"
                  << _currentState;
@@ -59,12 +59,9 @@ void SFDownloadHandler::_onAccessorFinish(const int &id)
 {
     switch(_currentState)
     {
-    case ChapterUrlListing:
-        _startProcess(TaskMaking);
-        break;
-    case TaskMaking:
-        _startProcess(Downloading);
-        break;
+    case ChapterUrlListing: _startProcess(TaskMaking); break;
+    case TaskMaking: _startProcess(Downloading); break;
+    case Downloading: break;
     default:
         qDebug() << "SFDownloadHandler:_onAccessorFinish:錯誤的狀態"
                  << _currentState;
@@ -72,38 +69,53 @@ void SFDownloadHandler::_onAccessorFinish(const int &id)
     }
 }
 
+void SFDownloadHandler::_onDownloaderInfo(
+        const QHash<QString, QString> downloaderInfo)
+{
+    //完成進度
+    int done = _taskInfo["done"].toInt() + 1;
+    int sum = _task.size();
+    float progress = float(done) / sum * 100;
+
+    //新增進度資訊
+    _taskInfo["done"] =  QString::number(done);
+
+    QHash<QString, QString> newInfo = downloaderInfo;
+    newInfo["progress"] = QString::number(progress);
+
+    qDebug() << "SFDownloadHandler:_onDownloaderInfo:" << newInfo;
+    emit info(newInfo);
+}
+
 void SFDownloadHandler::_onDownloaderFinish()
 {
+    _clear();
     _currentState = NothingDoing;
     emit finish();
 }
 
-void SFDownloadHandler::_setConnection()
+void SFDownloadHandler::_clear()
 {
-    connect(_networkAccessor, SIGNAL(reply(const int&,QNetworkReply*)),
-            SLOT(_onAccessorReply(const int&,QNetworkReply*)));
-    connect(_networkAccessor, SIGNAL(finish(const int&)),
-            SLOT(_onAccessorFinish(const int&)));
-    connect(_downloader, SIGNAL(info(const QHash<QString,QString>&)),
-            SIGNAL(info(const QHash<QString,QString>&)));
+    _taskInfo.clear();
+    _chapterUrlList.clear();
+    _task.clear();
 }
 
 void SFDownloadHandler::_startProcess(const SFDownloadHandler::State &state)
 {
-    qDebug() << "SFDownloadHandler:_startProcess:開始執行 " << state << "狀態";
+    qDebug() << "SFDownloadHandler:_startProcess:開始 " << state << "狀態";
+    _currentState = state;
     switch(state)
     {
     case ChapterUrlListing:
-        _currentState = ChapterUrlListing;
         _networkAccessor->get(QString("http://comic.sfacg.com/HTML/%1/")
-                              .arg(_key));
+                              .arg(_taskInfo["key"]));
         break;
     case TaskMaking:
-        _currentState = TaskMaking;
         _networkAccessor->get(_chapterUrlList);
         break;
     case Downloading:
-        _currentState = Downloading;
+        _taskInfo["done"] = QString::number(0);
         _downloader->download(_task);
         break;
     default:
@@ -115,8 +127,8 @@ void SFDownloadHandler::_getComicName(const QString &html)
 {
     QRegExp nameExp("<b class=\"F14PX\">([^<]+)</b>");
     nameExp.indexIn(html);
-    _comicName = nameExp.cap(1);
-    qDebug() << "SFDownloadHandler:_getComicName:取得漫畫名稱 " << _comicName;
+    _taskInfo["comicName"] = nameExp.cap(1);
+    qDebug() << "SFDownloadHandler:_getComicName:取得漫畫名稱 " << _taskInfo["comicName"];
 }
 
 void SFDownloadHandler::_listChapters(const QString &html)
@@ -166,8 +178,8 @@ void SFDownloadHandler::_makeTask(const QString &url, const QString &html)
         int imageNum = urlExp.cap(1).toInt();
         QString imageUrl = urlExp.cap(2);
         QString path = QString("%1/%2/%3/%4.%5")
-                .arg(_dstDir).arg(_comicName).arg(chapter)
-                .arg(imageNum, 3, 10, QChar('0'))
+                .arg(_taskInfo["dstDir"]).arg(_taskInfo["comicName"])
+                .arg(chapter).arg(imageNum, 3, 10, QChar('0'))
                 .arg(imageUrl.right(3));
 
         _task[imageUrl] = path;
@@ -181,5 +193,5 @@ void SFDownloadHandler::d_test()
     /*
       * 測試
       */
-    download("FSJII", "漫畫");
+    download("CANVA", "漫畫");
 }

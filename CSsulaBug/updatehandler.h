@@ -10,7 +10,7 @@ class UpdateHandler : public QObject
 
 public:
 
-    explicit UpdateHandler(QObject *parent = 0);
+    explicit UpdateHandler(QObject *parent = 0):QObject(parent){}
     
 signals:
     

@@ -10,7 +10,7 @@ class DownloadHandler : public QObject
 
 public:
 
-    explicit DownloadHandler(QObject *parent = 0);
+    explicit DownloadHandler(QObject *parent = 0):QObject(parent){}
     
 signals:
 

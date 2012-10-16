@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
     view.show();
     */
 
-    Downloader tester;
+    SFDownloadHandler tester;
     tester.d_test();
 
     return a.exec();

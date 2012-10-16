@@ -2,8 +2,6 @@ INPUT(
 ./release\main.o
 ./release\networkaccessor.o
 ./release\downloader.o
-./release\updatehandler.o
-./release\downloadhandler.o
 ./release\sfupdatehandler.o
 ./release\sfdownloadhandler.o
 ./release\core.o

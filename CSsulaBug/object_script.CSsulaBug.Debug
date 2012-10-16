@@ -2,8 +2,6 @@ INPUT(
 ./debug\main.o
 ./debug\networkaccessor.o
 ./debug\downloader.o
-./debug\updatehandler.o
-./debug\downloadhandler.o
 ./debug\sfupdatehandler.o
 ./debug\sfdownloadhandler.o
 ./debug\core.o

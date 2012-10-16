@@ -26,6 +26,7 @@ private slots:
     void _onAccessorReply(const int &id, QNetworkReply *networkReply);
     void _onAccessorFinish(const int &id);
 
+    void _onDownloaderInfo(const QHash<QString, QString> downloaderInfo);
     void _onDownloaderFinish();
 
 private:
@@ -34,14 +35,13 @@ private:
 
     State _currentState;
     NetworkAccessor *_networkAccessor;
-    Downloader *_downloader;
-    Downloader::Task _task;
-    QString _key;
-    QString _dstDir;
-    QString _comicName;
+    QHash<QString, QString> _taskInfo;
     QStringList _chapterUrlList;
 
-    void _setConnection();
+    Downloader *_downloader;
+    Downloader::Task _task;
+
+    void _clear();
     void _startProcess(const State &state);
     void _getComicName(const QString &html);
     void _listChapters(const QString &html);
