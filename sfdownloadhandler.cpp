@@ -2,6 +2,7 @@
 #include "networkaccessor.h"
 #include <QNetworkReply>
 #include <QDebug>
+#include <QDir>
 
 SFDownloadHandler::SFDownloadHandler(QObject *parent) :
     DownloadHandler(parent), _currentState(NothingDoing)
@@ -139,22 +140,15 @@ void SFDownloadHandler::_listChapters(const QString &html)
     int comicID = idExp.cap(1).toInt();
     qDebug() << "取得 comicID " << comicID;
 
-    //取得 漫畫種類(網站自己的分法)
-    QRegExp typeExp("<a href=\"http://([^\"]+).sfacg.com/AllComic");
-    typeExp.indexIn(html);
-    QString comicType = typeExp.cap(1);
-    qDebug() << "取得 comicType " << comicType;
-
     //取得話數
-    QRegExp chapterExp(QString("<a href=\"http://%1.sfacg.com/AllComic"
-                               "/%2/(\\d+j?)/").arg(comicType).arg(comicID));
-    qDebug() << QString("<a href=\"http://%1.sfacg.com/AllComic"
-                        "/%2/(\\d+j?)/").arg(comicType).arg(comicID);
+    QRegExp chapterExp(QString("<a href=\"/HTML/%1/(\\d+j?)/").arg(_taskInfo["key"]));
+    qDebug() << QString("<a href=\"/HTML/%1/(\\d+j?)/").arg(_taskInfo["key"]);
+
     int pos = 0;
     while ((pos = chapterExp.indexIn(html, pos)) != -1)
     {
-        QString chapterUrl = QString("http://%1.sfacg.com/Utility/%2/%3.js")
-                .arg(comicType).arg(comicID).arg(chapterExp.cap(1));
+        QString chapterUrl = QString("http://comic.sfacg.com/Utility/%1/%2.js")
+                .arg(comicID).arg(chapterExp.cap(1));
 
         _chapterUrlList.append(chapterUrl);
         qDebug() << "取得 chapterUrl " << chapterUrl;
@@ -169,14 +163,19 @@ void SFDownloadHandler::_makeTask(const QString &url, const QString &html)
     chapterExp.indexIn(url);
     QString chapter = chapterExp.cap(1);
 
+    //取得 host
+    QRegExp hostExp("var hosts = \\[\"([^\"]+)");
+    hostExp.indexIn(html);
+    QString host = hostExp.cap(1);
+    qDebug() << "取得 host " << host;
+
     //取得 imageUrl
     QRegExp urlExp("picAy\\[(\\d+)\\] = \"([^\"]+)\"");
-
     int pos = 0;
     while ((pos = urlExp.indexIn(html, pos)) != -1)
     {
         int imageNum = urlExp.cap(1).toInt();
-        QString imageUrl = urlExp.cap(2);
+        QString imageUrl = host + urlExp.cap(2);
         QString path = QString("%1/%2/%3/%4.%5")
                 .arg(_taskInfo["dstDir"]).arg(_taskInfo["comicName"])
                 .arg(chapter).arg(imageNum, 3, 10, QChar('0'))
