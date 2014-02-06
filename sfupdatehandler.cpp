@@ -96,9 +96,9 @@ void SFUpdateHandler::_getPageUrl(const QString &html)
     qDebug() << "SFUpdateHandler::_getPageUrl: 截取所有頁數的 url";
     int maxPageNumber = 0;
 
+    //找到最後一頁
     QRegExp pageNumExp("http://comic.sfacg.com/Catalog/"
-                       "Default.aspx\\?PageIndex=(\\d+)");
-
+                       "default.aspx\\?PageIndex=(\\d+)");
     int pos = 0;
     while ((pos = pageNumExp.indexIn(html, pos)) != -1)
     {
@@ -115,6 +115,7 @@ void SFUpdateHandler::_getPageUrl(const QString &html)
     const QString pattern("http://comic.sfacg.com/Catalog/Default.aspx?PageIndex=%1");
     for(int i = 1; i <= maxPageNumber; i++)
         _allPageUrlList.append(pattern.arg(i));
+    qDebug() << "aaaaaaaaaa" << maxPageNumber;
 }
 
 void SFUpdateHandler::_getComicInfo(const QString &html)
