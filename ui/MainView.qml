@@ -32,6 +32,15 @@ ApplicationWindow {
         Text { text: comicList.state }
     }
 
+    /*Image {
+
+        anchors.centerIn: parent
+        width: 350
+
+        source: "images/lazchi.png"
+        fillMode: Image.PreserveAspectFit
+    }*/
+
     ListView {
         id: comicList
         anchors.fill: parent
@@ -79,6 +88,7 @@ ApplicationWindow {
                 width: 390
                 height: 115
                 color: "white"
+                opacity: 0.9
 
                 RowLayout{
                     anchors.fill: parent
@@ -100,10 +110,7 @@ ApplicationWindow {
     Component {
         id: highlight
         Rectangle {
-            width: comic.width
-            height: comic.height
             color: "darkgray"
-            //z: 10
             y: comicList.currentItem.y
         }
     }
