@@ -32,8 +32,9 @@ void Core::download(const QString &key, const QString &dstDir)
 
 void Core::setFilter(const QString &pattern)
 {
-    _proxyModel->setFilterRegExp(QRegExp(pattern, Qt::CaseInsensitive, QRegExp::FixedString));
-    _proxyModel->setFilterRole(2);
+    _proxyModel->setFilterRole(1);
+    _proxyModel->setFilterRegExp(QRegExp(pattern, Qt::CaseInsensitive,
+                                                 QRegExp::FixedString));
 }
 
 QString Core::getKey(const int index) const

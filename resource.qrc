@@ -1,7 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>convertz.res</file>
-        <file>ui/ContentView.qml</file>
         <file>ui/MainView.qml</file>
         <file>ui/images/button.gif</file>
         <file>ui/images/button.png</file>
