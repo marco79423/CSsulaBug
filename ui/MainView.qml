@@ -55,7 +55,7 @@ ApplicationWindow {
         states: [
             State {
                 name: "updating"
-                PropertyChanges { target: loading ; opacity: 1}
+                PropertyChanges { target: loading ; opacity: 0.9}
             },
 
             State {
@@ -67,8 +67,10 @@ ApplicationWindow {
 
         AnimatedImage {
             id: loading
-            anchors.centerIn: parent
-            scale: 0.2
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+            width: 60
+            height: 60
             source: "images/loading.gif"
         }
 
