@@ -33,7 +33,6 @@ FORMS    +=
 OTHER_FILES += \
     ui/MainView.qml \
     ui/ContentView.qml \
-    ui/Comic.qml \
     ui/Button.qml
 
 static {

@@ -16,12 +16,13 @@ ApplicationWindow {
             TextField {
                 id: searchField
                 Layout.fillWidth: true
+                onTextChanged: { core.setFilter(text); }
             }
 
             Button{
                 text: "下載"
                 onClicked: {
-                    var key = comicModel.getKey(comicList.currentIndex);
+                    var key = core.getKey(comicList.currentIndex);
                     core.download(key, ".")
                 }
             }
@@ -117,30 +118,3 @@ ApplicationWindow {
 
 
 }
-
-/*
-Item {
-
-    Component.onCompleted: core.update()
-
-    id: mainView
-    width: 400 ; height: 600
-
-    Rectangle {
-        id: background
-        color: "#6c48a6"
-        anchors.fill: parent
-
-    }
-
-    ContentView {
-        id: contentView
-
-        Behavior on x {
-            NumberAnimation { duration: 100 }
-        }
-    }
-
-
-}
-*/

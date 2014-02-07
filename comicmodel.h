@@ -26,8 +26,7 @@ signals:
 public slots:
 
     void update();
-    QString getKey(const int index) const;
-    
+
 private slots:
 
     void _insertOneEntry(const QHash<QString, QString> &info);

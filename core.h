@@ -3,6 +3,8 @@
 
 #include <QObject>
 
+class QSortFilterProxyModel;
+
 class ComicModel;
 class DownloadHandler;
 
@@ -13,8 +15,8 @@ class Core : public QObject
 public:
 
     explicit Core(QObject *parent = 0);
-    ComicModel* model() const;
-    
+    QSortFilterProxyModel* model() const;
+
 signals:
     
     void updateFinish();
@@ -23,10 +25,13 @@ public slots:
 
     void update();
     void download(const QString &key, const QString &dstDir);
+    void setFilter(const QString &pattern);
+    QString getKey(const int index) const;
 
 private:
 
     ComicModel *_model;
+    QSortFilterProxyModel *_proxyModel;
     DownloadHandler *_downloadHandler;
 };
 

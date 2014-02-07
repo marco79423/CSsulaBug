@@ -1,8 +1,8 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
+#include <QSortFilterProxyModel>
 #include "core.h"
-#include "comicmodel.h"
 
 int main(int argc, char *argv[])
 {

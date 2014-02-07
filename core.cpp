@@ -2,18 +2,22 @@
 #include "sfdownloadhandler.h"
 #include "comicmodel.h"
 
+#include <QSortFilterProxyModel>
+
 Core::Core(QObject *parent) :
     QObject(parent)
 {
     _model = new ComicModel(this);
+    _proxyModel = new QSortFilterProxyModel(this);
+    _proxyModel->setSourceModel(_model);
     _downloadHandler = new SFDownloadHandler(this);
 
     connect(_model, SIGNAL(updateFinish()), SIGNAL(updateFinish()));
 }
 
-ComicModel* Core::model() const
+QSortFilterProxyModel* Core::model() const
 {
-    return _model;
+    return _proxyModel;
 }
 
 void Core::update()
@@ -24,6 +28,17 @@ void Core::update()
 void Core::download(const QString &key, const QString &dstDir)
 {
     _downloadHandler->download(key, dstDir);
+}
+
+void Core::setFilter(const QString &pattern)
+{
+    _proxyModel->setFilterRegExp(QRegExp(pattern, Qt::CaseInsensitive, QRegExp::FixedString));
+    _proxyModel->setFilterRole(2);
+}
+
+QString Core::getKey(const int index) const
+{
+    return _proxyModel->data(_proxyModel->index(index, 0), 2).toString();
 }
 
 
