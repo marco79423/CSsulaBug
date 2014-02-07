@@ -51,6 +51,7 @@ ApplicationWindow {
         highlight: highlight
         state: "updating"
 
+
         states: [
             State {
                 name: "updating"
