@@ -46,6 +46,12 @@ void ComicModel::update()
     _updateHandler->update();
 }
 
+QString ComicModel::getKey(const int idx) const
+{
+    return data(index(idx, 0), 2).toString();
+}
+
+
 void ComicModel::_insertOneEntry(const QHash<QString, QString> &info)
 {
     beginInsertRows(QModelIndex(), rowCount(), rowCount());

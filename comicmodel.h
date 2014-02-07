@@ -26,6 +26,7 @@ signals:
 public slots:
 
     void update();
+    QString getKey(const int index) const;
     
 private slots:
 

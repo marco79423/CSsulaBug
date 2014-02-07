@@ -115,7 +115,6 @@ void SFUpdateHandler::_getPageUrl(const QString &html)
     const QString pattern("http://comic.sfacg.com/Catalog/Default.aspx?PageIndex=%1");
     for(int i = 1; i <= maxPageNumber; i++)
         _allPageUrlList.append(pattern.arg(i));
-    qDebug() << "aaaaaaaaaa" << maxPageNumber;
 }
 
 void SFUpdateHandler::_getComicInfo(const QString &html)
