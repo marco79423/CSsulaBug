@@ -17,6 +17,7 @@ ApplicationWindow {
             TextField {
                 id: searchField
                 Layout.fillWidth: true
+                placeholderText: "點此搜尋想下載的漫畫 ..."
                 onTextChanged: { core.setFilter(text); }
             }
 
@@ -115,7 +116,6 @@ ApplicationWindow {
         }
     }
 
-
     Component {
         id: highlight
         Item {
@@ -131,6 +131,4 @@ ApplicationWindow {
             }
         }
     }
-
-
 }
