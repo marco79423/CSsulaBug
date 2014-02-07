@@ -30,7 +30,9 @@ ApplicationWindow {
     }
 
     statusBar: StatusBar{
-        Text { text: comicList.state }
+        Text {
+            text: comicList.state == "updating" ? "正在抓取漫畫資訊，請稍等 ..." : "準備完成，可以選擇要下載的漫畫";
+        }
     }
 
     /*Image {
@@ -55,7 +57,7 @@ ApplicationWindow {
         states: [
             State {
                 name: "updating"
-                PropertyChanges { target: loading ; opacity: 0.9}
+                PropertyChanges { target: loading ; opacity: 0.9; }
             },
 
             State {
