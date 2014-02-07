@@ -7,6 +7,7 @@ ApplicationWindow {
     visible:true
     width: 400; height: 600
     title: "CSsulaBug 漫畫下載器"
+    color: "darkgray"
 
     Component.onCompleted: core.update()
 
@@ -49,11 +50,13 @@ ApplicationWindow {
         anchors.fill: parent
         model: comicModel
         focus: true
+
         delegate: comic
         highlight: highlight
+
+        highlightFollowsCurrentItem: false
+
         state: "updating"
-
-
         states: [
             State {
                 name: "updating"
@@ -115,9 +118,17 @@ ApplicationWindow {
 
     Component {
         id: highlight
-        Rectangle {
-            color: "darkgray"
+        Item {
+            width: 400
+            height: 120
             y: comicList.currentItem.y
+
+            Rectangle {
+                anchors.centerIn: parent
+                width: 390
+                height: 115
+                color: "#0000BB"
+            }
         }
     }
 
