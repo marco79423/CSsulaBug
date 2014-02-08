@@ -64,19 +64,19 @@ ApplicationWindow {
             State {
                 name: "updating"
                 PropertyChanges { target: loadingImage ; opacity: 0.9; }
-                PropertyChanges { target: comicList ; focus: false}
+                PropertyChanges { target: comicList ; enabled: false}
             },
 
             State {
                 name: "ready"
                 PropertyChanges { target: loadingImage ; opacity: 0}
-                PropertyChanges { target: comicList ; focus: true}
+                PropertyChanges { target: comicList ; enabled: true}
             },
 
             State {
                 name: "downloading"
                 PropertyChanges { target: loadingImage ; opacity: 0.9;}
-                PropertyChanges { target: comicList ; focus: false}
+                PropertyChanges { target: comicList ; enabled: false}
             }
         ]
 
@@ -125,6 +125,14 @@ ApplicationWindow {
                         Text { text: "作者：" + author}
                         Text { text: "最新更新：" + lastUpdated}
                     }
+                }
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                hoverEnabled: true
+                onClicked: {
+                    comicList.currentIndex = index
                 }
             }
         }
