@@ -73,14 +73,14 @@ ApplicationWindow {
             State {
                 name: "ready"
                 PropertyChanges { target: loadingImage ; opacity: 0}
-                PropertyChanges { target: comicList ; enabled: true}
+                PropertyChanges { target: comicList ; enabled: true; focus: true}
                 PropertyChanges { target: toolBar ; enabled: true}
             },
 
             State {
                 name: "downloading"
                 PropertyChanges { target: loadingImage ; opacity: 0.9;}
-                PropertyChanges { target: comicList ; enabled: false}
+                PropertyChanges { target: comicList ; enabled: false; focus: false}
                 PropertyChanges { target: toolBar ; enabled: false}
             }
         ]
