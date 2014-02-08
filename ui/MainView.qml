@@ -6,6 +6,9 @@ ApplicationWindow {
 
     visible:true
     width: 400; height: 600
+    maximumWidth: width; minimumWidth: width
+    minimumHeight: 600
+
     title: "CSsulaBug 漫畫下載器"
     color: "darkgray"
 
