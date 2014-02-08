@@ -1,8 +1,8 @@
 <RCC>
     <qresource prefix="/">
-        <file>convertz.res</file>
         <file>ui/MainView.qml</file>
         <file>ui/images/lazchi.png</file>
         <file>ui/images/loading.gif</file>
+        <file>convertz.dat</file>
     </qresource>
 </RCC>

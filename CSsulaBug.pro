@@ -16,7 +16,8 @@ SOURCES += main.cpp \
     sfupdatehandler.cpp \
     sfdownloadhandler.cpp \
     core.cpp \
-    comicmodel.cpp
+    comicmodel.cpp \
+    convertz.cpp
 
 HEADERS  += \
     networkaccessor.h \
@@ -26,7 +27,8 @@ HEADERS  += \
     sfupdatehandler.h \
     sfdownloadhandler.h \
     core.h \
-    comicmodel.h
+    comicmodel.h \
+    convertz.h
 
 FORMS    +=
 
