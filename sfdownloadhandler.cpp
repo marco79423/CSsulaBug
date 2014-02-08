@@ -16,6 +16,7 @@ SFDownloadHandler::SFDownloadHandler(QObject *parent) :
             SLOT(_onAccessorFinish(const int&)));
     connect(_downloader, SIGNAL(info(const QHash<QString,QString>&)),
             SLOT(_onDownloaderInfo(const QHash<QString,QString>&)));
+    connect(_downloader, SIGNAL(finish()), SIGNAL(finish()));
 }
 
 

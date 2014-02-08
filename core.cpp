@@ -3,6 +3,7 @@
 #include "comicmodel.h"
 
 #include <QSortFilterProxyModel>
+#include <QDebug>
 
 Core::Core(QObject *parent) :
     QObject(parent)
@@ -13,11 +14,18 @@ Core::Core(QObject *parent) :
     _downloadHandler = new SFDownloadHandler(this);
 
     connect(_model, SIGNAL(updateFinish()), SIGNAL(updateFinish()));
+    connect(_downloadHandler, SIGNAL(finish()), SIGNAL(downloadFinish()));
+    connect(_downloadHandler, SIGNAL(info(QHash<QString,QString>)), SLOT(_onGettingDownloadInfo(QHash<QString, QString>)));
 }
 
 QSortFilterProxyModel* Core::model() const
 {
     return _proxyModel;
+}
+
+QString Core::getDownloadInfo() const
+{
+    return _downloadInfo;
 }
 
 void Core::update()
@@ -40,6 +48,13 @@ void Core::setFilter(const QString &pattern)
 QString Core::getKey(const int index) const
 {
     return _proxyModel->data(_proxyModel->index(index, 0), 2).toString();
+}
+
+void Core::_onGettingDownloadInfo(const QHash<QString, QString> &info)
+{
+    _downloadInfo = QString("[進度 %1%] 下載 %2").arg(info["progress"]).arg(info["path"]);
+    qDebug() << "下載進度資訊" << _downloadInfo;
+    emit downloadInfoChanged();
 }
 
 

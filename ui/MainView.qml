@@ -27,8 +27,9 @@ ApplicationWindow {
             Button{
                 text: "下載"
                 onClicked: {
+                    comicList.state = "downloading";
                     var key = core.getKey(comicList.currentIndex);
-                    core.download(key, ".")
+                    core.download(key, ".");
                 }
             }
         }
@@ -36,18 +37,16 @@ ApplicationWindow {
 
     statusBar: StatusBar{
         Text {
-            text: comicList.state == "updating" ? "正在抓取漫畫資訊，請稍等 ..." : "準備完成，可以選擇要下載的漫畫";
+            text: {
+                if(comicList.state == "updating")
+                    return "正在抓取漫畫資訊，請稍等 ...";
+                else if(comicList.state == "ready")
+                    return "準備完成，可以選擇要下載的漫畫";
+                else
+                    return core.downloadInfo
+            }
         }
     }
-
-    /*Image {
-
-        anchors.centerIn: parent
-        width: 350
-
-        source: "images/lazchi.png"
-        fillMode: Image.PreserveAspectFit
-    }*/
 
     ListView {
         id: comicList
@@ -64,18 +63,25 @@ ApplicationWindow {
         states: [
             State {
                 name: "updating"
-                PropertyChanges { target: loading ; opacity: 0.9; }
+                PropertyChanges { target: loadingImage ; opacity: 0.9; }
+                PropertyChanges { target: comicList ; focus: false}
             },
 
             State {
-                name: "updateCompleted"
-                PropertyChanges { target: loading ; opacity: 0}
+                name: "ready"
+                PropertyChanges { target: loadingImage ; opacity: 0}
                 PropertyChanges { target: comicList ; focus: true}
+            },
+
+            State {
+                name: "downloading"
+                PropertyChanges { target: loadingImage ; opacity: 0.9;}
+                PropertyChanges { target: comicList ; focus: false}
             }
         ]
 
         AnimatedImage {
-            id: loading
+            id: loadingImage
             anchors.right: parent.right
             anchors.bottom: parent.bottom
             width: 60
@@ -85,7 +91,12 @@ ApplicationWindow {
 
         Connections {
             target: core
-            onUpdateFinish: comicList.state = "updateCompleted"
+            onUpdateFinish: comicList.state = "ready"
+        }
+
+        Connections {
+            target: core
+            onDownloadFinish: comicList.state = "ready"
         }
     }
 
