@@ -28,13 +28,7 @@ QString convertToTraditional(const QString &content)
 
 int main(int argc, char *argv[])
 {
-    QApplication app(argc, argv);
-    QTextCodec *codec = QTextCodec::codecForName("utf-8");
-    QTextCodec::setCodecForCStrings(codec);
-    QTextCodec::setCodecForTr(codec);
-    QTextCodec::setCodecForLocale(codec);
-
-    QFile content("convertz.res");
+    QFile content("../../../convertz.res");
     content.open(QIODevice::ReadOnly);
     QTextStream in(&content);
     QString sim = in.readLine();
@@ -45,28 +39,30 @@ int main(int argc, char *argv[])
     QHash<QChar, QChar> table;
     for(int i=0; i < sim.size(); i++)
     {
+        qDebug() << sim[i] << tra[i];
         table[sim[i]] = tra[i]; 
     }
-    qDebug() << table.size();
-    QFile output("convertz.dat");
+    QFile output("../../../convertz.dat");
     output.open(QIODevice::WriteOnly | QIODevice::Text);
     QDataStream out(&output);
     out << table;
     qDebug() << "done";
     output.close();
-
-    QString word = "用";
-    qDebug() << table[word[0]];
-
+    /*
     QString string = "使用繁体字";
-    QString string2 = convertToTraditional(string);
+    //QString string2 = convertToTraditional(string);
 
-    QTextBrowser browser;
-    browser.append(string);
-    browser.append(string2);
-    browser.append(QString(sim[75]));
-    browser.append(QString(tra[75]));
+    QFileInfo info("../../../convertz.dat");
+    qDebug() << info.absoluteFilePath();
+    QFile file("../../../convertz.dat");
+    if(!file.open(QIODevice::ReadOnly))
+        qCritical() << "無法開啟 convertz.dat";
 
-    browser.show();
-    return app.exec();
+    QHash<QChar, QChar> table;
+    QDataStream in(&file);
+    in >> table;
+    file.close();
+
+    foreach(QChar word, table.keys())
+        qDebug() << word << table[word];*/
 }
