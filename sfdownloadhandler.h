@@ -3,6 +3,7 @@
 
 #include "downloadhandler.h"
 #include "downloader.h"
+#include "convertz.h"
 
 class NetworkAccessor;
 
@@ -40,6 +41,7 @@ private:
 
     Downloader *_downloader;
     Downloader::Task _task;
+    ConvertZ _convertz;
 
     void _clear();
     void _startProcess(const State &state);

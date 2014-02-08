@@ -178,7 +178,7 @@ void SFDownloadHandler::_makeTask(const QString &url, const QString &html)
         int imageNum = urlExp.cap(1).toInt();
         QString imageUrl = host + urlExp.cap(2);
         QString path = QString("%1/%2/%3/%4.%5")
-                .arg(_taskInfo["dstDir"]).arg(_taskInfo["comicName"])
+                .arg(_taskInfo["dstDir"]).arg(_convertz.convertToTraditional(_taskInfo["comicName"]))
                 .arg(chapter).arg(imageNum, 3, 10, QChar('0'))
                 .arg(imageUrl.right(3));
 
