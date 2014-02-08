@@ -15,16 +15,18 @@ ApplicationWindow {
     Component.onCompleted: core.update()
 
     toolBar: ToolBar {
+        id: toolBar
+        enabled: false
         RowLayout{
             width: parent.width
             TextField {
-                id: searchField
                 Layout.fillWidth: true
                 placeholderText: "點此搜尋想下載的漫畫 ..."
                 onTextChanged: { core.setFilter(text); }
             }
 
             Button{
+                id: downloadButton
                 text: "下載"
                 onClicked: {
                     comicList.state = "downloading";
@@ -65,18 +67,21 @@ ApplicationWindow {
                 name: "updating"
                 PropertyChanges { target: loadingImage ; opacity: 0.9; }
                 PropertyChanges { target: comicList ; enabled: false}
+                PropertyChanges { target: toolBar ; enabled: false}
             },
 
             State {
                 name: "ready"
                 PropertyChanges { target: loadingImage ; opacity: 0}
                 PropertyChanges { target: comicList ; enabled: true}
+                PropertyChanges { target: toolBar ; enabled: true}
             },
 
             State {
                 name: "downloading"
                 PropertyChanges { target: loadingImage ; opacity: 0.9;}
                 PropertyChanges { target: comicList ; enabled: false}
+                PropertyChanges { target: toolBar ; enabled: false}
             }
         ]
 
