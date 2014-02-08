@@ -9,6 +9,12 @@ QT       += core gui widgets network sql quick
 TARGET = CSsulaBug
 TEMPLATE = app
 
+macx {
+    ICON = $$PWD/icon.icns
+}
+win32 {
+    RC_FILE = CSsulaBug.rc
+}
 
 SOURCES += main.cpp \
     networkaccessor.cpp \
@@ -29,8 +35,6 @@ HEADERS  += \
     core.h \
     comicmodel.h \
     convertz.h
-
-RC_FILE = CSsulaBug.rc
 
 OTHER_FILES += \
     ui/MainView.qml \
