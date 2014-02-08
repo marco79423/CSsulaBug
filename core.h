@@ -2,6 +2,7 @@
 #define CORE_H
 
 #include <QObject>
+#include <convertz.h>
 
 class QSortFilterProxyModel;
 
@@ -33,6 +34,7 @@ private:
     ComicModel *_model;
     QSortFilterProxyModel *_proxyModel;
     DownloadHandler *_downloadHandler;
+    ConvertZ _convertz;
 };
 
 #endif // CORE_H

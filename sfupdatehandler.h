@@ -3,6 +3,7 @@
 
 #include <QStringList>
 #include "updatehandler.h"
+#include "convertz.h"
 
 class NetworkAccessor;
 class QNetworkReply;
@@ -33,6 +34,7 @@ private:
     State _currentState;
     NetworkAccessor *_networkAccessor;
     QStringList _allPageUrlList;
+    ConvertZ _convertz;
 
     void _clear();
     void _startProcess(const State &state);

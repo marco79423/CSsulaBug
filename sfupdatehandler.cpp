@@ -138,10 +138,10 @@ void SFUpdateHandler::_getComicInfo(const QString &html)
         updateInfo["site"] = "SF";
         updateInfo["coverUrl"] = regexp.cap(1);
         updateInfo["key"] = regexp.cap(2);
-        updateInfo["name"] = regexp.cap(3);
-        updateInfo["author"] = regexp.cap(4);
-        updateInfo["type"] = regexp.cap(5);
-        updateInfo["lastUpdated"] = regexp.cap(6);
+        updateInfo["name"] = _convertz.convertToTraditional(regexp.cap(3));
+        updateInfo["author"] = _convertz.convertToTraditional(regexp.cap(4));
+        updateInfo["type"] = _convertz.convertToTraditional(regexp.cap(5));
+        updateInfo["lastUpdated"] = _convertz.convertToTraditional(regexp.cap(6));
         //updateInfo["description"] = regexp.cap(7).simplified();
 
         qDebug() << "SFUpdater::_getComicInfo:取得" << updateInfo;
