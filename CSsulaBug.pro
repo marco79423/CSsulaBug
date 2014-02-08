@@ -30,12 +30,13 @@ HEADERS  += \
     comicmodel.h \
     convertz.h
 
-FORMS    +=
+RC_FILE = CSsulaBug.rc
 
 OTHER_FILES += \
     ui/MainView.qml \
     ui/ContentView.qml \
     ui/Button.qml
+
 
 static {
     QMAKE_LFLAGS += -static-libgcc
