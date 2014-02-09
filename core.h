@@ -13,10 +13,11 @@ class Core : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString downloadInfo READ getDownloadInfo NOTIFY downloadInfoChanged)
+
 public:
 
     explicit Core(QObject *parent = 0);
-    QSortFilterProxyModel* model() const;
+    QSortFilterProxyModel* getModel() const;
     QString getDownloadInfo() const;
 
 signals:

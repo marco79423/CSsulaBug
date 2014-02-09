@@ -18,7 +18,7 @@ Core::Core(QObject *parent) :
     connect(_downloadHandler, SIGNAL(info(QHash<QString,QString>)), SLOT(_onGettingDownloadInfo(QHash<QString, QString>)));
 }
 
-QSortFilterProxyModel* Core::model() const
+QSortFilterProxyModel* Core::getModel() const
 {
     return _proxyModel;
 }

@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine engine;
 
     engine.rootContext()->setContextProperty("core", &core);
-    engine.rootContext()->setContextProperty("comicModel", core.model());
+    engine.rootContext()->setContextProperty("comicModel", core.getModel());
     engine.load(QUrl("qrc:ui/MainView.qml"));
 
     return a.exec();

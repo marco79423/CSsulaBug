@@ -122,7 +122,7 @@ ApplicationWindow {
                 RowLayout{
                     anchors.fill: parent
                     anchors.leftMargin: 10
-                    Image { source: model.coverUrl }
+                    Image { source: coverUrl }
                     ColumnLayout{
                         Text { text: name ; font.pointSize: 20; font.bold: true; horizontalAlignment: Text.AlignLeft }
                         Text { text: "漫畫來源：" + site }

@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui widgets network sql quick
+QT       += core widgets network quick
 
 TARGET = CSsulaBug
 TEMPLATE = app
