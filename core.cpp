@@ -3,6 +3,7 @@
 #include "comicmodel.h"
 
 #include <QSortFilterProxyModel>
+#include <QStandardPaths>
 #include <QDebug>
 
 Core::Core(QObject *parent) :
@@ -33,9 +34,10 @@ void Core::update()
     _model->update();
 }
 
-void Core::download(const QString &key, const QString &dstDir)
+void Core::download(const QString &key)
 {
-    _downloadHandler->download(key, dstDir);
+    QString desktopPath = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
+    _downloadHandler->download(key, desktopPath);
 }
 
 void Core::setFilter(const QString &pattern)

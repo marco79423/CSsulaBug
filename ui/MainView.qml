@@ -21,7 +21,7 @@ ApplicationWindow {
             width: parent.width
             TextField {
                 Layout.fillWidth: true
-                placeholderText: "點此搜尋想下載的漫畫 ..."
+                placeholderText: "點此搜尋想下載的漫畫至桌面 ..."
                 onTextChanged: { core.setFilter(text); }
             }
 
@@ -31,7 +31,7 @@ ApplicationWindow {
                 onClicked: {
                     comicList.state = "downloading";
                     var key = core.getKey(comicList.currentIndex);
-                    core.download(key, ".");
+                    core.download(key);
                 }
             }
         }

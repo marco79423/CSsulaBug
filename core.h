@@ -29,7 +29,7 @@ signals:
 public slots:
 
     void update();
-    void download(const QString &key, const QString &dstDir);
+    void download(const QString &key);
     void setFilter(const QString &pattern);
     QString getKey(const int index) const;
 
