@@ -98,7 +98,7 @@ void SFUpdateHandler::_getPageUrl(const QString &html)
 
     //找到最後一頁
     QRegExp pageNumExp("http://comic.sfacg.com/Catalog/"
-                       "default.aspx\\?PageIndex=(\\d+)");
+                       "[dD]efault.aspx\\?PageIndex=(\\d+)");
     int pos = 0;
     while ((pos = pageNumExp.indexIn(html, pos)) != -1)
     {
@@ -112,7 +112,7 @@ void SFUpdateHandler::_getPageUrl(const QString &html)
     //因為有bug，所以還要再加一頁
     maxPageNumber += 1;
 
-    const QString pattern("http://comic.sfacg.com/Catalog/Default.aspx?PageIndex=%1");
+    const QString pattern("http://comic.sfacg.com/Catalog/default.aspx?PageIndex=%1");
     for(int i = 1; i <= maxPageNumber; i++)
         _allPageUrlList.append(pattern.arg(i));
 }
