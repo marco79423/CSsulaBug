@@ -3,7 +3,7 @@
 
 #include <QAbstractListModel>
 
-class UpdateHandler;
+class AUpdateHandler;
 
 class ComicModel : public QAbstractListModel
 {
@@ -11,7 +11,7 @@ class ComicModel : public QAbstractListModel
 
 public:
 
-    explicit ComicModel(QObject *parent = 0);
+    explicit ComicModel(AUpdateHandler *updateHandler, QObject *parent = 0);
     
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     QVariant data(const QModelIndex &index, int role) const;
@@ -34,7 +34,7 @@ private slots:
 private:
 
     QList< QHash<QString, QString> > _comicList;
-    UpdateHandler *_updateHandler;
+    AUpdateHandler *_updateHandler;
 };
 
 #endif // COMICMODEL_H

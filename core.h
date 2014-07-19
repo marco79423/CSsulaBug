@@ -6,8 +6,10 @@
 
 class QSortFilterProxyModel;
 
-class ComicModel;
+class AUpdateHandler;
 class ADownloadHandler;
+
+class ComicModel;
 
 class Core : public QObject
 {
@@ -16,7 +18,7 @@ class Core : public QObject
 
 public:
 
-    explicit Core(QObject *parent = 0);
+    explicit Core(AUpdateHandler* updateHandler, ADownloadHandler *downloadHandler, QObject *parent = 0);
     QSortFilterProxyModel* getModel() const;
     QString getDownloadInfo() const;
 

@@ -27,18 +27,16 @@ SOURCES += main.cpp \
 HEADERS  += \
     networkaccessor.h \
     downloader.h \
-    updatehandler.h \
-    downloadhandler.h \
+    adownloadhandler.h \
     sfupdatehandler.h \
     sfdownloadhandler.h \
     core.h \
     comicmodel.h \
-    convertz.h
+    convertz.h \
+    aupdatehandler.h
 
 OTHER_FILES += \
-    ui/MainView.qml \
-    ui/ContentView.qml \
-    ui/Button.qml
+    ui/MainView.qml
 
 
 static {

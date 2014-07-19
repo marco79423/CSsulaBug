@@ -5,7 +5,7 @@
 #include <QDebug>
 
 SFUpdateHandler::SFUpdateHandler(QObject *parent) :
-    UpdateHandler(parent), _currentState(NothingDoing)
+    AUpdateHandler(parent), _currentState(NothingDoing)
 {
     _networkAccessor = new NetworkAccessor(this);
 

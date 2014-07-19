@@ -1,13 +1,15 @@
 ﻿#include "comicmodel.h"
 #include "sfupdatehandler.h"
-#include "updatehandler.h"
+#include "aupdatehandler.h"
 #include <QDebug>
 #include <QStringList>
 
-ComicModel::ComicModel(QObject *parent) :
+ComicModel::ComicModel(AUpdateHandler *updateHandler, QObject *parent) :
     QAbstractListModel(parent)
 {
-    _updateHandler = new SFUpdateHandler(this);
+    _updateHandler = updateHandler;
+    _updateHandler->setParent(this);
+
     connect(_updateHandler, SIGNAL(info(const QHash<QString,QString>)),
             SLOT(_insertOneEntry(const QHash<QString,QString>)));
     connect(_updateHandler, SIGNAL(finish()), SIGNAL(updateFinish()));

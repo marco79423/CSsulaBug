@@ -2,13 +2,13 @@
 #define SFUPDATEHANDLER_H
 
 #include <QStringList>
-#include "updatehandler.h"
+#include "aupdatehandler.h"
 #include "convertz.h"
 
 class NetworkAccessor;
 class QNetworkReply;
 
-class SFUpdateHandler : public UpdateHandler
+class SFUpdateHandler : public AUpdateHandler
 {
     Q_OBJECT
 

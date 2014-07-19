@@ -107,12 +107,6 @@
     <ClCompile Include="Release\moc_sfupdatehandler.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
-    <ClCompile Include="Debug\moc_updatehandler.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="Release\moc_updatehandler.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
     <ClCompile Include="GeneratedFiles\qrc_resource.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
@@ -120,6 +114,12 @@
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
     <ClCompile Include="Release\moc_adownloadhandler.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_aupdatehandler.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Release\moc_aupdatehandler.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
   </ItemGroup>
@@ -145,10 +145,10 @@
     <CustomBuild Include="sfupdatehandler.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
-    <CustomBuild Include="updatehandler.h">
+    <CustomBuild Include="adownloadhandler.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
-    <CustomBuild Include="adownloadhandler.h">
+    <CustomBuild Include="aupdatehandler.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
   </ItemGroup>

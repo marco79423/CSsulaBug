@@ -2,6 +2,9 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QSortFilterProxyModel>
+
+#include "sfupdatehandler.h"
+#include "sfdownloadhandler.h"
 #include "core.h"
 
 int main(int argc, char *argv[])
@@ -10,7 +13,9 @@ int main(int argc, char *argv[])
 
     //*
     //CSsulaBug 的核心
-    Core core;
+    AUpdateHandler *updateHandler = new SFUpdateHandler();
+    ADownloadHandler *downloadHandler = new SFDownloadHandler();
+    Core core(updateHandler, downloadHandler);
 
     //顯示
     QQmlApplicationEngine engine;

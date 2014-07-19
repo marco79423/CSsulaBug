@@ -1,18 +1,22 @@
 ﻿#include "core.h"
-#include "sfdownloadhandler.h"
 #include "comicmodel.h"
+
+#include "aupdatehandler.h"
+#include "adownloadhandler.h"
 
 #include <QSortFilterProxyModel>
 #include <QStandardPaths>
 #include <QDebug>
 
-Core::Core(QObject *parent) :
+Core::Core(AUpdateHandler* updateHandler, ADownloadHandler *downloadHandler, QObject *parent) :
     QObject(parent)
 {
-    _model = new ComicModel(this);
+    _model = new ComicModel(updateHandler, this);
     _proxyModel = new QSortFilterProxyModel(this);
     _proxyModel->setSourceModel(_model);
-    _downloadHandler = new SFDownloadHandler(this);
+
+    _downloadHandler = downloadHandler;
+    _downloadHandler->setParent(this);
 
     connect(_model, SIGNAL(updateFinish()), SIGNAL(updateFinish()));
     connect(_downloadHandler, SIGNAL(finish()), SIGNAL(downloadFinish()));
