@@ -3,13 +3,15 @@
 #include <QQmlContext>
 #include <QSortFilterProxyModel>
 
-#include "sfupdatehandler.h"
-#include "sfdownloadhandler.h"
-#include "core.h"
+#include <sfupdatehandler.h>
+#include <sfdownloadhandler.h>
+#include <core.h>
 
 int main(int argc, char *argv[])
 {
     QGuiApplication a(argc, argv);
+
+    Q_INIT_RESOURCE(src_resource);
 
     //*
     //CSsulaBug 的核心

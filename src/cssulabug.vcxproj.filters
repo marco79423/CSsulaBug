@@ -36,12 +36,12 @@
       <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
     <Filter Include="Generated Files\Debug">
-      <UniqueIdentifier>{15afb3da-ad42-4569-b9ae-b6329ac64773}</UniqueIdentifier>
+      <UniqueIdentifier>{79db44fe-7427-4b6f-ba73-27bc25d482d3}</UniqueIdentifier>
       <Extensions>cpp;moc</Extensions>
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
     <Filter Include="Generated Files\Release">
-      <UniqueIdentifier>{05b735a3-76f3-42bc-8020-fc40e20b2f5c}</UniqueIdentifier>
+      <UniqueIdentifier>{5420da77-0fe3-4736-8b40-eeac1a3ac02a}</UniqueIdentifier>
       <Extensions>cpp;moc</Extensions>
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
@@ -59,9 +59,6 @@
     <ClCompile Include="downloader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="networkaccessor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -70,6 +67,18 @@
     </ClCompile>
     <ClCompile Include="sfupdatehandler.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_adownloadhandler.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Release\moc_adownloadhandler.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_aupdatehandler.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Release\moc_aupdatehandler.cpp">
+      <Filter>Generated Files\Release</Filter>
     </ClCompile>
     <ClCompile Include="Debug\moc_comicmodel.cpp">
       <Filter>Generated Files\Debug</Filter>
@@ -107,26 +116,23 @@
     <ClCompile Include="Release\moc_sfupdatehandler.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\qrc_resource.cpp">
+    <ClCompile Include="GeneratedFiles\qrc_src_resource.cpp">
       <Filter>Generated Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Debug\moc_adownloadhandler.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="Release\moc_adownloadhandler.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="Debug\moc_aupdatehandler.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="Release\moc_aupdatehandler.cpp">
-      <Filter>Generated Files\Release</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <CustomBuild Include="adownloadhandler.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="aupdatehandler.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
     <CustomBuild Include="comicmodel.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
+    <ClInclude Include="convertz.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <CustomBuild Include="core.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
@@ -142,34 +148,13 @@
     <CustomBuild Include="sfupdatehandler.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
-    <CustomBuild Include="adownloadhandler.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="aupdatehandler.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="convertz.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="ui\MainView.qml">
-      <Filter>Resource Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="convertz.dat">
-      <Filter>Resource Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="ui\images\lazchi.png">
-      <Filter>Resource Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="ui\images\loading.gif">
-      <Filter>Resource Files</Filter>
-    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="resource.qrc">
+    <None Include="convertz.dat">
+      <Filter>Resource Files</Filter>
+    </None>
+    <CustomBuild Include="src_resource.qrc">
       <Filter>Resource Files</Filter>
     </CustomBuild>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="CSsulaBug.rc" />
   </ItemGroup>
 </Project>
