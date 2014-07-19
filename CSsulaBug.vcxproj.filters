@@ -89,12 +89,6 @@
     <ClCompile Include="Release\moc_downloader.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
-    <ClCompile Include="Debug\moc_downloadhandler.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="Release\moc_downloadhandler.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
     <ClCompile Include="Debug\moc_networkaccessor.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
@@ -122,6 +116,12 @@
     <ClCompile Include="GeneratedFiles\qrc_resource.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
+    <ClCompile Include="Debug\moc_adownloadhandler.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Release\moc_adownloadhandler.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="comicmodel.h">
@@ -136,9 +136,6 @@
     <CustomBuild Include="downloader.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
-    <CustomBuild Include="downloadhandler.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
     <CustomBuild Include="networkaccessor.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
@@ -149,6 +146,9 @@
       <Filter>Header Files</Filter>
     </CustomBuild>
     <CustomBuild Include="updatehandler.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="adownloadhandler.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
   </ItemGroup>

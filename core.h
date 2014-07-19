@@ -7,7 +7,7 @@
 class QSortFilterProxyModel;
 
 class ComicModel;
-class DownloadHandler;
+class ADownloadHandler;
 
 class Core : public QObject
 {
@@ -37,7 +37,7 @@ public slots:
 private:
     ComicModel *_model;
     QSortFilterProxyModel *_proxyModel;
-    DownloadHandler *_downloadHandler;
+    ADownloadHandler *_downloadHandler;
     ConvertZ _convertz;
 
     QString _downloadInfo;

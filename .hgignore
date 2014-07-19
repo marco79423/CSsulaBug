@@ -6,3 +6,5 @@ syntax: glob
 *moc_*
 *qrc_*
 *.pyc
+Win32/*
+debug/*

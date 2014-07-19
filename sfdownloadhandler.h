@@ -1,13 +1,13 @@
 ﻿#ifndef SFDOWNLOADHANDLER_H
 #define SFDOWNLOADHANDLER_H
 
-#include "downloadhandler.h"
+#include "adownloadhandler.h"
 #include "downloader.h"
 #include "convertz.h"
 
 class NetworkAccessor;
 
-class SFDownloadHandler : public DownloadHandler
+class SFDownloadHandler : public ADownloadHandler
 {
     Q_OBJECT
 

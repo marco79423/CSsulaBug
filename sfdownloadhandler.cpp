@@ -5,7 +5,7 @@
 #include <QDir>
 
 SFDownloadHandler::SFDownloadHandler(QObject *parent) :
-    DownloadHandler(parent), _currentState(NothingDoing)
+    ADownloadHandler(parent), _currentState(NothingDoing)
 {
     _networkAccessor = new NetworkAccessor(this);
     _downloader = new Downloader(this);
