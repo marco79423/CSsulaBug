@@ -1,4 +1,4 @@
-#include "downloader.h"
+﻿#include "downloader.h"
 #include "networkaccessor.h"
 #include <QNetworkReply>
 #include <QFile>
@@ -50,9 +50,7 @@ void Downloader::_onAccessorReply(const int &id, QNetworkReply *networkReply)
         QDir dir = fileInfo.absoluteDir();
         if(!dir.exists() && !dir.mkpath(dir.absolutePath()))
         {
-            qCritical() << "Downloader:_onAccessorReply:資料夾"
-                        << dir.absolutePath()
-                        << "建立失敗";
+            qCritical() << "Downloader:_onAccessorReply:資料夾" << dir.absolutePath() << "建立失敗";
         }
 
         QFile file(path);

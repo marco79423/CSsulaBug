@@ -1,4 +1,4 @@
-#ifndef CONVERTZ_H
+﻿#ifndef CONVERTZ_H
 #define CONVERTZ_H
 
 #include <QString>

@@ -1,4 +1,4 @@
-#ifndef SFUPDATEHANDLER_H
+﻿#ifndef SFUPDATEHANDLER_H
 #define SFUPDATEHANDLER_H
 
 #include <QStringList>

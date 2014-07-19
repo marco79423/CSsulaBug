@@ -1,4 +1,4 @@
-#include "convertz.h"
+﻿#include "convertz.h"
 #include <QFile>
 #include <QDebug>
 

@@ -1,4 +1,4 @@
-#include "core.h"
+﻿#include "core.h"
 #include "sfdownloadhandler.h"
 #include "comicmodel.h"
 

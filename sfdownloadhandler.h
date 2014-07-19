@@ -1,4 +1,4 @@
-#ifndef SFDOWNLOADHANDLER_H
+﻿#ifndef SFDOWNLOADHANDLER_H
 #define SFDOWNLOADHANDLER_H
 
 #include "downloadhandler.h"

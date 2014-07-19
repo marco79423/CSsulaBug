@@ -1,4 +1,4 @@
-#ifndef COMICMODEL_H
+﻿#ifndef COMICMODEL_H
 #define COMICMODEL_H
 
 #include <QAbstractListModel>

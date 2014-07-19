@@ -1,4 +1,4 @@
-#include "sfdownloadhandler.h"
+﻿#include "sfdownloadhandler.h"
 #include "networkaccessor.h"
 #include <QNetworkReply>
 #include <QDebug>
@@ -51,8 +51,7 @@ void SFDownloadHandler::_onAccessorReply(const int &id,
     case TaskMaking: _makeTask(url, html); break;
     case Downloading: break;
     default:
-        qDebug() << "SFDownloadHandler:_onAccessorReply:錯誤的狀態"
-                 << _currentState;
+        qDebug() << "SFDownloadHandler:_onAccessorReply:錯誤的狀態" << _currentState;
         break;
     }
 }
@@ -65,8 +64,7 @@ void SFDownloadHandler::_onAccessorFinish(const int &id)
     case TaskMaking: _startProcess(Downloading); break;
     case Downloading: break;
     default:
-        qDebug() << "SFDownloadHandler:_onAccessorFinish:錯誤的狀態"
-                 << _currentState;
+        qDebug() << "SFDownloadHandler:_onAccessorFinish:錯誤的狀態" << _currentState;
         break;
     }
 }

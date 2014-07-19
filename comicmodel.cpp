@@ -1,4 +1,4 @@
-#include "comicmodel.h"
+﻿#include "comicmodel.h"
 #include "sfupdatehandler.h"
 #include "updatehandler.h"
 #include <QDebug>

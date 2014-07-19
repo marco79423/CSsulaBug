@@ -1,4 +1,4 @@
-#ifndef NETWORKACCESSOR_H
+﻿#ifndef NETWORKACCESSOR_H
 #define NETWORKACCESSOR_H
 
 #include <QObject>

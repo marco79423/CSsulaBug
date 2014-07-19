@@ -1,4 +1,4 @@
-#include "networkaccessor.h"
+﻿#include "networkaccessor.h"
 #include <QtNetwork>
 #include <QDebug>
 

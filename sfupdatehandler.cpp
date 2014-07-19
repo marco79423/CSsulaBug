@@ -1,4 +1,4 @@
-#include "sfupdatehandler.h"
+﻿#include "sfupdatehandler.h"
 #include "networkaccessor.h"
 
 #include <QNetworkReply>
@@ -97,8 +97,7 @@ void SFUpdateHandler::_getPageUrl(const QString &html)
     int maxPageNumber = 0;
 
     //找到最後一頁
-    QRegExp pageNumExp("http://comic.sfacg.com/Catalog/"
-                       "[dD]efault.aspx\\?PageIndex=(\\d+)");
+    QRegExp pageNumExp("http://comic.sfacg.com/Catalog/[dD]efault.aspx\\?PageIndex=(\\d+)");
     int pos = 0;
     while ((pos = pageNumExp.indexIn(html, pos)) != -1)
     {
@@ -119,9 +118,10 @@ void SFUpdateHandler::_getPageUrl(const QString &html)
 
 void SFUpdateHandler::_getComicInfo(const QString &html)
 {
-    qDebug() << "SFUpdateHandler:_getComicInfo: 截取頁面上所有漫畫資訊";
+	qDebug() << "SFUpdateHandler:_getComicInfo: 截取頁面上所有漫畫資訊";
 
-    QRegExp regexp("<img src=\"([^\"]+)\"" //cover
+	/*
+    QRegExp regexp("<img src=\"([^\"]+)\""  //cover
                    "[^>]+></a></li>\\s+<li><strong class=\""
                    "F14PX\"><a href=\"/HTML/([^/]+)" //keyName
                    "[^>]+>([^<]+)" //name
@@ -129,7 +129,8 @@ void SFUpdateHandler::_getComicInfo(const QString &html)
                    "[^\\]]+[^>]+>([^<]+)" //comicType
                    "</a> /([^/]+)+/" //lastUpdated
                    " \\d+<br />([^<]+)" //description
-                   );
+                   );*/
+	QRegExp regexp("<img src=\"([^\"]+)\"[^>]+></a></li>\\s+<li><strong class=\"F14PX\"><a href=\"/HTML/([^/]+)[^>]+>([^<]+)[^1]+1\">([^<]+)[^\\]]+[^>]+>([^<]+)</a> /([^/]+)+/ \\d+<br />([^<]+)");
 
     int pos = 0;
     while ((pos = regexp.indexIn(html, pos)) != -1)

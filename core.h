@@ -1,8 +1,8 @@
-#ifndef CORE_H
+﻿#ifndef CORE_H
 #define CORE_H
 
 #include <QObject>
-#include <convertz.h>
+#include "convertz.h"
 
 class QSortFilterProxyModel;
 
