@@ -8,3 +8,4 @@ syntax: glob
 *.pyc
 Win32/*
 debug/*
+*.user

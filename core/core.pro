@@ -6,7 +6,7 @@
 
 QT       += widgets network
 
-TARGET = cssulabug
+TARGET = core
 TEMPLATE = lib
 CONFIG += staticlib
 
@@ -31,4 +31,4 @@ SOURCES += \
     sfupdatehandler.cpp
 
 RESOURCES += \
-    src_resource.qrc
+    core_resource.qrc

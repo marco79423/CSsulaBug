@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
 {
     QGuiApplication a(argc, argv);
 
-    Q_INIT_RESOURCE(src_resource);
+    Q_INIT_RESOURCE(core_resource);
 
     //*
     //CSsulaBug 的核心
