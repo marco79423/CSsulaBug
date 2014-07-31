@@ -6,9 +6,11 @@
 #include <QDebug>
 #include <QFileInfo>
 
-Downloader::Downloader(QObject *parent) :
-    QObject(parent)
+Downloader::Downloader(AFileSaver *fileSaver, QObject *parent) :
+    QObject(parent), _fileSaver(fileSaver)
 {
+    _fileSaver->setParent(this);
+
     _networkAccessor = new NetworkAccessor(this);
 
     connect(_networkAccessor, SIGNAL(reply(const int&,QNetworkReply*)),
@@ -16,7 +18,6 @@ Downloader::Downloader(QObject *parent) :
     connect(_networkAccessor, SIGNAL(finish(const int&)),
             SLOT(_onAccessorFinish(const int&)));
 }
-
 
 int Downloader::download(const Downloader::Task &task)
 {
@@ -44,24 +45,23 @@ void Downloader::_onAccessorReply(const int &id, QNetworkReply *networkReply)
     downloadInfo["url"] = url;
     downloadInfo["path"] = path;
 
-    QFileInfo fileInfo(path);
-    if(!fileInfo.exists())
+    AFileSaver::SaverStatus saverStatus = _fileSaver->saveFile(networkReply->readAll(), path);
+    switch(saverStatus)
     {
-        QDir dir = fileInfo.absoluteDir();
-        if(!dir.exists() && !dir.mkpath(dir.absolutePath()))
-        {
-            qCritical() << "Downloader:_onAccessorReply:資料夾" << dir.absolutePath() << "建立失敗";
-        }
-
-        QFile file(path);
-        if(!file.open(QFile::WriteOnly))
-        {
-            qCritical() << "Downloader:_onAccessorReply: 開啟 " << path << " 失敗";
-            return;
-        }
-
-        file.write(networkReply->readAll());
-        file.close();
+        case AFileSaver::SaverStatus::FileExists:
+            qCritical() << "Downloader:_onAccessorReply:目標檔案存在";
+            break;
+        case AFileSaver::SaverStatus::FailedToCreateDstDir:
+            qCritical() << "Downloader:_onAccessorReply:目標資料夾建立失敗";
+            break;
+        case AFileSaver::SaverStatus::FailedToCreateDstFile:
+            qCritical() << "Downloader:_onAccessorReply: 目標檔案開啟失敗";
+            break;
+        case AFileSaver::SaverStatus::FailedToWriteDstFile:
+            qCritical() << "Downloader:_onAccessorReply: 目標檔案寫入失敗";
+            break;
+        default:
+            break;
     }
 
     qDebug() << "Downloader:_onAccessorReply: 已下載 " << path;
@@ -81,22 +81,3 @@ void Downloader::_onAccessorFinish(const int &id)
     emit finish();
 }
 
-void Downloader::d_test()
-{
-    /*
-      * 測試
-      */
-
-    const QString url1 = "http://cssula.nba.nctu.edu.tw/~marco/DoNotPress.exe";
-    const QString url2 = "http://cssula.nba.nctu.edu.tw/~marco/GameOfLife.exe";
-
-    Task task1;
-    task1[url1] = "1a.exe";
-
-    Task task2;
-    task2[url1] = "2a.exe";
-    task2[url2] = "2b.exe";
-
-    download(task1);
-    download(task2);
-}

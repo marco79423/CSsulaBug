@@ -1,21 +1,14 @@
-#-------------------------------------------------
-#
-# Project created by QtCreator 2014-07-22T12:32:20
-#
-#-------------------------------------------------
-
 QT += testlib
 
-TARGET = unittest
-CONFIG += console testcase
-
-
-SOURCES += \
-    convertztest.cpp \
-    main.cpp
+TARGET = integrationtest
+CONFIG += c++11 console testcase
 
 HEADERS += \
-    convertztest.h
+    filesavertest.h
+
+SOURCES += \
+    filesavertest.cpp \
+    main.cpp
 
 INCLUDEPATH += $$PWD/../../core
 

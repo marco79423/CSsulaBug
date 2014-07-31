@@ -8,7 +8,7 @@ QT       += widgets network
 
 TARGET = core
 TEMPLATE = lib
-CONFIG += staticlib
+CONFIG += c++11 staticlib
 
 HEADERS += \
     adownloadhandler.h \
@@ -19,7 +19,9 @@ HEADERS += \
     downloader.h \
     networkaccessor.h \
     sfdownloadhandler.h \
-    sfupdatehandler.h
+    sfupdatehandler.h \
+    filesaver.h \
+    afilesaver.h
 
 SOURCES += \
     comicmodel.cpp \
@@ -28,7 +30,8 @@ SOURCES += \
     downloader.cpp \
     networkaccessor.cpp \
     sfdownloadhandler.cpp \
-    sfupdatehandler.cpp
+    sfupdatehandler.cpp \
+    filesaver.cpp
 
 RESOURCES += \
     core_resource.qrc

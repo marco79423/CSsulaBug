@@ -1,5 +1,6 @@
 ﻿#include "sfdownloadhandler.h"
 #include "networkaccessor.h"
+#include "filesaver.h"
 #include <QNetworkReply>
 #include <QDebug>
 #include <QDir>
@@ -8,7 +9,7 @@ SFDownloadHandler::SFDownloadHandler(QObject *parent) :
     ADownloadHandler(parent), _currentState(NothingDoing)
 {
     _networkAccessor = new NetworkAccessor(this);
-    _downloader = new Downloader(this);
+    _downloader = new Downloader(new FileSaver, this);
 
     connect(_networkAccessor, SIGNAL(reply(const int&,QNetworkReply*)),
             SLOT(_onAccessorReply(const int&,QNetworkReply*)));

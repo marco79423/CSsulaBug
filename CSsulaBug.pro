@@ -7,7 +7,8 @@
 TEMPLATE = subdirs
 CONFIG+= ordered
 
-SUBDIRS += core app \
+SUBDIRS += core \
+    app \
     test
 
 app.depends = core

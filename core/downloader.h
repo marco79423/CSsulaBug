@@ -5,6 +5,8 @@
 #include <QHash>
 #include <QStringList>
 
+#include "afilesaver.h"
+
 class NetworkAccessor;
 class QNetworkReply;
 
@@ -17,9 +19,7 @@ public:
     //Task => (Url, FilePath)
     typedef QHash<QString, QString> Task;
 
-    explicit Downloader(QObject *parent = 0);
-
-    void d_test();
+    explicit Downloader(AFileSaver *fileSaver, QObject *parent = 0);
 
 signals:
     
@@ -36,6 +36,8 @@ private slots:
     void _onAccessorFinish(const int &id);
 
 private:
+
+    AFileSaver *_fileSaver;
 
     NetworkAccessor *_networkAccessor;
     QHash<int, Task> _taskHash;

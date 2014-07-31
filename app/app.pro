@@ -7,13 +7,14 @@
 TARGET = CSsulaBug
 TEMPLATE = app
 QT += quick
+CONFIG += c++11
 
-#macx {
-#    ICON = $$PWD/icon.icns
-#}
-#win32 {
-#    RC_FILE = CSsulaBug.rc
-#}
+macx {
+    ICON = $$PWD/icon.icns
+}
+win32 {
+    RC_FILE = CSsulaBug.rc
+}
 
 SOURCES += \
     main.cpp
@@ -23,4 +24,11 @@ RESOURCES += \
 
 INCLUDEPATH += $$PWD/../core
 
-win32-g++:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../core/debug -lcore
+win32-g++:CONFIG(debug, debug|release): {
+    LIBS += -L$$OUT_PWD/../core/debug -lcore
+    PRE_TARGETDEPS += $$OUT_PWD/../core/debug/libcore.a
+}
+unix:CONFIG(release, debug|release){
+    LIBS += -L$$OUT_PWD/../core -lcore
+    PRE_TARGETDEPS += $$OUT_PWD/../core/libcore.a
+}
