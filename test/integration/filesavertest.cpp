@@ -17,11 +17,11 @@ void FileSaverTest::initTestCase()
 void FileSaverTest::saveFile()
 {
     AFileSaver *fileSaver = new FileSaver(this);
-    foreach(QString filePath, _testcases)
+    foreach(QString filePath, _testcases.keys())
     {
         AFileSaver::SaverStatus status = fileSaver->saveFile(_testcases[filePath], filePath);
 
-        QVERIFY(status == AFileSaver::SaverStatus::Success);
+        QCOMPARE(status, AFileSaver::SaverStatus::Success);
         QFileInfo fileInfo(filePath);
         QVERIFY(fileInfo.exists());
 

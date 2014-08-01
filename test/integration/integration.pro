@@ -1,14 +1,16 @@
-QT += testlib
+QT += testlib network
 
 TARGET = integrationtest
 CONFIG += c++11 console testcase
 
 HEADERS += \
-    filesavertest.h
+    filesavertest.h \
+    networkaccessortest.h
 
 SOURCES += \
     filesavertest.cpp \
-    main.cpp
+    main.cpp \
+    networkaccessortest.cpp
 
 INCLUDEPATH += $$PWD/../../core
 
@@ -21,3 +23,6 @@ unix:CONFIG(release, debug|release){
     LIBS += -L$$OUT_PWD/../../core -lcore
     PRE_TARGETDEPS += $$OUT_PWD/../../core/libcore.a
 }
+
+RESOURCES += \
+    integration_resource.qrc

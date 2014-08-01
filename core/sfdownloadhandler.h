@@ -25,7 +25,7 @@ public slots:
 private slots:
 
     void _onAccessorReply(const int &id, QNetworkReply *networkReply);
-    void _onAccessorFinish(const int &id);
+    void _onAccessorFinish(const int &id, const bool &error);
 
     void _onDownloaderInfo(const QHash<QString, QString> downloaderInfo);
     void _onDownloaderFinish();

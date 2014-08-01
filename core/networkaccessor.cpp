@@ -8,7 +8,7 @@ NetworkAccessor::NetworkAccessor(QObject *parent) :
     _networkAccessManager = new QNetworkAccessManager(this);
 
     connect(_networkAccessManager, SIGNAL(finished(QNetworkReply*)),
-            SLOT(_onManagerFinish(QNetworkReply*)));
+            SLOT(_onManagerReply(QNetworkReply*)));
 }
 
 int NetworkAccessor::get(const QString &url)
@@ -50,7 +50,6 @@ void NetworkAccessor::_startAccess()
     /*
       *若是現在沒有實際執行下載任務，便開始執行。
       */
-
     if(!_isAccessing && !_taskQueue.isEmpty())
     {
         _isAccessing = true;
@@ -60,12 +59,14 @@ void NetworkAccessor::_startAccess()
         {
             QNetworkRequest request = _makeRequest(url);
             qDebug() << "NetworkAccessor:_startAccess:開始下載 " << url;
-            _networkAccessManager->get(request);
+            QNetworkReply *reply = _networkAccessManager->get(request);
+            _currentTask.replyList.append(reply);
         }
     }
 }
 
-void NetworkAccessor::_onManagerFinish(QNetworkReply *networkReply)
+
+void NetworkAccessor::_onManagerReply(QNetworkReply *networkReply)
 {
     /*
       * 當 NetWorkAcessManager finish 時，若沒問題，就發送完成任務的訊號，
@@ -73,25 +74,34 @@ void NetworkAccessor::_onManagerFinish(QNetworkReply *networkReply)
       */
 
     const QString url = networkReply->url().toString();
-    qDebug() << "NetworkAccessor:_onManagerFinish: 收到 " << url;
-
-    if(networkReply->error())
-    {
-        qCritical() << "NetworkAccessor:onManagerFinish:error " << url;
-        networkReply->deleteLater();
-        return;
-    }
+    qDebug() << "NetworkAccessor:_onManagerReply: 收到 " << url;
 
     _currentTask.urlList.removeOne(url);
-    emit reply(_currentTask.id, networkReply);
-    networkReply->deleteLater();
+    _currentTask.replyList.removeOne(networkReply);
+
+    if(networkReply->error() != QNetworkReply::NoError)
+    {
+        qDebug() << "NetworkAccessor:_onManagerReply:error " << networkReply->error();
+        foreach(QNetworkReply *reply, _currentTask.replyList)
+        {
+            reply->abort();
+        }
+        _currentTask.urlList.clear();
+        _currentTask.replyList.clear();
+    }
+    else
+    {
+        emit reply(_currentTask.id, networkReply);
+    }
 
     if(_currentTask.urlList.isEmpty())
     {
-        emit finish(_currentTask.id);
+        emit finish(_currentTask.id, networkReply->error() != QNetworkReply::NoError);
         _isAccessing = false;
         _startAccess();
     }
+
+    networkReply->deleteLater();
 }
 
 QNetworkRequest NetworkAccessor::_makeRequest(const QString &url)
@@ -101,11 +111,11 @@ QNetworkRequest NetworkAccessor::_makeRequest(const QString &url)
       */
 
     QNetworkRequest request(url);
-    request.setRawHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64)"
-                         "AppleWebKit/536.5 (KHTML, like Gecko) Chrome/19.0."
-                         "1084.1 Safari/536.5");
+    request.setRawHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.125 Safari/537.36");
     return request;
 }
+
+
 
 void NetworkAccessor::d_test()
 {
@@ -119,3 +129,4 @@ void NetworkAccessor::d_test()
     get(url1);
     get(QStringList() << url1 << url2);
 }
+

@@ -13,8 +13,8 @@ SFDownloadHandler::SFDownloadHandler(QObject *parent) :
 
     connect(_networkAccessor, SIGNAL(reply(const int&,QNetworkReply*)),
             SLOT(_onAccessorReply(const int&,QNetworkReply*)));
-    connect(_networkAccessor, SIGNAL(finish(const int&)),
-            SLOT(_onAccessorFinish(const int&)));
+    connect(_networkAccessor, SIGNAL(finish(const int&, const bool&)),
+            SLOT(_onAccessorFinish(const int&, const bool&)));
     connect(_fileDownloader, SIGNAL(info(const QHash<QString,QString>&)),
             SLOT(_onDownloaderInfo(const QHash<QString,QString>&)));
     connect(_fileDownloader, SIGNAL(finish()), SIGNAL(finish()));
@@ -57,7 +57,7 @@ void SFDownloadHandler::_onAccessorReply(const int &id,
     }
 }
 
-void SFDownloadHandler::_onAccessorFinish(const int &id)
+void SFDownloadHandler::_onAccessorFinish(const int &id, const bool& error)
 {
     switch(_currentState)
     {

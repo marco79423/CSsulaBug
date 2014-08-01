@@ -15,8 +15,8 @@ FileDownloader::FileDownloader(AFileSaver *fileSaver, QObject *parent) :
 
     connect(_networkAccessor, SIGNAL(reply(const int&,QNetworkReply*)),
             SLOT(_onAccessorReply(const int&,QNetworkReply*)));
-    connect(_networkAccessor, SIGNAL(finish(const int&)),
-            SLOT(_onAccessorFinish(const int&)));
+    connect(_networkAccessor, SIGNAL(finish(const int&, const bool&)),
+            SLOT(_onAccessorFinish(const int&, const bool&)));
 }
 
 int FileDownloader::download(const FileDownloader::Task &task)
@@ -69,7 +69,7 @@ void FileDownloader::_onAccessorReply(const int &id, QNetworkReply *networkReply
     _taskHash[id].remove(url);
 }
 
-void FileDownloader::_onAccessorFinish(const int &id)
+void FileDownloader::_onAccessorFinish(const int &id, const bool &error)
 {
     /*
       * 當一項任務下載完後，刪除該任務資料
@@ -77,7 +77,10 @@ void FileDownloader::_onAccessorFinish(const int &id)
 
     _taskHash.remove(id);
 
-    qDebug() << "Downloader:_onAccessorFinish: id " << id << " 下載完成";
+    if(error)
+        qDebug() << "Downloader:_onAccessorFinish: id " << id << " 下載失敗";
+    else
+        qDebug() << "Downloader:_onAccessorFinish: id " << id << " 下載完成";
     emit finish();
 }
 

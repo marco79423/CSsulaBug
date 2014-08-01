@@ -2,6 +2,7 @@
 #include <QTest>
 
 #include "filesavertest.h"
+#include "networkaccessortest.h"
 
 int main(int argc, char *argv[])
 {
@@ -11,8 +12,12 @@ int main(int argc, char *argv[])
 
     int ret = 0;
 
-    FileSaverTest test;
-    ret += QTest::qExec(&test, argc, argv);
+    FileSaverTest fileSaverTest;
+    ret += QTest::qExec(&fileSaverTest, argc, argv);
+
+
+    NetworkAccessorTest networkAccessorTest;
+    ret += QTest::qExec(&networkAccessorTest, argc, argv);
 
     return ret;
 }

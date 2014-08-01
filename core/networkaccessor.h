@@ -4,9 +4,9 @@
 #include <QObject>
 #include <QStringList>
 #include <QQueue>
+#include <QNetworkReply>
 
 class QNetworkAccessManager;
-class QNetworkReply;
 class QNetworkRequest;
 
 class NetworkAccessor : public QObject
@@ -25,11 +25,11 @@ public:
 signals:
     
     void reply(const int &id, QNetworkReply *networkReply);
-    void finish(const int &id);
+    void finish(const int &id, const bool &error);
 
 private slots:
 
-    void _onManagerFinish(QNetworkReply *networkReply);
+    void _onManagerReply(QNetworkReply *networkReply);
 
 private:
 
@@ -37,6 +37,7 @@ private:
     {
         int id;
         QStringList urlList;
+        QList<QNetworkReply*> replyList;
     };
 
     QNetworkAccessManager *_networkAccessManager;
@@ -49,5 +50,8 @@ private:
     QNetworkRequest _makeRequest(const QString &url);
 
 };
+
+
+Q_DECLARE_METATYPE(QNetworkReply *)
 
 #endif // NETWORKACCESSOR_H

@@ -11,8 +11,8 @@ SFUpdateHandler::SFUpdateHandler(QObject *parent) :
 
     connect(_networkAccessor, SIGNAL(reply(const int&,QNetworkReply*)),
             SLOT(_onAccessorReply(const int&,QNetworkReply*)));
-    connect(_networkAccessor, SIGNAL(finish(const int&)),
-            SLOT(_onAccessorFinish(const int&)));
+    connect(_networkAccessor, SIGNAL(finish(const int&, const bool&)),
+            SLOT(_onAccessorFinish(const int&, const bool&)));
 }
 
 bool SFUpdateHandler::isReady()
@@ -51,7 +51,7 @@ void SFUpdateHandler::_onAccessorReply(const int &id, QNetworkReply *networkRepl
     }
 }
 
-void SFUpdateHandler::_onAccessorFinish(const int &id)
+void SFUpdateHandler::_onAccessorFinish(const int &id, const bool&error)
 {
     switch(_currentState)
     {
