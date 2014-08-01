@@ -2,7 +2,7 @@
 #define SFDOWNLOADHANDLER_H
 
 #include "adownloadhandler.h"
-#include "downloader.h"
+#include "filedownloader.h"
 #include "convertz.h"
 
 class NetworkAccessor;
@@ -39,8 +39,8 @@ private:
     QHash<QString, QString> _taskInfo;
     QStringList _chapterUrlList;
 
-    Downloader *_downloader;
-    Downloader::Task _task;
+    FileDownloader *_fileDownloader;
+    FileDownloader::Task _task;
     ConvertZ _convertz;
 
     void _clear();

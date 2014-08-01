@@ -9,15 +9,15 @@ SFDownloadHandler::SFDownloadHandler(QObject *parent) :
     ADownloadHandler(parent), _currentState(NothingDoing)
 {
     _networkAccessor = new NetworkAccessor(this);
-    _downloader = new Downloader(new FileSaver, this);
+    _fileDownloader = new FileDownloader(new FileSaver, this);
 
     connect(_networkAccessor, SIGNAL(reply(const int&,QNetworkReply*)),
             SLOT(_onAccessorReply(const int&,QNetworkReply*)));
     connect(_networkAccessor, SIGNAL(finish(const int&)),
             SLOT(_onAccessorFinish(const int&)));
-    connect(_downloader, SIGNAL(info(const QHash<QString,QString>&)),
+    connect(_fileDownloader, SIGNAL(info(const QHash<QString,QString>&)),
             SLOT(_onDownloaderInfo(const QHash<QString,QString>&)));
-    connect(_downloader, SIGNAL(finish()), SIGNAL(finish()));
+    connect(_fileDownloader, SIGNAL(finish()), SIGNAL(finish()));
 }
 
 
@@ -117,7 +117,7 @@ void SFDownloadHandler::_startProcess(const SFDownloadHandler::State &state)
         break;
     case Downloading:
         _taskInfo["done"] = QString::number(0);
-        _downloader->download(_task);
+        _fileDownloader->download(_task);
         break;
     default:
         qCritical() << "SFDownloadHandler:_startProcess:錯誤的狀態 " << state;

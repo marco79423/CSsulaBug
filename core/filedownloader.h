@@ -1,5 +1,5 @@
-﻿#ifndef DOWNLOADER_H
-#define DOWNLOADER_H
+﻿#ifndef FILEDOWNLOADER_H
+#define FILEDOWNLOADER_H
 
 #include <QObject>
 #include <QHash>
@@ -10,7 +10,7 @@
 class NetworkAccessor;
 class QNetworkReply;
 
-class Downloader : public QObject
+class FileDownloader : public QObject
 {
     Q_OBJECT
 
@@ -19,7 +19,7 @@ public:
     //Task => (Url, FilePath)
     typedef QHash<QString, QString> Task;
 
-    explicit Downloader(AFileSaver *fileSaver, QObject *parent = 0);
+    explicit FileDownloader(AFileSaver *fileSaver, QObject *parent = 0);
 
 signals:
     
@@ -43,4 +43,4 @@ private:
     QHash<int, Task> _taskHash;
 };
 
-#endif // DOWNLOADER_H
+#endif // FILEDOWNLOADER_H

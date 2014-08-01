@@ -1,4 +1,4 @@
-﻿#include "downloader.h"
+﻿#include "filedownloader.h"
 #include "networkaccessor.h"
 #include <QNetworkReply>
 #include <QFile>
@@ -6,7 +6,7 @@
 #include <QDebug>
 #include <QFileInfo>
 
-Downloader::Downloader(AFileSaver *fileSaver, QObject *parent) :
+FileDownloader::FileDownloader(AFileSaver *fileSaver, QObject *parent) :
     QObject(parent), _fileSaver(fileSaver)
 {
     _fileSaver->setParent(this);
@@ -19,7 +19,7 @@ Downloader::Downloader(AFileSaver *fileSaver, QObject *parent) :
             SLOT(_onAccessorFinish(const int&)));
 }
 
-int Downloader::download(const Downloader::Task &task)
+int FileDownloader::download(const FileDownloader::Task &task)
 {
     /*
       *下載 task 任務
@@ -33,7 +33,7 @@ int Downloader::download(const Downloader::Task &task)
     return id;
 }
 
-void Downloader::_onAccessorReply(const int &id, QNetworkReply *networkReply)
+void FileDownloader::_onAccessorReply(const int &id, QNetworkReply *networkReply)
 {
     /*
       *處理 NetworkAccessor 的回應，把內容寫至目標路徑
@@ -69,7 +69,7 @@ void Downloader::_onAccessorReply(const int &id, QNetworkReply *networkReply)
     _taskHash[id].remove(url);
 }
 
-void Downloader::_onAccessorFinish(const int &id)
+void FileDownloader::_onAccessorFinish(const int &id)
 {
     /*
       * 當一項任務下載完後，刪除該任務資料
