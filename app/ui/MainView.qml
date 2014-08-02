@@ -1,4 +1,4 @@
-﻿import QtQuick 2.0
+﻿import QtQuick 2.2
 import QtQuick.Controls 1.1
 import QtQuick.Layouts 1.1
 
@@ -12,7 +12,7 @@ ApplicationWindow {
     title: "CSsulaBug 漫畫下載器"
     color: "darkgray"
 
-    Component.onCompleted: core.update()
+    Component.onCompleted: comicInfoService.update()
 
     toolBar: ToolBar {
         id: toolBar
@@ -22,7 +22,7 @@ ApplicationWindow {
             TextField {
                 Layout.fillWidth: true
                 placeholderText: "點此搜尋想下載的漫畫至桌面 ..."
-                onTextChanged: { core.setFilter(text); }
+                onTextChanged: { comicInfoService.setFilter(text); }
             }
 
             Button{
@@ -30,8 +30,8 @@ ApplicationWindow {
                 text: "下載"
                 onClicked: {
                     comicList.state = "downloading";
-                    var key = core.getKey(comicList.currentIndex);
-                    core.download(key);
+                    var key = comicInfoService.getKey(comicList.currentIndex);
+                    downloadService.download(key);
                 }
             }
         }
@@ -45,7 +45,7 @@ ApplicationWindow {
                 else if(comicList.state == "ready")
                     return "準備完成，可以選擇要下載的漫畫";
                 else
-                    return core.downloadInfo
+                    return downloadService.downloadProgress
             }
         }
     }
@@ -95,12 +95,12 @@ ApplicationWindow {
         }
 
         Connections {
-            target: core
+            target: comicInfoService
             onUpdateFinish: comicList.state = "ready"
         }
 
         Connections {
-            target: core
+            target: downloadService
             onDownloadFinish: comicList.state = "ready"
         }
     }

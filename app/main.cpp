@@ -5,7 +5,8 @@
 
 #include <sfupdatehandler.h>
 #include <sfdownloadhandler.h>
-#include <core.h>
+#include <comicinfoservice.h>
+#include <downloadservice.h>
 
 int main(int argc, char *argv[])
 {
@@ -15,15 +16,15 @@ int main(int argc, char *argv[])
 
     //*
     //CSsulaBug 的核心
-    AUpdateHandler *updateHandler = new SFUpdateHandler();
-    ADownloadHandler *downloadHandler = new SFDownloadHandler();
-    Core core(updateHandler, downloadHandler);
+    ComicInfoService comicInfoService(new SFUpdateHandler);
+    DownloadService downloadService(new SFDownloadHandler);
 
     //顯示
     QQmlApplicationEngine engine;
 
-    engine.rootContext()->setContextProperty("core", &core);
-    engine.rootContext()->setContextProperty("comicModel", core.getModel());
+    engine.rootContext()->setContextProperty("comicInfoService", &comicInfoService);
+    engine.rootContext()->setContextProperty("comicModel", comicInfoService.getModel());
+    engine.rootContext()->setContextProperty("downloadService", &downloadService);
     engine.load(QUrl("qrc:ui/MainView.qml"));
 
     return a.exec();

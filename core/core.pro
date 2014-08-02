@@ -15,23 +15,27 @@ HEADERS += \
     aupdatehandler.h \
     comicmodel.h \
     convertz.h \
-    core.h \
     networkaccessor.h \
     sfdownloadhandler.h \
     sfupdatehandler.h \
     filesaver.h \
     afilesaver.h \
-    filedownloader.h
+    filedownloader.h \
+    adownloadservice.h \
+    downloadservice.h \
+    acomicinfoservice.h \
+    comicinfoservice.h
 
 SOURCES += \
     comicmodel.cpp \
     convertz.cpp \
-    core.cpp \
     networkaccessor.cpp \
     sfdownloadhandler.cpp \
     sfupdatehandler.cpp \
     filesaver.cpp \
-    filedownloader.cpp
+    filedownloader.cpp \
+    downloadservice.cpp \
+    comicinfoservice.cpp
 
 RESOURCES += \
     core_resource.qrc

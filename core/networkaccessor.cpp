@@ -112,6 +112,8 @@ QNetworkRequest NetworkAccessor::_makeRequest(const QString &url)
 
     QNetworkRequest request(url);
     request.setRawHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.125 Safari/537.36");
+    request.setRawHeader("Connection", "close");
+
     return request;
 }
 
