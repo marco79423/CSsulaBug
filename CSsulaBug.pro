@@ -9,7 +9,7 @@ CONFIG+= ordered
 
 SUBDIRS += core \
     app \
-    test
+    test \
 
 app.depends = core
 test.depends = core

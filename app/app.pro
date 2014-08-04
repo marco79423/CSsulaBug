@@ -23,6 +23,7 @@ RESOURCES += \
     app_resource.qrc
 
 INCLUDEPATH += $$PWD/../core
+INCLUDEPATH += $$PWD/../stubcore
 
 win32-g++:CONFIG(debug, debug|release): {
     LIBS += -L$$OUT_PWD/../core/debug -lcore

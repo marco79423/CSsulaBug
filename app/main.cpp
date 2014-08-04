@@ -8,6 +8,9 @@
 #include <comicinfoservice.h>
 #include <downloadservice.h>
 
+#include <stub/stubupdatehandler.h>
+#include <stub/stubdownloadhandler.h>
+
 int main(int argc, char *argv[])
 {
     QGuiApplication a(argc, argv);
@@ -17,7 +20,10 @@ int main(int argc, char *argv[])
     //*
     //CSsulaBug 的核心
     ComicInfoService comicInfoService(new SFUpdateHandler);
+    //ComicInfoService comicInfoService(new StubUpdateHandler);
+
     DownloadService downloadService(new SFDownloadHandler);
+    //DownloadService downloadService(new StubDownloadHandler);
 
     //顯示
     QQmlApplicationEngine engine;

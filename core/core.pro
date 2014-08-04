@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += widgets network
+QT += network
 
 TARGET = core
 TEMPLATE = lib
@@ -24,7 +24,9 @@ HEADERS += \
     adownloadservice.h \
     downloadservice.h \
     acomicinfoservice.h \
-    comicinfoservice.h
+    comicinfoservice.h \
+    stub/stubupdatehandler.h \
+    stub/stubdownloadhandler.h
 
 SOURCES += \
     comicmodel.cpp \
@@ -35,7 +37,9 @@ SOURCES += \
     filesaver.cpp \
     filedownloader.cpp \
     downloadservice.cpp \
-    comicinfoservice.cpp
+    comicinfoservice.cpp \
+    stub/stubupdatehandler.cpp \
+    stub/stubdownloadhandler.cpp
 
 RESOURCES += \
     core_resource.qrc
