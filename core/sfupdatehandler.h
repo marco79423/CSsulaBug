@@ -17,8 +17,6 @@ public:
     explicit SFUpdateHandler(QObject *parent = 0);
     bool isReady();
 
-    void d_test();
-
 public slots:
 
     void update();

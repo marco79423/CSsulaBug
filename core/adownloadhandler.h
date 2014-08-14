@@ -19,7 +19,7 @@ signals:
 
 public slots:
 
-    virtual void download(const QString &key, const QString &dstDir){}
+    virtual void download(const QString &key, const QString &dstDir) = 0;
 
 protected:
 

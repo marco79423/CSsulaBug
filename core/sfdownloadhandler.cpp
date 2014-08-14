@@ -43,6 +43,8 @@ void SFDownloadHandler::download(const QString &key, const QString &dstDir)
 void SFDownloadHandler::_onAccessorReply(const int &id,
                                          QNetworkReply *networkReply)
 {
+    Q_UNUSED(id)
+
     const QString url = networkReply->url().toString();
     const QString html = networkReply->readAll();
 
@@ -59,6 +61,9 @@ void SFDownloadHandler::_onAccessorReply(const int &id,
 
 void SFDownloadHandler::_onAccessorFinish(const int &id, const bool& error)
 {
+    Q_UNUSED(id)
+    Q_UNUSED(error)
+
     switch(_currentState)
     {
     case ChapterUrlListing: _startProcess(TaskMaking); break;

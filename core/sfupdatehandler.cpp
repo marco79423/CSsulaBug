@@ -39,6 +39,8 @@ void SFUpdateHandler::update()
 
 void SFUpdateHandler::_onAccessorReply(const int &id, QNetworkReply *networkReply)
 {
+    Q_UNUSED(id)
+
     const QString html = networkReply->readAll();
 
     switch(_currentState)
@@ -53,6 +55,9 @@ void SFUpdateHandler::_onAccessorReply(const int &id, QNetworkReply *networkRepl
 
 void SFUpdateHandler::_onAccessorFinish(const int &id, const bool&error)
 {
+    Q_UNUSED(id)
+    Q_UNUSED(error)
+
     switch(_currentState)
     {
     case ALLPageUrlListGetting: _startProcess(ComicInfoGetting); break;
@@ -150,13 +155,4 @@ void SFUpdateHandler::_getComicInfo(const QString &html)
 
         pos += regexp.matchedLength();
     }
-}
-
-
-void SFUpdateHandler::d_test()
-{
-    /*
-      * 測試
-      */
-    update();
 }

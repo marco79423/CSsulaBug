@@ -13,6 +13,9 @@ bool StubDownloadHandler::isReady() const
 
 void StubDownloadHandler::download(const QString &key, const QString &dstDir)
 {
+    Q_UNUSED(key)
+    Q_UNUSED(dstDir)
+
     _isReady = false;
     for(int i=10; i <= 100; i+= 10)
     {
