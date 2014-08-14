@@ -8,7 +8,7 @@ StubUpdateHandler::StubUpdateHandler(QObject *parent)
 void StubUpdateHandler::update()
 {
     {
-        QHash<QString, QString> updateInfo;
+        ComicInfo updateInfo;
         updateInfo["site"] = "SF";
         updateInfo["coverUrl"] = "http://mh.sfacg.com/Logo/347639a1-530a-4550-988c-bab00a95c0fe.jpg";
         updateInfo["key"] = "JDZJ";
@@ -21,7 +21,7 @@ void StubUpdateHandler::update()
     }
 
     {
-        QHash<QString, QString> updateInfo;
+        ComicInfo updateInfo;
         updateInfo["site"] = "SF";
         updateInfo["coverUrl"] = "http://mh.sfacg.com/Logo/04595fd1-746a-4ddc-9c82-05a28ba42aec.jpg";
         updateInfo["key"] = "CGX";
@@ -34,7 +34,7 @@ void StubUpdateHandler::update()
     }
 
     {
-        QHash<QString, QString> updateInfo;
+        ComicInfo updateInfo;
         updateInfo["site"] = "SF";
         updateInfo["coverUrl"] = "http://mh.sfacg.com/Logo/fd877ece-1ce2-45a3-9589-7f1893f23420.jpg";
         updateInfo["key"] = "SUGAR";
@@ -47,7 +47,7 @@ void StubUpdateHandler::update()
     }
 
     {
-        QHash<QString, QString> updateInfo;
+        ComicInfo updateInfo;
         updateInfo["site"] = "SF";
         updateInfo["coverUrl"] = "http://mh.sfacg.com/Logo/baa9dd71-d46e-4e65-96bd-26ab8efa27a3.jpg";
         updateInfo["key"] = "GWLRE";
@@ -60,7 +60,7 @@ void StubUpdateHandler::update()
     }
 
     {
-        QHash<QString, QString> updateInfo;
+        ComicInfo updateInfo;
         updateInfo["site"] = "SF";
         updateInfo["coverUrl"] = "http://mh.sfacg.com/Logo/e9e72c53-323c-410e-bf64-d3797515d4f1.jpg";
         updateInfo["key"] = "DYDF";
@@ -73,7 +73,7 @@ void StubUpdateHandler::update()
     }
 
     {
-        QHash<QString, QString> updateInfo;
+        ComicInfo updateInfo;
         updateInfo["site"] = "SF";
         updateInfo["coverUrl"] = "http://mh.sfacg.com/Logo/c235c24f-40d3-4593-8387-4b3b5e5a815b.jpg";
         updateInfo["key"] = "LSWDH";

@@ -17,13 +17,16 @@ int main(int argc, char *argv[])
 
     Q_INIT_RESOURCE(core_resource);
 
+
+    qRegisterMetaType<AUpdateHandler::ComicInfo>();
+
     //*
     //CSsulaBug 的核心
     ComicInfoService comicInfoService(new SFUpdateHandler);
     //ComicInfoService comicInfoService(new StubUpdateHandler);
 
-    DownloadService downloadService(new SFDownloadHandler);
-    //DownloadService downloadService(new StubDownloadHandler);
+    //DownloadService downloadService(new SFDownloadHandler);
+    DownloadService downloadService(new StubDownloadHandler);
 
     //顯示
     QQmlApplicationEngine engine;

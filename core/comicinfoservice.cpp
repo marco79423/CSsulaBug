@@ -7,8 +7,6 @@
 ComicInfoService::ComicInfoService(AUpdateHandler *updateHandler, QObject *parent) :
     AComicInfoService(parent), _updateHandler(updateHandler)
 {
-    _updateHandler->setParent(this);
-
     _model = new ComicModel(_updateHandler, this);
     _proxyModel = new QSortFilterProxyModel(this);
     _proxyModel->setSourceModel(_model);

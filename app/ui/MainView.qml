@@ -12,7 +12,7 @@ ApplicationWindow {
     title: "CSsulaBug 漫畫下載器"
     color: "darkgray"
 
-    Component.onCompleted: comicInfoService.update()
+    //Component.onCompleted: comicInfoService.update()
 
     toolBar: ToolBar {
         id: toolBar

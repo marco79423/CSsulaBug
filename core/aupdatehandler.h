@@ -10,11 +10,13 @@ class AUpdateHandler : public QObject
 
 public:
 
-   virtual bool isReady() const { return true;}
+    typedef QHash<QString, QString> ComicInfo;
+
+    virtual bool isReady() const { return true;}
     
 signals:
     
-    void info(const QHash<QString, QString> &info);
+    void info(const AUpdateHandler::ComicInfo &info);
     void finish();
 
 public slots:
@@ -25,5 +27,7 @@ protected:
 
      explicit AUpdateHandler(QObject *parent = 0):QObject(parent){}
 };
+
+Q_DECLARE_METATYPE(AUpdateHandler::ComicInfo)
 
 #endif // A_UPDATE_HANDLER_H

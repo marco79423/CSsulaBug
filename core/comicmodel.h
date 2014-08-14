@@ -2,8 +2,9 @@
 #define COMICMODEL_H
 
 #include <QAbstractListModel>
+#include <QThread>
 
-class AUpdateHandler;
+#include "aupdatehandler.h"
 
 class ComicModel : public QAbstractListModel
 {
@@ -17,24 +18,22 @@ public:
     QVariant data(const QModelIndex &index, int role) const;
     QHash<int, QByteArray> roleNames() const;
 
-    void d_test();
+    ~ComicModel();
 
 signals:
     
-    void updateFinish();
-
-public slots:
-
     void update();
+    void updateFinish();
 
 private slots:
 
-    void _insertOneEntry(const QHash<QString, QString> &info);
+    void _insertOneEntry(const AUpdateHandler::ComicInfo &info);
 
 private:
 
-    QList< QHash<QString, QString> > _comicList;
+    QList<AUpdateHandler::ComicInfo> _comicList;
     AUpdateHandler *_updateHandler;
+    QThread _updateThread;
 };
 
 #endif // COMICMODEL_H
