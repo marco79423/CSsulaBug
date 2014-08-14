@@ -22,16 +22,17 @@ public:
 
 signals:
     
-    void update();
     void updateFinish();
+
+    void _update();
 
 private slots:
 
-    void _insertOneEntry(const AUpdateHandler::ComicInfo &info);
+    void _insertOneEntry(const StringHash &info);
 
 private:
 
-    QList<AUpdateHandler::ComicInfo> _comicList;
+    QList<StringHash> _comicList;
     AUpdateHandler *_updateHandler;
     QThread _updateThread;
 };

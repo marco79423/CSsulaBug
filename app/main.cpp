@@ -3,6 +3,8 @@
 #include <QQmlContext>
 #include <QSortFilterProxyModel>
 
+#include <globals.h>
+
 #include <sfupdatehandler.h>
 #include <sfdownloadhandler.h>
 #include <comicinfoservice.h>
@@ -18,15 +20,15 @@ int main(int argc, char *argv[])
     Q_INIT_RESOURCE(core_resource);
 
 
-    qRegisterMetaType<AUpdateHandler::ComicInfo>();
+    qRegisterMetaType<StringHash>();
 
     //*
     //CSsulaBug 的核心
     ComicInfoService comicInfoService(new SFUpdateHandler);
     //ComicInfoService comicInfoService(new StubUpdateHandler);
 
-    //DownloadService downloadService(new SFDownloadHandler);
-    DownloadService downloadService(new StubDownloadHandler);
+    DownloadService downloadService(new SFDownloadHandler);
+    //DownloadService downloadService(new StubDownloadHandler);
 
     //顯示
     QQmlApplicationEngine engine;

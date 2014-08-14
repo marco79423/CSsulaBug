@@ -2,7 +2,8 @@
 #define A_DOWNLOAD_HANDLER_H
 
 #include <QObject>
-#include <QHash>
+
+#include "globals.h"
 
 class ADownloadHandler : public QObject
 {
@@ -14,7 +15,7 @@ public:
     
 signals:
 
-    void info(const QHash<QString, QString> &info);
+    void info(const StringHash &info);
     void finish();
 
 public slots:

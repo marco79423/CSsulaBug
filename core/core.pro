@@ -26,7 +26,8 @@ HEADERS += \
     acomicinfoservice.h \
     comicinfoservice.h \
     stub/stubupdatehandler.h \
-    stub/stubdownloadhandler.h
+    stub/stubdownloadhandler.h \
+    globals.h
 
 SOURCES += \
     comicmodel.cpp \

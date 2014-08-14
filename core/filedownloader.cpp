@@ -41,7 +41,7 @@ void FileDownloader::_onAccessorReply(const int &id, QNetworkReply *networkReply
     QString url = networkReply->url().toString();
     QString path = _taskHash[id][url];
 
-    QHash<QString, QString> downloadInfo;
+    StringHash downloadInfo;
     downloadInfo["url"] = url;
     downloadInfo["path"] = path;
 

@@ -96,7 +96,7 @@ ApplicationWindow {
 
         Connections {
             target: comicInfoService
-            onUpdateFinish: comicList.state = "ready"
+            onUpdateFinish: if(comicList.state == "updating") comicList.state = "ready"
         }
 
         Connections {

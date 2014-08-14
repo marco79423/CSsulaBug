@@ -1,9 +1,10 @@
 #ifndef DOWNLOADSERVICE_H
 #define DOWNLOADSERVICE_H
 
-#include "adownloadservice.h"
+#include <QThread>
 
-class ADownloadHandler;
+#include "adownloadservice.h"
+#include "adownloadhandler.h"
 
 class DownloadService : public ADownloadService
 {
@@ -15,19 +16,26 @@ public:
 
     QString getDownloadProgress() const;
 
+    ~DownloadService();
+
+signals:
+
+    void _downloadSignal(const QString &key, const QString &dirpath);
+
 public slots:
 
     void download(const QString &key);
 
 private slots:
 
-     void _onGettingDownloadProgress(const QHash<QString, QString> &info);
+     void _onGettingDownloadProgress(const StringHash &info);
 
 private:
 
     ADownloadHandler *_downloadHandler;
 
     QString _downloadProgress;
+    QThread _downloadThread;
 };
 
 #endif // DOWNLOADSERVICE_H

@@ -18,7 +18,6 @@ public:
 
 public slots:
 
-    virtual void update();
     virtual void setFilter(const QString &pattern);
     virtual QString getKey(const int index) const;
 

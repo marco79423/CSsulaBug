@@ -20,12 +20,6 @@ QSortFilterProxyModel *ComicInfoService::getModel() const
     return _proxyModel;
 }
 
-
-void ComicInfoService::update()
-{
-    _model->update();
-}
-
 void ComicInfoService::setFilter(const QString &pattern)
 {
     QString tpattern = _convertz.convertToTraditional(pattern);

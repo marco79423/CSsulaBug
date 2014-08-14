@@ -16,8 +16,6 @@ public:
     explicit SFDownloadHandler(QObject *parent = 0);
     virtual bool isReady() const;
 
-    void d_test();
-
 public slots:
 
     virtual void download(const QString &key, const QString &dstDir);
@@ -27,7 +25,7 @@ private slots:
     void _onAccessorReply(const int &id, QNetworkReply *networkReply);
     void _onAccessorFinish(const int &id, const bool &error);
 
-    void _onDownloaderInfo(const QHash<QString, QString> downloaderInfo);
+    void _onDownloaderInfo(const StringHash &downloaderInfo);
     void _onDownloaderFinish();
 
 private:

@@ -7,16 +7,17 @@
 ComicModel::ComicModel(AUpdateHandler *updateHandler, QObject *parent) :
     QAbstractListModel(parent), _updateHandler(updateHandler)
 {
-    connect(this, SIGNAL(update()), _updateHandler, SLOT(update()));
-    connect(_updateHandler, SIGNAL(info(const AUpdateHandler::ComicInfo&)),
-            SLOT(_insertOneEntry(const AUpdateHandler::ComicInfo&)));
+    connect(_updateHandler, SIGNAL(info(const StringHash&)),
+            SLOT(_insertOneEntry(const StringHash&)));
     connect(_updateHandler, SIGNAL(finish()), SIGNAL(updateFinish()));
     connect(&_updateThread, SIGNAL(finished()), _updateHandler, SLOT(deleteLater()));
+
+    connect(this, SIGNAL(_update()), _updateHandler, SLOT(update()), Qt::QueuedConnection);
 
     _updateHandler->moveToThread(&_updateThread);
     _updateThread.start();
 
-    emit update();
+    emit _update();
 }
 
 int ComicModel::rowCount(const QModelIndex &parent) const
@@ -30,7 +31,7 @@ QVariant ComicModel::data(const QModelIndex &index, int role) const
     if(index.row() < 0 || index.row() >= _comicList.size())
         return QVariant();
 
-    AUpdateHandler::ComicInfo comicInfo = _comicList[index.row()];
+    StringHash comicInfo = _comicList[index.row()];
     return comicInfo[roleNames()[role]];
 }
 
@@ -47,7 +48,7 @@ QHash<int, QByteArray> ComicModel::roleNames() const
     return roleNames;
 }
 
-void ComicModel::_insertOneEntry(const AUpdateHandler::ComicInfo &info)
+void ComicModel::_insertOneEntry(const StringHash &info)
 {
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
     _comicList << info;

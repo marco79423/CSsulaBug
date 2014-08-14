@@ -18,7 +18,6 @@ signals:
 
 public slots:
 
-    virtual void update() = 0;
     virtual void setFilter(const QString &pattern) = 0;
     virtual QString getKey(const int index) const = 0;
 

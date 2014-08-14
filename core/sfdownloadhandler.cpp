@@ -15,8 +15,8 @@ SFDownloadHandler::SFDownloadHandler(QObject *parent) :
             SLOT(_onAccessorReply(const int&,QNetworkReply*)));
     connect(_networkAccessor, SIGNAL(finish(const int&, const bool&)),
             SLOT(_onAccessorFinish(const int&, const bool&)));
-    connect(_fileDownloader, SIGNAL(info(const QHash<QString,QString>&)),
-            SLOT(_onDownloaderInfo(const QHash<QString,QString>&)));
+    connect(_fileDownloader, SIGNAL(info(const StringHash&)),
+            SLOT(_onDownloaderInfo(const StringHash&)));
     connect(_fileDownloader, SIGNAL(finish()), SIGNAL(finish()));
 }
 
@@ -75,8 +75,7 @@ void SFDownloadHandler::_onAccessorFinish(const int &id, const bool& error)
     }
 }
 
-void SFDownloadHandler::_onDownloaderInfo(
-        const QHash<QString, QString> downloaderInfo)
+void SFDownloadHandler::_onDownloaderInfo(const StringHash &downloaderInfo)
 {
     //完成進度
     int done = _taskInfo["done"].toInt() + 1;
@@ -86,7 +85,7 @@ void SFDownloadHandler::_onDownloaderInfo(
     //新增進度資訊
     _taskInfo["done"] =  QString::number(done);
 
-    QHash<QString, QString> newInfo = downloaderInfo;
+    StringHash newInfo = downloaderInfo;
     newInfo["progress"] = QString::number(progress);
 
     qDebug() << "SFDownloadHandler:_onDownloaderInfo:" << newInfo;
@@ -189,13 +188,4 @@ void SFDownloadHandler::_makeTask(const QString &url, const QString &html)
         _task[imageUrl] = path;
         pos += urlExp.matchedLength();
     }
-}
-
-
-void SFDownloadHandler::d_test()
-{
-    /*
-      * 測試
-      */
-    download("CANVA", "漫畫");
 }

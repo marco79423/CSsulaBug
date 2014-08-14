@@ -5,6 +5,7 @@
 #include <QHash>
 #include <QStringList>
 
+#include "globals.h"
 #include "afilesaver.h"
 
 class NetworkAccessor;
@@ -23,7 +24,7 @@ public:
 
 signals:
     
-    void info(const QHash<QString, QString> &downloadInfo);
+    void info(const StringHash &downloadInfo);
     void finish();
 
 public slots:

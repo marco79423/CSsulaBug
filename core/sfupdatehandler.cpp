@@ -140,7 +140,7 @@ void SFUpdateHandler::_getComicInfo(const QString &html)
     int pos = 0;
     while ((pos = regexp.indexIn(html, pos)) != -1)
     {
-        QHash<QString, QString> updateInfo;
+        StringHash updateInfo;
         updateInfo["site"] = "SF";
         updateInfo["coverUrl"] = regexp.cap(1);
         updateInfo["key"] = regexp.cap(2);

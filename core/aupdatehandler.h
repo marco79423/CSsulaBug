@@ -2,7 +2,8 @@
 #define A_UPDATE_HANDLER_H
 
 #include <QObject>
-#include <QHash>
+
+#include "globals.h"
 
 class AUpdateHandler : public QObject
 {
@@ -10,13 +11,11 @@ class AUpdateHandler : public QObject
 
 public:
 
-    typedef QHash<QString, QString> ComicInfo;
-
     virtual bool isReady() const { return true;}
     
 signals:
     
-    void info(const AUpdateHandler::ComicInfo &info);
+    void info(const StringHash &info);
     void finish();
 
 public slots:
@@ -25,9 +24,7 @@ public slots:
 
 protected:
 
-     explicit AUpdateHandler(QObject *parent = 0):QObject(parent){}
+    explicit AUpdateHandler(QObject *parent = 0):QObject(parent){}
 };
-
-Q_DECLARE_METATYPE(AUpdateHandler::ComicInfo)
 
 #endif // A_UPDATE_HANDLER_H
