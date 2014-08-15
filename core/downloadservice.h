@@ -3,8 +3,11 @@
 
 #include <QThread>
 
+#include "globals.h"
 #include "adownloadservice.h"
-#include "adownloadhandler.h"
+
+class AComicSiteHandler;
+class DownloadHandler;
 
 class DownloadService : public ADownloadService
 {
@@ -12,7 +15,7 @@ class DownloadService : public ADownloadService
 
 public:
 
-    explicit DownloadService(ADownloadHandler *downloadHandler, QObject *parent = 0);
+    explicit DownloadService(AComicSiteHandler *comicSiteHandler, QObject *parent = 0);
 
     QString getDownloadProgress() const;
 
@@ -24,7 +27,8 @@ signals:
 
 public slots:
 
-    void download(const QString &key);
+    void download(const QString &comicKey);
+    void download(const QString &comicKey, const StringPair &chapter);
 
 private slots:
 
@@ -32,7 +36,7 @@ private slots:
 
 private:
 
-    ADownloadHandler *_downloadHandler;
+    DownloadHandler *_downloadHandler;
 
     QString _downloadProgress;
     QThread _downloadThread;

@@ -45,6 +45,22 @@ int NetworkAccessor::get(const QStringList &urlList)
     return newTask.id;
 }
 
+QString NetworkAccessor::getHtmlImmediately(const QString &url)
+{
+    QEventLoop eventLoop;
+
+    QNetworkAccessManager *networkAccessManager = new QNetworkAccessManager(this);
+    QNetworkReply *reply = networkAccessManager->get(_makeRequest(url));
+    connect(networkAccessManager, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(quit()));
+    eventLoop.exec();
+
+    const QString html = reply->readAll();
+    reply->deleteLater();
+    networkAccessManager->deleteLater();
+
+    return html;
+}
+
 void NetworkAccessor::_startAccess()
 {
     /*
@@ -115,20 +131,5 @@ QNetworkRequest NetworkAccessor::_makeRequest(const QString &url)
     request.setRawHeader("Connection", "close");
 
     return request;
-}
-
-
-
-void NetworkAccessor::d_test()
-{
-    /*
-      * 測試
-      */
-
-    const QString url1 = "http://cssula.nba.nctu.edu.tw/~marco/DoNotPress.exe";
-    const QString url2 = "http://cssula.nba.nctu.edu.tw/~marco/GameOfLife.exe";
-
-    get(url1);
-    get(QStringList() << url1 << url2);
 }
 

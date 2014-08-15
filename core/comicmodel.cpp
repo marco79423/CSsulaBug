@@ -4,20 +4,10 @@
 #include <QDebug>
 #include <QStringList>
 
-ComicModel::ComicModel(AUpdateHandler *updateHandler, QObject *parent) :
-    QAbstractListModel(parent), _updateHandler(updateHandler)
+ComicModel::ComicModel(QObject *parent) :
+    QAbstractListModel(parent)
 {
-    connect(_updateHandler, SIGNAL(info(const StringHash&)),
-            SLOT(_insertOneEntry(const StringHash&)));
-    connect(_updateHandler, SIGNAL(finish()), SIGNAL(updateFinish()));
-    connect(&_updateThread, SIGNAL(finished()), _updateHandler, SLOT(deleteLater()));
 
-    connect(this, SIGNAL(_update()), _updateHandler, SLOT(update()), Qt::QueuedConnection);
-
-    _updateHandler->moveToThread(&_updateThread);
-    _updateThread.start();
-
-    emit _update();
 }
 
 int ComicModel::rowCount(const QModelIndex &parent) const
@@ -55,8 +45,3 @@ void ComicModel::_insertOneEntry(const StringHash &info)
     endInsertRows();
 }
 
-ComicModel::~ComicModel()
-{
-    _updateThread.quit();
-    _updateThread.wait();
-}

@@ -65,7 +65,7 @@ void FileDownloader::_onAccessorReply(const int &id, QNetworkReply *networkReply
     }
 
     qDebug() << "Downloader:_onAccessorReply: 已下載 " << path;
-    emit info(downloadInfo);
+    emit info(id, downloadInfo);
     _taskHash[id].remove(url);
 }
 
@@ -81,6 +81,6 @@ void FileDownloader::_onAccessorFinish(const int &id, const bool &error)
         qDebug() << "Downloader:_onAccessorFinish: id " << id << " 下載失敗";
     else
         qDebug() << "Downloader:_onAccessorFinish: id " << id << " 下載完成";
-    emit finish();
+    emit finish(id, error);
 }
 

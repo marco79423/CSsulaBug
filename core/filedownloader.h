@@ -24,8 +24,8 @@ public:
 
 signals:
     
-    void info(const StringHash &downloadInfo);
-    void finish();
+    void info(const int &id, const StringHash &downloadInfo);
+    void finish(const int &id, const bool &error);
 
 public slots:
 

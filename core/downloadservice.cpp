@@ -1,14 +1,17 @@
 #include "downloadservice.h"
+#include "downloadhandler.h"
 
 #include <QStandardPaths>
 #include <QDebug>
 
-DownloadService::DownloadService(ADownloadHandler *downloadHandler, QObject *parent) :
-    ADownloadService(parent), _downloadHandler(downloadHandler)
+DownloadService::DownloadService(AComicSiteHandler *comicSiteHandler, QObject *parent) :
+    ADownloadService(parent)
 {
+    _downloadHandler = new DownloadHandler(comicSiteHandler);
+
     connect(this, SIGNAL(_downloadSignal(const QString&, const QString&)), _downloadHandler, SLOT(download(const QString&, const QString&)));
-    connect(_downloadHandler, SIGNAL(info(const StringHash&)), SLOT(_onGettingDownloadProgress(const StringHash&)));
-    connect(_downloadHandler, SIGNAL(finish()), SIGNAL(downloadFinish()));
+    connect(_downloadHandler, SIGNAL(downloadInfoSignal(const StringHash&)), SLOT(_onGettingDownloadProgress(const StringHash&)));
+    connect(_downloadHandler, SIGNAL(downloadFinishedSignal()), SIGNAL(downloadFinish()));
     connect(&_downloadThread, SIGNAL(finished()), _downloadHandler, SLOT(deleteLater()));
 
     _downloadHandler->moveToThread(&_downloadThread);
@@ -27,10 +30,16 @@ DownloadService::~DownloadService()
     _downloadThread.wait();
 }
 
-void DownloadService::download(const QString &key)
+
+void DownloadService::download(const QString &comicKey)
 {
     QString desktopPath = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
-    emit _downloadSignal(key, desktopPath);
+    emit _downloadSignal(comicKey, desktopPath);
+}
+
+void DownloadService::download(const QString &comicKey, const StringPair &chapter)
+{
+
 }
 
 void DownloadService::_onGettingDownloadProgress(const StringHash &info)

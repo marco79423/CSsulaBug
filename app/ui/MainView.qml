@@ -12,7 +12,7 @@ ApplicationWindow {
     title: "CSsulaBug 漫畫下載器"
     color: "darkgray"
 
-    //Component.onCompleted: comicInfoService.update()
+    Component.onCompleted: service.update()
 
     toolBar: ToolBar {
         id: toolBar
@@ -22,7 +22,7 @@ ApplicationWindow {
             TextField {
                 Layout.fillWidth: true
                 placeholderText: "點此搜尋想下載的漫畫至桌面 ..."
-                onTextChanged: { comicInfoService.setFilter(text); }
+                onTextChanged: { service.setFilter(text); }
             }
 
             Button{
@@ -30,8 +30,7 @@ ApplicationWindow {
                 text: "下載"
                 onClicked: {
                     comicList.state = "downloading";
-                    var key = comicInfoService.getKey(comicList.currentIndex);
-                    downloadService.download(key);
+                    service.download(comicList.currentIndex);
                 }
             }
         }
@@ -45,7 +44,7 @@ ApplicationWindow {
                 else if(comicList.state == "ready")
                     return "準備完成，可以選擇要下載的漫畫";
                 else
-                    return downloadService.downloadProgress
+                    return service.downloadProgress
             }
         }
     }
@@ -95,13 +94,13 @@ ApplicationWindow {
         }
 
         Connections {
-            target: comicInfoService
-            onUpdateFinish: if(comicList.state == "updating") comicList.state = "ready"
+            target: service
+            onUpdateFinishedSignal: if(comicList.state == "updating") comicList.state = "ready"
         }
 
         Connections {
-            target: downloadService
-            onDownloadFinish: comicList.state = "ready"
+            target: service
+            onDownloadFinishSignal: comicList.state = "ready"
         }
     }
 

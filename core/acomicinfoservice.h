@@ -14,7 +14,7 @@ public:
 
 signals:
 
-    void updateFinish();
+    void updateFinishedSignal();
 
 public slots:
 

@@ -2,7 +2,11 @@
 #define GLOBALS_H
 
 #include <QObject>
+#include <QPair>
+
 #include <QHash>
+
+typedef QPair<QString, QString> StringPair;
 
 typedef QHash<QString, QString> StringHash;
 

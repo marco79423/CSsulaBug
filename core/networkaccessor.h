@@ -20,7 +20,7 @@ public:
     int get(const QString &url);
     int get(const QStringList &urlList);
 
-    void d_test();
+    QString getHtmlImmediately(const QString &url);
 
 signals:
     
