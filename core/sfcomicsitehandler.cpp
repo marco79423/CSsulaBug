@@ -26,7 +26,7 @@ QList<StringPair> SFComicSiteHandler::getChapters(const QString &comicKey)
     int pos = 0;
     while ((pos = chapterExp.indexIn(html, pos)) != -1)
     {
-        QString chapterName = chapterExp.cap(3);
+        QString chapterName = _convertz.convertToTraditional(chapterExp.cap(3));
         QString chapterUrl = QString("http://comic.sfacg.com/Utility/%1/%2.js").arg(comicID).arg(chapterExp.cap(1));
 
         chapters.append(StringPair(chapterName, chapterUrl));
