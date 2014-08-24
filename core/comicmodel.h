@@ -19,7 +19,7 @@ public:
 
 public slots:
 
-    void _insertOneEntry(const StringHash &info);
+    void insertOneEntry(const StringHash &info);
 
 private:
 

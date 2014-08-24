@@ -1,4 +1,4 @@
-#include "sfcomicsitehandler.h"
+﻿#include "sfcomicsitehandler.h"
 #include "networkaccessor.h"
 
 #include <QEventLoop>
@@ -29,9 +29,7 @@ QList<StringPair> SFComicSiteHandler::getChapters(const QString &comicKey)
         QString chapterName = chapterExp.cap(3);
         QString chapterUrl = QString("http://comic.sfacg.com/Utility/%1/%2.js").arg(comicID).arg(chapterExp.cap(1));
 
-        StringPair pair(chapterName, chapterUrl);
-        chapters.append(pair);
-
+        chapters.append(StringPair(chapterName, chapterUrl));
         pos += chapterExp.matchedLength();
     }
 

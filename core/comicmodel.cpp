@@ -1,6 +1,4 @@
 ﻿#include "comicmodel.h"
-#include "sfupdatehandler.h"
-#include "aupdatehandler.h"
 #include <QDebug>
 #include <QStringList>
 
@@ -38,7 +36,7 @@ QHash<int, QByteArray> ComicModel::roleNames() const
     return roleNames;
 }
 
-void ComicModel::_insertOneEntry(const StringHash &info)
+void ComicModel::insertOneEntry(const StringHash &info)
 {
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
     _comicList << info;

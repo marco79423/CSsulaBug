@@ -63,7 +63,6 @@ void FileDownloader::_onAccessorReply(const int &id, QNetworkReply *networkReply
         default:
             break;
     }
-
     qDebug() << "Downloader:_onAccessorReply: 已下載 " << path;
     emit info(id, downloadInfo);
     _taskHash[id].remove(url);

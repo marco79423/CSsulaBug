@@ -3,5 +3,8 @@
         <file>ui/MainView.qml</file>
         <file>ui/images/lazchi.png</file>
         <file>ui/images/loading.gif</file>
+        <file>ui/ComicInfoItem.qml</file>
+        <file>ui/ComicListView.qml</file>
+        <file>ui/ComicDetail.qml</file>
     </qresource>
 </RCC>

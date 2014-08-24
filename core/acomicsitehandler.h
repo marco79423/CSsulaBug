@@ -1,4 +1,4 @@
-#ifndef ACOMICSITEHANDLER_H
+﻿#ifndef ACOMICSITEHANDLER_H
 #define ACOMICSITEHANDLER_H
 
 #include <QObject>

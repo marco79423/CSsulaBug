@@ -1,4 +1,4 @@
-#ifndef SFCOMICSITESERVICE_H
+﻿#ifndef SFCOMICSITESERVICE_H
 #define SFCOMICSITESERVICE_H
 
 #include "acomicsitehandler.h"
@@ -17,12 +17,12 @@ public:
 
     explicit SFComicSiteHandler(QObject *parent = 0);
 
-    virtual QList<StringPair> getChapters(const QString &comicKey);
-    virtual QStringList getImageUrls(const QString &comicKey, const QString &chapterKey);
+    QList<StringPair> getChapters(const QString &comicKey);
+    QStringList getImageUrls(const QString &comicKey, const QString &chapterKey);
 
 public slots:
 
-    virtual void updateComicInfos();
+    void updateComicInfos();
 
 private slots:
 

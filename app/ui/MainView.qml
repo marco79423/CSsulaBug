@@ -1,159 +1,165 @@
-﻿import QtQuick 2.2
-import QtQuick.Controls 1.1
+﻿import QtQuick 2.3
+import QtQuick.Controls 1.2
+import QtQuick.Controls.Styles 1.2
 import QtQuick.Layouts 1.1
+
+import "qrc:/ui" as UI
 
 ApplicationWindow {
 
+    id: window
+
     visible:true
     width: 400; height: 600
-    maximumWidth: width; minimumWidth: width
-    minimumHeight: 600
+    maximumWidth: width
+    minimumHeight: height
 
-    title: "CSsulaBug 漫畫下載器"
+    title: "俗辣蟲漫畫下載器 CSsulaBug"
     color: "darkgray"
 
     Component.onCompleted: service.update()
 
-    toolBar: ToolBar {
-        id: toolBar
-        enabled: false
-        RowLayout{
-            width: parent.width
-            TextField {
-                Layout.fillWidth: true
-                placeholderText: "點此搜尋想下載的漫畫至桌面 ..."
-                onTextChanged: { service.setFilter(text); }
-            }
+    toolBar: ToolBar{
+        id: toolbar
+        height: 60
 
-            Button{
-                id: downloadButton
-                text: "下載"
-                onClicked: {
-                    comicList.state = "downloading";
-                    service.download(comicList.currentIndex);
+        enabled: !service.downloading
+
+        style: ToolBarStyle{
+            background: Rectangle{
+                color: "#004d40"
+            }
+        }
+
+        TextField {
+            id: searchField
+
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.left: parent.left
+            anchors.leftMargin: 10
+
+            width: 200
+
+            style: TextFieldStyle {
+                background: Rectangle{
+                    color: "#f5f5f5"
                 }
             }
+
+            placeholderText: "點此搜尋想下載的漫畫至桌面 ..."
+            onTextChanged: { service.setFilter(text); }
+        }
+
+        Button{
+            id: backButton
+
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.left: parent.left
+            anchors.leftMargin: 10
+
+            text: "返回"
+            onClicked: {comicDetail.startLeaveAnimation(); }
+        }
+
+        Button{
+
+            id: settingButton
+
+            anchors.right: parent.right
+            anchors.rightMargin: 10
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: -25
+
+            width: 50
+            height: 50
+
+            style: ButtonStyle{
+                background: Rectangle{
+
+                    color: "#ffeb3b"
+                    radius: 100
+                }
+            }
+
+            /*text: "設定"
+            onClicked: {
+                console.log("setting");
+            }*/
         }
     }
 
     statusBar: StatusBar{
         Text {
             text: {
-                if(comicList.state == "updating")
-                    return "正在抓取漫畫資訊，請稍等 ...";
-                else if(comicList.state == "ready")
-                    return "準備完成，可以選擇要下載的漫畫";
-                else
-                    return service.downloadProgress
+                if(service.downloading) return service.downloadProgress;
+                else if(service.updating) return "正在抓取漫畫資訊，請稍等 ...";
+                else return "準備完成，可以選擇要下載的漫畫"
             }
         }
     }
 
-    ListView {
-        id: comicList
+    Rectangle{
+
+        id:page
+
         anchors.fill: parent
-        model: comicModel
-        focus: true
 
-        delegate: comic
-        highlight: highlight
+        enabled: !service.downloading
 
-        highlightFollowsCurrentItem: false
+        color: "transparent"
+        state: "MainPageState"
 
-        state: "updating"
-        states: [
+        states:[
             State {
-                name: "updating"
-                PropertyChanges { target: loadingImage ; opacity: 0.9; }
-                PropertyChanges { target: comicList ; enabled: false}
-                PropertyChanges { target: toolBar ; enabled: false}
+                name: "MainPageState"
+                when: !comicDetail.visible
+                PropertyChanges { target: searchField ; visible: true; }
+                PropertyChanges { target: backButton ; visible: false; }
+                PropertyChanges { target: comicListView; visible: true; }
             },
 
             State {
-                name: "ready"
-                PropertyChanges { target: loadingImage ; opacity: 0}
-                PropertyChanges { target: comicList ; enabled: true; focus: true}
-                PropertyChanges { target: toolBar ; enabled: true}
-            },
-
-            State {
-                name: "downloading"
-                PropertyChanges { target: loadingImage ; opacity: 0.9;}
-                PropertyChanges { target: comicList ; enabled: false; focus: false}
-                PropertyChanges { target: toolBar ; enabled: false}
+                name: "DetailPageState"
+                when: comicDetail.visible
+                PropertyChanges { target: searchField ; visible: false; }
+                PropertyChanges { target: backButton ; visible: true; }
+                PropertyChanges { target: comicListView; visible: false; }
             }
         ]
 
-        AnimatedImage {
-            id: loadingImage
-            anchors.right: parent.right
-            anchors.bottom: parent.bottom
-            width: 60
-            height: 60
-            source: "images/loading.gif"
-        }
+        UI.ComicListView {
+            id: comicListView
 
-        Connections {
-            target: service
-            onUpdateFinishedSignal: if(comicList.state == "updating") comicList.state = "ready"
-        }
+            anchors.fill: parent
 
-        Connections {
-            target: service
-            onDownloadFinishSignal: comicList.state = "ready"
-        }
-    }
+            model: comicModel
+            focus: true
 
-    Component {
-        id: comic
+            state: "BusyState"
 
-        Item {
-            width: 400
-            height: 120
-
-            Rectangle {
-                anchors.centerIn: parent
-                width: 390
-                height: 115
-                color: "white"
-                opacity: 0.9
-
-                RowLayout{
-                    anchors.fill: parent
-                    anchors.leftMargin: 10
-                    Image { source: coverUrl }
-                    ColumnLayout{
-                        Text { text: name ; font.pointSize: 20; font.bold: true; horizontalAlignment: Text.AlignLeft }
-                        Text { text: "漫畫來源：" + site }
-                        Text { text: "漫畫類型：" + type }
-                        Text { text: "作者：" + author}
-                        Text { text: "最新更新：" + lastUpdated}
-                    }
-                }
+            function onAdvanceButtonClicked(comicInfo)
+            {
+                comicDetail.startEnterAnimation(comicInfo, comicListView.currentItem.y);
             }
 
-            MouseArea {
-                anchors.fill: parent
-                hoverEnabled: true
-                onClicked: {
-                    comicList.currentIndex = index
-                }
+            function onDownloadButtonClicked(comicKey)
+            {
+                service.download(comicKey);
+            }
+
+            Connections {
+                target: service
+                onUpdateFinishedSignal: if(comicListView.state == "BusyState") comicListView.state = "DefaultState"
             }
         }
-    }
 
-    Component {
-        id: highlight
-        Item {
-            width: 400
-            height: 120
-            y: comicList.currentItem.y
+        UI.ComicDetail{
+            id: comicDetail
+            anchors.fill: parent
 
-            Rectangle {
-                anchors.centerIn: parent
-                width: 390
-                height: 115
-                color: "#0000BB"
+            function onDownloadButtonClicked(comicKey, chapters)
+            {
+                service.download(comicKey, chapters);
             }
         }
     }
