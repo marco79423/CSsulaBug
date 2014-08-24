@@ -5,7 +5,9 @@
 #include "comicmodel.h"
 
 #include <QStandardPaths>
+#include <QFileInfo>
 #include <QDebug>
+
 
 Service::Service(AComicSiteHandler *comicSiteHandler, QObject *parent)
     :AService(parent), _comicSiteHandler(comicSiteHandler), _isUpdating(false), _isDownloading(false)
@@ -104,7 +106,8 @@ void Service::download(const QString &comicKey, const QStringList &chapterNames)
     QList<StringPair> chapters = _chapterInfo[comicKey];
     foreach(StringPair chapter, chapters)
     {
-        if(!chapterNames.contains(chapter.first))
+        QFileInfo fileInfo(QString("%1/%2/%3").arg(dstDir).arg(name).arg(chapter.first));
+        if(!chapterNames.contains(chapter.first) || fileInfo.exists())
         {
             continue;
         }
@@ -122,7 +125,16 @@ void Service::download(const QString &comicKey, const QStringList &chapterNames)
         const int id = _fileDownloader->download(task);
         _currentTaskIDs.append(id);
     }
+
     _currentTaskSize = _currentTaskIDs.size();
+
+    if(_currentTaskIDs.isEmpty())
+    {
+        qDebug() << "下載結束";
+        _isDownloading = false;
+        emit isDownloadingChangedSignal();
+        emit downloadFinishSignal();
+    }
 }
 
 void Service::_onUpdateFinished()
