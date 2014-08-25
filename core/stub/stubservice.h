@@ -17,7 +17,7 @@ public:
 
     QSortFilterProxyModel* getModel();
 
-    QStringList getChapters(const QString &comicKey);
+    QStringList getChapterNames(const QString &comicKey);
 
     bool isUpdating();
     bool isDownloading();

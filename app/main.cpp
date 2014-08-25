@@ -1,7 +1,7 @@
 ﻿#include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
-#include <QSortFilterProxyModel>
+#include <QFont>
 
 #include <globals.h>
 

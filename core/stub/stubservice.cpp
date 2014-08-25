@@ -81,6 +81,19 @@ StubService::StubService(QObject *parent) :
     {
         StringHash comicInfo;
         comicInfo["site"] = "SF";
+        comicInfo["coverUrl"] = "http://mh.sfacg.com/Logo/167a1629-5581-480d-aebc-2474323a48a6.jpg";
+        comicInfo["key"] = "WDQCL";
+        comicInfo["name"] = "我的青春戀愛喜劇果然有問題";
+        comicInfo["author"] = "佳月玲茅";
+        comicInfo["type"] = "校園類";
+        comicInfo["lastUpdated"] = "022話[未完結]";
+
+        _comicInfos.append(comicInfo);
+    }
+
+    {
+        StringHash comicInfo;
+        comicInfo["site"] = "SF";
         comicInfo["coverUrl"] = "http://mh.sfacg.com/Logo/c235c24f-40d3-4593-8387-4b3b5e5a815b.jpg";
         comicInfo["key"] = "LSWDH";
         comicInfo["name"] = "獵殺瓦達漢加";
@@ -97,7 +110,7 @@ QSortFilterProxyModel *StubService::getModel()
     return _proxyModel;
 }
 
-QStringList StubService::getChapters(const QString &comicKey)
+QStringList StubService::getChapterNames(const QString &comicKey)
 {
     Q_UNUSED(comicKey)
     QThread::sleep(2);

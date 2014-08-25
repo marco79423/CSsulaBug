@@ -43,6 +43,8 @@ ListView {
 
     delegate: UI.ComicInfoItem{
 
+        width: comicListView.width
+
         comicInfo: model
         highlight: ListView.isCurrentItem
 

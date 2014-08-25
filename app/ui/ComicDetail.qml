@@ -13,7 +13,6 @@ Rectangle{
     height: 520
 
     visible: false
-    color: "transparent"
 
     property variant comicInfo: {"key": "", "coverUrl": "", "name":"", "site": "", "type": "", "author":"", "lastUpdated":""}
     property int startY
@@ -170,6 +169,8 @@ Rectangle{
 
             width: parent.width
             height: 40
+
+            z: 1
 
             color: "#006064"
 
