@@ -161,6 +161,11 @@ ApplicationWindow {
             {
                 service.download(comicKey, chapters);
             }
+
+            function getChapterNames(comicKey)
+            {
+                return service.getChapterNames(comicKey);
+            }
         }
     }
 }

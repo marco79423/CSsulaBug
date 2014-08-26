@@ -17,6 +17,9 @@ Rectangle{
     property variant comicInfo: {"key": "", "coverUrl": "", "name":"", "site": "", "type": "", "author":"", "lastUpdated":""}
     property int startY
 
+    function onDownloadButtonClicked(comicKey, chapters){}
+    function getChapterNames(comicKey){}
+
     function startEnterAnimation(comicInfo, startY)
     {
         comicDetail.comicInfo = comicInfo;
@@ -28,8 +31,6 @@ Rectangle{
     {
         comicDetail.state = "StartingState";
     }
-
-    function onDownloadButtonClicked(comicKey, chapters){}
 
     state: "StartingState"
 
@@ -61,7 +62,7 @@ Rectangle{
             SequentialAnimation{
                 PropertyAction { target: comicInfoItem; property:"y"; value:comicDetail.startY; }
                 NumberAnimation { target: comicInfoItem; property: "y"; to: 0; duration: 200; easing.type: Easing.OutExpo }
-                ScriptAction { script: {prepareChapterInfo(); comicDetail.state = "ShowingState"}}
+                ScriptAction { script: {prepareChapterModel(); comicDetail.state = "ShowingState"}}
             }
         },
 
@@ -83,10 +84,10 @@ Rectangle{
         }
     ]
 
-    function prepareChapterInfo()
+    function prepareChapterModel()
     {
         chapterModel.clear();
-        var chapterNames = service.getChapterNames(comicDetail.comicInfo.key);
+        var chapterNames = comicDetail.getChapterNames(comicDetail.comicInfo.key);
         for (var i = 0; i < chapterNames.length; i++)
         {
            chapterModel.append({"chapterName": chapterNames[i], "selected": i==0 ? true:false});
