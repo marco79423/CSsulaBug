@@ -12,6 +12,7 @@ Rectangle{
     width: 400
     height: 520
 
+    color: "transparent"
     visible: false
 
     property variant comicInfo: {"key": "", "coverUrl": "", "name":"", "site": "", "type": "", "author":"", "lastUpdated":""}
@@ -228,6 +229,7 @@ Rectangle{
 
                 Text{                   
                     anchors.centerIn: parent
+                    font.pointSize: 12
                     text: model.chapterName
                 }
 
