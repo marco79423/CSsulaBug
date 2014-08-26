@@ -119,10 +119,10 @@ void SFComicSiteHandler::_getComicInfo(const int id, QNetworkReply *reply)
         comicInfo["site"] = "SF";
         comicInfo["coverUrl"] = regexp.cap(1);
         comicInfo["key"] = regexp.cap(2);
-        comicInfo["name"] = _convertz.convertToTraditional(regexp.cap(3));
-        comicInfo["author"] = _convertz.convertToTraditional(regexp.cap(4));
-        comicInfo["type"] = _convertz.convertToTraditional(regexp.cap(5));
-        comicInfo["lastUpdated"] = _convertz.convertToTraditional(regexp.cap(6));
+        comicInfo["name"] = _convertz.convertToTraditional(regexp.cap(3).simplified());
+        comicInfo["author"] = _convertz.convertToTraditional(regexp.cap(4).simplified());
+        comicInfo["type"] = _convertz.convertToTraditional(regexp.cap(5).simplified());
+        comicInfo["lastUpdated"] = _convertz.convertToTraditional(regexp.cap(6).simplified());
         //updateInfo["description"] = regexp.cap(7).simplified();
 
         qDebug() << "取得" << comicInfo;
