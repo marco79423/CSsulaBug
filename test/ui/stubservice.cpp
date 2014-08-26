@@ -1,5 +1,6 @@
 ﻿#include "stubservice.h"
-#include "../comicmodel.h"
+
+#include <comicmodel.h>
 
 #include <QTimer>
 #include <QThread>

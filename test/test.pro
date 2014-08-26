@@ -2,4 +2,5 @@ TEMPLATE = subdirs
 
 SUBDIRS += \
     unit \
-    integration
+    integration \
+    ui

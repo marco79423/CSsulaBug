@@ -3,8 +3,8 @@
 #include <QQmlContext>
 
 #include <globals.h>
-#include <sfcomicsitehandler.h>
-#include <service.h>
+
+#include "stubservice.h"
 
 int main(int argc, char *argv[])
 {
@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
 
     qRegisterMetaType<StringHash>();
 
-    Service service(new SFComicSiteHandler);
+    StubService service;
 
     //顯示
     QQmlApplicationEngine engine;
@@ -25,3 +25,4 @@ int main(int argc, char *argv[])
     engine.load(QUrl("qrc:ui/MainView.qml"));
     return a.exec();
 }
+

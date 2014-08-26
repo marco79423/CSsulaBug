@@ -1,9 +1,8 @@
 ﻿#ifndef STUBSERVICE_H
 #define STUBSERVICE_H
 
-#include "../aservice.h"
-
-#include "../globals.h"
+#include <aservice.h>
+#include <globals.h>
 
 class ComicModel;
 

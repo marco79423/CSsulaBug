@@ -21,8 +21,7 @@ HEADERS += \
     acomicsitehandler.h \
     sfcomicsitehandler.h \
     service.h \
-    aservice.h \
-    stub/stubservice.h
+    aservice.h
 
 SOURCES += \
     comicmodel.cpp \
@@ -31,8 +30,7 @@ SOURCES += \
     filesaver.cpp \
     filedownloader.cpp \
     sfcomicsitehandler.cpp \
-    service.cpp \
-    stub/stubservice.cpp
+    service.cpp
 
 RESOURCES += \
     core_resource.qrc
