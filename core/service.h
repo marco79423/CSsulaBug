@@ -21,10 +21,6 @@ public:
     QSortFilterProxyModel* getModel();
     QStringList getChapterNames(const QString &comicKey);
 
-    virtual bool isUpdating();
-    virtual bool isDownloading();
-    virtual QString getDownloadProgress();
-
 public slots:
 
     void update();
@@ -47,10 +43,6 @@ private:
     QSortFilterProxyModel *_proxyModel;
 
     QHash<QString, QList<StringPair> > _chapterInfo;
-
-    bool _isUpdating;
-    bool _isDownloading;
-    QString _downloadProgress;
 
     QList<int> _currentTaskIDs;
     int _currentTaskSize;

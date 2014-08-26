@@ -10,7 +10,7 @@
 
 
 Service::Service(AComicSiteHandler *comicSiteHandler, QObject *parent)
-    :AService(parent), _comicSiteHandler(comicSiteHandler), _isUpdating(false), _isDownloading(false)
+    :AService(parent), _comicSiteHandler(comicSiteHandler)
 {
     _comicSiteHandler->setParent(this);
     _fileDownloader = new FileDownloader(new FileSaver);
@@ -46,25 +46,9 @@ QStringList Service::getChapterNames(const QString &comicKey)
     return chapterNames;
 }
 
-bool Service::isUpdating()
-{
-    return _isUpdating;
-}
-
-bool Service::isDownloading()
-{
-    return _isDownloading;
-}
-
-QString Service::getDownloadProgress()
-{
-    return _downloadProgress;
-}
-
 void Service::update()
 {
-    _isUpdating = true;
-    emit isUpdatingChangedSignal();
+    setProperty("isUpdatingStatus", true);
 
     _comicSiteHandler->updateComicInfos();
 }
@@ -78,30 +62,19 @@ void Service::setFilter(const QString &pattern)
 
 void Service::download(const QString &comicKey)
 {
-    if(!_isDownloading)
-    {
-        _isDownloading = true;
-        emit isDownloadingChangedSignal();
-    }
-
     download(comicKey, getChapterNames(comicKey));
 }
 
 void Service::download(const QString &comicKey, const QStringList &chapterNames)
 {
-    if(!_isDownloading)
-    {
-        _isDownloading = true;
-        emit isDownloadingChangedSignal();
-    }
+    setProperty("isDownloadingStatus", true);
 
     QString dstDir = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
 
     QModelIndex modelIndex = _proxyModel->match(_proxyModel->index(0, 0), 2, comicKey)[0];
     QString name = _proxyModel->data(modelIndex, 1).toString();
 
-    _downloadProgress = "準備下載 ... " + name;
-    emit downloadProgressChangedSignal();
+    setProperty("downloadProgress", QString("準備下載 ...").arg(name));
 
     QList<StringPair> chapters = _chapterInfo[comicKey];
     foreach(StringPair chapter, chapters)
@@ -131,8 +104,7 @@ void Service::download(const QString &comicKey, const QStringList &chapterNames)
     if(_currentTaskIDs.isEmpty())
     {
         qDebug() << "下載結束";
-        _isDownloading = false;
-        emit isDownloadingChangedSignal();
+        setProperty("isDownloadingStatus", false);
         emit downloadFinishSignal();
     }
 }
@@ -140,8 +112,7 @@ void Service::download(const QString &comicKey, const QStringList &chapterNames)
 void Service::_onUpdateFinished()
 {
     qDebug() << "更新結束";
-    _isUpdating = false;
-    emit isUpdatingChangedSignal();
+    setProperty("isUpdatingStatus", false);
     emit updateFinishedSignal();
 }
 
@@ -149,10 +120,8 @@ void Service::_onGettingDownloadProgress(const int &id, const StringHash &info)
 {
     Q_UNUSED(id)
 
-    _downloadProgress = QString("[進度 %2/%3 ] 下載 %4").arg(_currentTaskSize - _currentTaskIDs.size()).arg(_currentTaskSize).arg(info["path"]);
-    emit downloadProgressChangedSignal();
-
-    qDebug() << "下載進度資訊" << _downloadProgress;
+    setProperty("downloadProgress", QString("[進度 %2/%3 ] 下載 %4").arg(_currentTaskSize - _currentTaskIDs.size()).arg(_currentTaskSize).arg(info["path"]));
+    qDebug() << "下載進度資訊" << property("downloadProgress").toString();
 }
 
 void Service::_onTaskFinish(const int &id, const bool &error)
@@ -163,8 +132,7 @@ void Service::_onTaskFinish(const int &id, const bool &error)
     if(_currentTaskIDs.isEmpty())
     {
         qDebug() << "下載結束";
-        _isDownloading = false;
-        emit isDownloadingChangedSignal();
+        setProperty("isDownloadingStatus", false);
         emit downloadFinishSignal();
     }
 }

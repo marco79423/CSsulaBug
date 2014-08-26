@@ -5,8 +5,8 @@
 #include <QThread>
 #include <QDebug>
 
-StubService::StubService(QObject *parent) :
-    AService(parent), _isUpdating(false), _isDownloading(false)
+StubService::StubService(QObject *parent)
+    :AService(parent)
 {
     _model = new ComicModel(this);
     _proxyModel = new QSortFilterProxyModel(this);
@@ -123,27 +123,9 @@ QStringList StubService::getChapterNames(const QString &comicKey)
 
 }
 
-
-bool StubService::isUpdating()
-{
-    return _isUpdating;
-}
-
-bool StubService::isDownloading()
-{
-    return _isDownloading;
-}
-
-QString StubService::getDownloadProgress()
-{
-    return _downloadProgress;
-}
-
 void StubService::update()
 {
-    _isUpdating = true;
-    emit isUpdatingChangedSignal();
-
+    setProperty("isUpdatingStatus", true);
     for(int i=0; i< _comicInfos.size(); i++)
     {
         QTimer::singleShot(i * 500, this, SLOT(_onUpdate()));
@@ -158,22 +140,12 @@ void StubService::setFilter(const QString &pattern)
 
 void StubService::download(const QString &comicKey)
 {
-    _isDownloading = true;
-    emit isDownloadingChangedSignal();
-
-    QModelIndex modelIndex = _proxyModel->match(_proxyModel->index(0, 0), 2, comicKey)[0];
-
-    _currentTask = _proxyModel->data(modelIndex, 1).toString();
-    for(int i=0; i< 10; i++)
-    {
-        QTimer::singleShot(i * 1000, this, SLOT(_onDownload()));
-    }
+    download(comicKey, getChapterNames(comicKey));
 }
 
 void StubService::download(const QString &comicKey, const QStringList &chapterNames)
 {
-    _isDownloading = true;
-    emit isDownloadingChangedSignal();
+    setProperty("isDownloadingStatus", true);
 
     qDebug() << "下載" << chapterNames;
     QModelIndex modelIndex = _proxyModel->match(_proxyModel->index(0, 0), 2, comicKey)[0];
@@ -192,8 +164,7 @@ void StubService::_onUpdate()
 
     if(i == _comicInfos.size() - 1)
     {
-        _isUpdating = false;
-        emit isUpdatingChangedSignal();
+        setProperty("isUpdatingStatus", false);
 
         emit updateFinishedSignal();
     }
@@ -205,14 +176,11 @@ void StubService::_onDownload()
 {
     static int i=1;
 
-    _downloadProgress = QString("[進度 %1%] 下載 %2").arg(i * 10).arg(_currentTask);
-    emit downloadProgressChangedSignal();
-
+    setProperty("downloadProgress", QString("[進度 %1%] 下載 %2").arg(i * 10).arg(_currentTask));
     if(i == 10)
     {
         i = 1;
-        _isDownloading = false;
-        emit isDownloadingChangedSignal();
+        setProperty("isDownloadingStatus", false);
 
         emit downloadFinishSignal();
     }

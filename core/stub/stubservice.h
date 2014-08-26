@@ -19,10 +19,6 @@ public:
 
     QStringList getChapterNames(const QString &comicKey);
 
-    bool isUpdating();
-    bool isDownloading();
-    QString getDownloadProgress();
-
 public slots:
 
     void update();
@@ -42,9 +38,6 @@ private:
     QSortFilterProxyModel *_proxyModel;
 
     QList<StringHash> _comicInfos;
-
-    bool _isUpdating;
-    bool _isDownloading;
 
     QString _currentTask;
     QString _downloadProgress;

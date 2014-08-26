@@ -91,8 +91,8 @@ ApplicationWindow {
     statusBar: StatusBar{
         Text {
             text: {
-                if(service.downloading) return service.downloadProgress;
-                else if(service.updating) return "正在抓取漫畫資訊，請稍等 ...";
+                if(service.isDownloadingStatus) return service.downloadProgress;
+                else if(service.isUpdatingStatus) return "正在抓取漫畫資訊，請稍等 ...";
                 else return "準備完成，可以選擇要下載的漫畫"
             }
         }

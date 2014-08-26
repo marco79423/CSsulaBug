@@ -8,9 +8,9 @@ class AService : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(bool updating READ isUpdating NOTIFY isUpdatingChangedSignal)
-    Q_PROPERTY(bool downloading READ isDownloading NOTIFY isDownloadingChangedSignal)
-    Q_PROPERTY(QString downloadProgress READ getDownloadProgress NOTIFY downloadProgressChangedSignal)
+    Q_PROPERTY(bool isUpdatingStatus MEMBER _isUpdatingStatus NOTIFY isUpdatingStatusChangedSignal)
+    Q_PROPERTY(bool isDownloadingStatus MEMBER _isDownloadingStatus NOTIFY isDownloadingStatusChangedSignal)
+    Q_PROPERTY(QString downloadProgress MEMBER _downloadProgress NOTIFY isUpdatingStatusChangedSignal)
 
 public:
 
@@ -18,16 +18,12 @@ public:
 
     Q_INVOKABLE virtual QStringList getChapterNames(const QString &comicKey) = 0;
 
-    virtual bool isUpdating() = 0;
-    virtual bool isDownloading() = 0;
-    virtual QString getDownloadProgress() = 0;
-
 signals:
 
-    void isUpdatingChangedSignal();
+    void isUpdatingStatusChangedSignal();
     void updateFinishedSignal();
 
-    void isDownloadingChangedSignal();
+    void isDownloadingStatusChangedSignal();
     void downloadProgressChangedSignal();
     void downloadFinishSignal();
 
@@ -41,8 +37,13 @@ public slots:
 
 protected:
 
-    explicit AService(QObject *parent = 0): QObject(parent){}
+    explicit AService(QObject *parent = 0): QObject(parent), _isUpdatingStatus(false), _isDownloadingStatus(false){}
 
+private:
+
+    bool _isUpdatingStatus;
+    bool _isDownloadingStatus;
+    QString _downloadProgress;
 };
 
 #endif // A_SERVICE_H
