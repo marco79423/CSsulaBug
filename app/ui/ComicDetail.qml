@@ -83,38 +83,15 @@ Rectangle{
         }
     ]
 
-    /*
-    SequentialAnimation {
-        id: enterAnimation
-        PropertyAction { target: comicInfoItem; property:"y"; value:comicDetail.startY; }
-        PropertyAction { target: comicDetail; property:"visible"; value:true; }
-        NumberAnimation { target: comicInfoItem; property: "y"; to: 0; duration: 200; easing.type: Easing.OutExpo }
-        ScriptAction { script: prepareChapterInfo()}
-        PropertyAction { target: chapterControl; property:"visible"; value:true;}
-        NumberAnimation { target: chapterControl; property: "y"; to: comicInfoItem.height; duration: 500; easing.type: Easing.OutExpo }
-    }
-
-    SequentialAnimation {
-        id: leaveAnimation
-        NumberAnimation { target: chapterControl; property: "y"; to: comicInfoItem.height-chapterControl.height; duration: 500; easing.type: Easing.OutExpo }
-        PropertyAction { target: chapterControl; property:"visible"; value:false; }
-        NumberAnimation { target: comicInfoItem; property: "y"; to: comicDetail.startY; duration: 200; easing.type: Easing.OutExpo }
-        PropertyAction { target: comicDetail; property:"visible"; value:false; }
-    }*/
-
     function prepareChapterInfo()
     {
         chapterModel.clear();
-        chapterGrid.selectedChapters = {};
-
         var chapterNames = service.getChapterNames(comicDetail.comicInfo.key);
         for (var i = 0; i < chapterNames.length; i++)
         {
-           chapterGrid.selectedChapters[chapterNames[i]] = true;
-           chapterModel.append({"chapter": chapterNames[i]});
+           chapterModel.append({"chapterName": chapterNames[i], "selected": i==0 ? true:false});
         }
-
-        chapterGrid.selectedChaptersChanged();
+        selectedMessage.updateSelectedMessage();
     }
 
     UI.ComicInfoItem{
@@ -139,16 +116,16 @@ Rectangle{
             text: "下載"
 
             onClicked:{
-                var selectedChapters = []
-                for(var chapter in chapterGrid.selectedChapters)
+                var selectedChapterNames = []
+                for(var i=0; i < chapterModel.count; i++)
                 {
-                    if(chapterGrid.selectedChapters[chapter])
+                    if(chapterModel.get(i).selected)
                     {
-                        selectedChapters.push(chapter);
+                        selectedChapterNames.push(chapterModel.get(i).chapterName);
                     }
                 }
 
-                onDownloadButtonClicked(comicInfo.key, selectedChapters);
+                onDownloadButtonClicked(comicInfo.key, selectedChapterNames);
             }
         }
     }
@@ -184,22 +161,22 @@ Rectangle{
                 Button{
                     text: "全選"
                     onClicked: {
-                        for(var chapter in chapterGrid.selectedChapters)
+                        for(var i=0; i < chapterModel.count; i++)
                         {
-                            chapterGrid.selectedChapters[chapter] = true;
+                            chapterModel.get(i).selected = true;
                         }
-                        chapterGrid.selectedChaptersChanged();
+                        selectedMessage.updateSelectedMessage();
                     }
                 }
 
                 Button{
                     text: "取消全選"
                     onClicked: {
-                        for(var chapter in chapterGrid.selectedChapters)
+                        for(var i=0; i < chapterModel.count; i++)
                         {
-                            chapterGrid.selectedChapters[chapter] = false;
+                            chapterModel.get(i).selected = false;
                         }
-                        chapterGrid.selectedChaptersChanged();
+                        selectedMessage.updateSelectedMessage();
                     }
                 }
 
@@ -211,17 +188,15 @@ Rectangle{
 
                     color:  "#f5f5f5"
 
-                    Connections {
-                        target: chapterGrid
-                        onSelectedChaptersChanged: {
-                            var count = 0;
-                            for(var chapter in chapterGrid.selectedChapters)
-                            {
-                                count += chapterGrid.selectedChapters[chapter] ? 1 : 0;
-                            }
-
-                            selectedMessage.text = "已選擇了 " + count + " 話";
+                    function updateSelectedMessage()
+                    {
+                        var count = 0;
+                        for(var i=0; i < chapterModel.count; i++)
+                        {
+                            count += chapterModel.get(i).selected ? 1 : 0;
                         }
+
+                        selectedMessage.text = "已選擇了 " + count + " 話";
                     }
                 }
             }
@@ -229,8 +204,6 @@ Rectangle{
 
         GridView{
             id: chapterGrid
-
-            property var selectedChapters: ({})
 
             anchors.top: selectionControl.bottom
             anchors.bottom: parent.bottom
@@ -250,26 +223,18 @@ Rectangle{
                 width: chapterGrid.cellWidth
                 height: chapterGrid.cellHeight
 
-                color: "#00bcd4"
+                color: model.selected ? "#00bcd4" : "#f5f5f5"
 
-                Connections {
-                    target: chapterGrid
-                    onSelectedChaptersChanged: {
-                        chapter.color = chapterGrid.selectedChapters[chapterName.text] ? "#00bcd4" : "#f5f5f5";
-                    }
-                }
-
-                Text{
-                    id:chapterName
+                Text{                   
                     anchors.centerIn: parent
-                    text: model.chapter
+                    text: model.chapterName
                 }
 
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
-                        chapterGrid.selectedChapters[chapterName.text] = !chapterGrid.selectedChapters[chapterName.text];
-                        chapterGrid.selectedChaptersChanged();
+                        chapterModel.get(index).selected = !chapterModel.get(index).selected;
+                        selectedMessage.updateSelectedMessage();
                     }
                 }
             }
