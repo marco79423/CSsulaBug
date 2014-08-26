@@ -50,7 +50,7 @@ void Service::update()
 {
     setProperty("isUpdatingStatus", true);
 
-    _comicSiteHandler->updateComicInfos();
+    _comicSiteHandler->update();
 }
 
 void Service::setFilter(const QString &pattern)

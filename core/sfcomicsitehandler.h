@@ -22,7 +22,7 @@ public:
 
 public slots:
 
-    void updateComicInfos();
+    void update();
 
 private slots:
 
