@@ -22,8 +22,8 @@ Service::Service(AComicSiteHandler *comicSiteHandler, QObject *parent)
     connect(_comicSiteHandler, SIGNAL(comicInfoSignal(const StringHash&)), _model,  SLOT(insertOneEntry(const StringHash&)));
     connect(_comicSiteHandler, SIGNAL(updateFinishedSignal()), this, SLOT(_onUpdateFinished()));
 
-    connect(_fileDownloader, SIGNAL(info(const int&, const StringHash&)), SLOT(_onGettingDownloadProgress(const int&, const StringHash&)));
-    connect(_fileDownloader, SIGNAL(finish(const int&, const bool&)), SLOT(_onTaskFinish(const int&, const bool&)));
+    connect(_fileDownloader, SIGNAL(downloadInfoSignal(const int&, const StringHash&)), SLOT(_onGettingDownloadProgress(const int&, const StringHash&)));
+    connect(_fileDownloader, SIGNAL(finishSignal(const int&, const bool&)), SLOT(_onTaskFinish(const int&, const bool&)));
 }
 
 

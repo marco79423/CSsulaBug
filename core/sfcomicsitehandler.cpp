@@ -6,8 +6,8 @@
 SFComicSiteHandler::SFComicSiteHandler(QObject *parent)
     :AComicSiteHandler(parent), _networkAccessor(new NetworkAccessor(this))
 {
-    connect(_networkAccessor, SIGNAL(reply(const int&,QNetworkReply*)), this, SLOT(_getComicInfo(const int&,QNetworkReply*)));
-    connect(_networkAccessor, SIGNAL(finish(const int&,const bool&)), this, SIGNAL(updateFinishedSignal()));
+    connect(_networkAccessor, SIGNAL(replySignal(const int&,QNetworkReply*)), this, SLOT(_getComicInfo(const int&,QNetworkReply*)));
+    connect(_networkAccessor, SIGNAL(finishSignal(const int&,const bool&)), this, SIGNAL(updateFinishedSignal()));
 }
 
 QList<StringPair> SFComicSiteHandler::getChapters(const QString &comicKey)

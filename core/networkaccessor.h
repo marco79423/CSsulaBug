@@ -24,8 +24,8 @@ public:
 
 signals:
     
-    void reply(const int &id, QNetworkReply *networkReply);
-    void finish(const int &id, const bool &error);
+    void replySignal(const int &id, QNetworkReply *networkReply);
+    void finishSignal(const int &id, const bool &error);
 
 private slots:
 

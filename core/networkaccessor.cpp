@@ -107,12 +107,12 @@ void NetworkAccessor::_onManagerReply(QNetworkReply *networkReply)
     }
     else
     {
-        emit reply(_currentTask.id, networkReply);
+        emit replySignal(_currentTask.id, networkReply);
     }
 
     if(_currentTask.urlList.isEmpty())
     {
-        emit finish(_currentTask.id, networkReply->error() != QNetworkReply::NoError);
+        emit finishSignal(_currentTask.id, networkReply->error() != QNetworkReply::NoError);
         _isAccessing = false;
         _startAccess();
     }
