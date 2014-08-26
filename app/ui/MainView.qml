@@ -23,7 +23,7 @@ ApplicationWindow {
         id: toolbar
         height: 60
 
-        enabled: !service.downloading
+        enabled: !service.isDownloadingStatus
 
         style: ToolBarStyle{
             background: Rectangle{
@@ -104,7 +104,7 @@ ApplicationWindow {
 
         anchors.fill: parent
 
-        enabled: !service.downloading
+        enabled: !service.isDownloadingStatus
 
         color: "transparent"
         state: "MainPageState"
