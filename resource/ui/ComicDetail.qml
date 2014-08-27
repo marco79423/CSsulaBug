@@ -63,7 +63,7 @@ Rectangle{
             SequentialAnimation{
                 PropertyAction { target: comicInfoItem; property:"y"; value:comicDetail.startY; }
                 NumberAnimation { target: comicInfoItem; property: "y"; to: 0; duration: 200; easing.type: Easing.OutExpo }
-                ScriptAction { script: {prepareChapterModel(); comicDetail.state = "ShowingState"}}
+                ScriptAction { script: {chapterControl.prepareChapterModel(); comicDetail.state = "ShowingState"}}
             }
         },
 
@@ -85,16 +85,7 @@ Rectangle{
         }
     ]
 
-    function prepareChapterModel()
-    {
-        chapterModel.clear();
-        var chapterNames = comicDetail.getChapterNames(comicDetail.comicInfo.key);
-        for (var i = 0; i < chapterNames.length; i++)
-        {
-           chapterModel.append({"chapterName": chapterNames[i], "selected": i==0 ? true:false});
-        }
-        selectedMessage.updateSelectedMessage();
-    }
+
 
     UI.ComicInfoItem{
         id: comicInfoItem
@@ -143,6 +134,29 @@ Rectangle{
         visible: false
         color: "transparent"
 
+        function prepareChapterModel()
+        {
+            chapterModel.clear();
+            var chapterNames = comicDetail.getChapterNames(comicDetail.comicInfo.key);
+            for (var i = 0; i < chapterNames.length; i++)
+            {
+               chapterModel.append({"chapterName": chapterNames[i], "selected": i==0 ? true:false});
+            }
+            chapterControl.updateSelectedMessage();
+        }
+
+        function updateSelectedMessage()
+        {
+            var count = 0;
+            for(var i=0; i < chapterModel.count; i++)
+            {
+                count += chapterModel.get(i).selected ? 1 : 0;
+            }
+
+            selectedMessage.text = "已選擇了 " + count + " 話";
+            downloadButton.enabled = (count > 0);
+        }
+
         Rectangle{
             id: selectionControl
 
@@ -151,7 +165,7 @@ Rectangle{
 
             z: 1
 
-            color: "#006064"
+            color: "#006064"   
 
             Row{
                 anchors.verticalCenter: parent.verticalCenter
@@ -167,7 +181,7 @@ Rectangle{
                         {
                             chapterModel.get(i).selected = true;
                         }
-                        selectedMessage.updateSelectedMessage();
+                        chapterControl.updateSelectedMessage();
                     }
                 }
 
@@ -178,7 +192,7 @@ Rectangle{
                         {
                             chapterModel.get(i).selected = false;
                         }
-                        selectedMessage.updateSelectedMessage();
+                        chapterControl.updateSelectedMessage();
                     }
                 }
 
@@ -189,17 +203,6 @@ Rectangle{
                     Layout.fillWidth: parent
 
                     color:  "#f5f5f5"
-
-                    function updateSelectedMessage()
-                    {
-                        var count = 0;
-                        for(var i=0; i < chapterModel.count; i++)
-                        {
-                            count += chapterModel.get(i).selected ? 1 : 0;
-                        }
-
-                        selectedMessage.text = "已選擇了 " + count + " 話";
-                    }
                 }
             }
         }
@@ -215,9 +218,7 @@ Rectangle{
             cellWidth: 100
             cellHeight: 40
 
-            model: ListModel {
-                id: chapterModel
-            }
+            model: ListModel { id: chapterModel }
 
             delegate: Rectangle{
                 id: chapter
@@ -237,7 +238,7 @@ Rectangle{
                     anchors.fill: parent
                     onClicked: {
                         chapterModel.get(index).selected = !chapterModel.get(index).selected;
-                        selectedMessage.updateSelectedMessage();
+                        chapterControl.updateSelectedMessage();
                     }
                 }
             }
