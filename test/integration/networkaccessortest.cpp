@@ -1,4 +1,4 @@
-#include "networkaccessortest.h"
+﻿#include "networkaccessortest.h"
 
 #include <networkaccessor.h>
 
@@ -9,8 +9,8 @@
 void NetworkAccessorTest::get()
 {
     NetworkAccessor *networkAccessor = new NetworkAccessor(this);
-    QSignalSpy spy1(networkAccessor, SIGNAL(reply(const int&, QNetworkReply*)));
-    QSignalSpy spy2(networkAccessor, SIGNAL(finish(const int&, const bool&)));
+    QSignalSpy spy1(networkAccessor, SIGNAL(replySignal(const int&, QNetworkReply*)));
+    QSignalSpy spy2(networkAccessor, SIGNAL(finishSignal(const int&, const bool&)));
 
     //const int id = networkAccessor->get("http://comic.sfacg.com/Catalog/");
     const int id = networkAccessor->get("http://marco79423.twbbs.org/images/author/marco.jpg");

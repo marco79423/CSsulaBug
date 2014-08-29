@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT += testlib
+QT += testlib network
 
 TARGET = unittest
 CONFIG += console testcase
@@ -12,10 +12,14 @@ CONFIG += console testcase
 
 SOURCES += \
     convertztest.cpp \
-    main.cpp
+    main.cpp \
+    stubcomicsitehandler.cpp \
+    servicetest.cpp
 
 HEADERS += \
-    convertztest.h
+    convertztest.h \
+    stubcomicsitehandler.h \
+    servicetest.h
 
 INCLUDEPATH += $$PWD/../../core
 

@@ -1,0 +1,59 @@
+﻿#include "stubcomicsitehandler.h"
+#include <QNetworkReply>
+#include <QStringList>
+#include <QTimer>
+
+
+QList<StringPair> StubComicSiteHandler::getChapters(const QString &comicKey)
+{
+    if(comicKey == "key1")
+        return QList<StringPair>() << StringPair("chapter1", "url1");
+    else if(comicKey == "key2")
+        return QList<StringPair>() << StringPair("chapter1", "url1") << StringPair("chapter2", "url2");
+    else if(comicKey == "key3")
+        return QList<StringPair>() << StringPair("chapter1", "url1") << StringPair("chapter2", "url2") << StringPair("chapter3", "url3");
+    return QList<StringPair>();
+}
+
+QStringList StubComicSiteHandler::getImageUrls(const QString &comicKey, const QString &chapterKey)
+{
+    if(comicKey == "key1")
+        return QStringList() << chapterKey;
+    else if(comicKey == "key2")
+        return QStringList() << chapterKey << chapterKey;
+    else if(comicKey == "key3")
+        return QStringList() << chapterKey << chapterKey << chapterKey;
+    return QStringList();
+}
+
+
+void StubComicSiteHandler::update()
+{
+    for(int i=0; i< 3; i++)
+    {
+        QTimer::singleShot(i * 100, this, SLOT(_onUpdate()));
+    }
+}
+
+void StubComicSiteHandler::onUpdate()
+{
+    static int i=1;
+
+    StringHash comicInfo;
+    comicInfo["site"] = "SF";
+    comicInfo["coverUrl"] = QString("coverUrl%1").arg(i);
+    comicInfo["key"] = QString("key%1").arg(i);
+    comicInfo["name"] = QString("name%1").arg(i);
+    comicInfo["author"] = QString("author%1").arg(i);
+    comicInfo["type"] = QString("type%1").arg(i);
+    comicInfo["lastUpdated"] = QString("lastUpdated%1").arg(i);
+    emit comicInfoSignal(comicInfo);
+
+    if(i == 3)
+    {
+        i=0;
+        emit updateFinishedSignal();
+    }
+
+    i+=1;
+}
