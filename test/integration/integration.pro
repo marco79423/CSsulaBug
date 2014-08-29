@@ -5,12 +5,14 @@ CONFIG += c++11 console testcase
 
 HEADERS += \
     filesavertest.h \
-    networkaccessortest.h
+    networkaccessortest.h \
+    sfcomicsitehandlertest.h
 
 SOURCES += \
     filesavertest.cpp \
     main.cpp \
-    networkaccessortest.cpp
+    networkaccessortest.cpp \
+    sfcomicsitehandlertest.cpp
 
 INCLUDEPATH += $$PWD/../../core
 

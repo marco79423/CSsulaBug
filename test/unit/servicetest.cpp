@@ -7,6 +7,8 @@
 #include <QSortFilterProxyModel>
 #include <QModelIndex>
 
+#include <QDebug>
+
 ServiceTest::ServiceTest(QObject *parent)
     :QObject(parent), _service(new Service(new StubComicSiteHandler))
 {
@@ -23,6 +25,7 @@ void ServiceTest::update()
         updateFinishSpy.wait(100);
 
     QSortFilterProxyModel *model = _service->getModel();
+    model->sort(0);
     for(int i = 0; i < 3; i++)
     {
         QModelIndex index = model->index(i, 0);
@@ -33,5 +36,7 @@ void ServiceTest::update()
         QCOMPARE(model->data(index, 4).toString(), QString("type%1").arg(i));
         QCOMPARE(model->data(index, 5).toString(), QString("author%1").arg(i));
         QCOMPARE(model->data(index, 6).toString(), QString("lastUpdated%1").arg(i));
+
+
     }
 }

@@ -18,7 +18,7 @@ public slots:
 
 private slots:
 
-    void onUpdate();
+    void _onUpdate();
 };
 
 #endif // STUBCOMICSITEHANDLER_H
