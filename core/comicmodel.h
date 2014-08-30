@@ -11,6 +11,8 @@ class ComicModel : public QAbstractListModel
 
 public:
 
+    enum RoleName {CoverUrl, Name, Key, Site, Type, Author, LastUpdated};
+
     explicit ComicModel(QObject *parent = 0);
     
     int rowCount(const QModelIndex &parent = QModelIndex()) const;

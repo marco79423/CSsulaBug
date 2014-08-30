@@ -56,7 +56,7 @@ void Service::update()
 void Service::setFilter(const QString &pattern)
 {
     QString tpattern = _convertz.convertToTraditional(pattern);
-    _proxyModel->setFilterRole(1);
+    _proxyModel->setFilterRole(ComicModel::Name);
     _proxyModel->setFilterRegExp(QRegExp(tpattern, Qt::CaseInsensitive, QRegExp::FixedString));
 }
 
@@ -71,8 +71,8 @@ void Service::download(const QString &comicKey, const QStringList &chapterNames)
 
     QString dstDir = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
 
-    QModelIndex modelIndex = _proxyModel->match(_proxyModel->index(0, 0), 2, comicKey)[0];
-    QString name = _proxyModel->data(modelIndex, 1).toString();
+    QModelIndex modelIndex = _proxyModel->match(_proxyModel->index(0, 0), ComicModel::Key, comicKey)[0];
+    QString name = _proxyModel->data(modelIndex, ComicModel::Name).toString();
 
     setProperty("downloadProgress", QString("準備下載 ...").arg(name));
 

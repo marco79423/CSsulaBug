@@ -26,13 +26,13 @@ QVariant ComicModel::data(const QModelIndex &index, int role) const
 QHash<int, QByteArray> ComicModel::roleNames() const
 {
     QHash<int, QByteArray> roleNames;
-    roleNames[0] = "coverUrl";
-    roleNames[1] = "name";
-    roleNames[2] = "key";
-    roleNames[3] = "site";
-    roleNames[4] = "type";
-    roleNames[5] = "author";
-    roleNames[6] = "lastUpdated";
+    roleNames[CoverUrl] = "coverUrl";
+    roleNames[Name] = "name";
+    roleNames[Key] = "key";
+    roleNames[Site] = "site";
+    roleNames[Type] = "type";
+    roleNames[Author] = "author";
+    roleNames[LastUpdated] = "lastUpdated";
     return roleNames;
 }
 

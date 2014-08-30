@@ -135,7 +135,7 @@ void StubService::update()
 
 void StubService::setFilter(const QString &pattern)
 {
-    _proxyModel->setFilterRole(1);
+    _proxyModel->setFilterRole(ComicModel::Name);
     _proxyModel->setFilterRegExp(QRegExp(pattern, Qt::CaseInsensitive, QRegExp::FixedString));
 }
 
@@ -151,7 +151,7 @@ void StubService::download(const QString &comicKey, const QStringList &chapterNa
     qDebug() << "下載" << chapterNames;
     QModelIndex modelIndex = _proxyModel->match(_proxyModel->index(0, 0), 2, comicKey)[0];
 
-    _currentTask = _proxyModel->data(modelIndex, 1).toString();
+    _currentTask = _proxyModel->data(modelIndex, ComicModel::Name).toString();
     for(int i=0; i< 10; i++)
     {
         QTimer::singleShot(i * 1000, this, SLOT(_onDownload()));
