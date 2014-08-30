@@ -34,3 +34,7 @@ SOURCES += \
 
 RESOURCES += \
     core_resource.qrc
+
+release {
+    DEFINES += QT_NO_DEBUG_OUTPUT
+}
