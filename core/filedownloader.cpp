@@ -48,16 +48,16 @@ void FileDownloader::_onAccessorReply(const int &id, QNetworkReply *networkReply
     AFileSaver::SaverStatus saverStatus = _fileSaver->saveFile(networkReply->readAll(), path);
     switch(saverStatus)
     {
-        case AFileSaver::SaverStatus::FileExists:
+        case AFileSaver::FileExists:
             qCritical() << "Downloader:_onAccessorReply:目標檔案存在";
             break;
-        case AFileSaver::SaverStatus::FailedToCreateDstDir:
+        case AFileSaver::FailedToCreateDstDir:
             qCritical() << "Downloader:_onAccessorReply:目標資料夾建立失敗";
             break;
-        case AFileSaver::SaverStatus::FailedToCreateDstFile:
+        case AFileSaver::FailedToCreateDstFile:
             qCritical() << "Downloader:_onAccessorReply: 目標檔案開啟失敗";
             break;
-        case AFileSaver::SaverStatus::FailedToWriteDstFile:
+        case AFileSaver::FailedToWriteDstFile:
             qCritical() << "Downloader:_onAccessorReply: 目標檔案寫入失敗";
             break;
         default:

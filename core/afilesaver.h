@@ -10,7 +10,7 @@ class AFileSaver : public QObject
 
 public:
 
-    enum class SaverStatus
+    enum SaverStatus
     {
         Success,
         FileExists,

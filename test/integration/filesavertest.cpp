@@ -21,7 +21,7 @@ void FileSaverTest::saveFile()
     {
         AFileSaver::SaverStatus status = fileSaver->saveFile(_testcases[filePath], filePath);
 
-        QCOMPARE(status, AFileSaver::SaverStatus::Success);
+        QCOMPARE(status, AFileSaver::Success);
         QFileInfo fileInfo(filePath);
         QVERIFY(fileInfo.exists());
 

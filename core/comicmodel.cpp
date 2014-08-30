@@ -36,7 +36,7 @@ QHash<int, QByteArray> ComicModel::roleNames() const
     return roleNames;
 }
 
-void ComicModel::insertOneEntry(const StringHash &info)
+void ComicModel::insertComicInfo(const StringHash &info)
 {
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
     _comicList << info;

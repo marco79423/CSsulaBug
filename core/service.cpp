@@ -19,7 +19,7 @@ Service::Service(AComicSiteHandler *comicSiteHandler, QObject *parent)
     _proxyModel = new QSortFilterProxyModel(this);
     _proxyModel->setSourceModel(_model);
 
-    connect(_comicSiteHandler, SIGNAL(comicInfoSignal(const StringHash&)), _model,  SLOT(insertOneEntry(const StringHash&)));
+    connect(_comicSiteHandler, SIGNAL(comicInfoSignal(const StringHash&)), _model,  SLOT(insertComicInfo(const StringHash&)));
     connect(_comicSiteHandler, SIGNAL(updateFinishedSignal()), this, SLOT(_onUpdateFinished()));
 
     connect(_fileDownloader, SIGNAL(downloadInfoSignal(const int&, const StringHash&)), SLOT(_onGettingDownloadProgress(const int&, const StringHash&)));

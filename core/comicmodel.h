@@ -11,7 +11,16 @@ class ComicModel : public QAbstractListModel
 
 public:
 
-    enum RoleName {CoverUrl, Name, Key, Site, Type, Author, LastUpdated};
+    enum RoleName
+    {
+        CoverUrl,
+        Name,
+        Key,
+        Site,
+        Type,
+        Author,
+        LastUpdated
+    };
 
     explicit ComicModel(QObject *parent = 0);
     
@@ -21,7 +30,7 @@ public:
 
 public slots:
 
-    void insertOneEntry(const StringHash &info);
+    void insertComicInfo(const StringHash &info);
 
 private:
 
