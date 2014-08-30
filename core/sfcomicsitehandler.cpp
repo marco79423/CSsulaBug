@@ -6,13 +6,13 @@
 SFComicSiteHandler::SFComicSiteHandler(QObject *parent)
     :AComicSiteHandler(parent), _networkAccessor(new NetworkAccessor(this))
 {
-    connect(_networkAccessor, SIGNAL(replySignal(const int&,QNetworkReply*)), this, SLOT(_getComicInfo(const int&,QNetworkReply*)));
-    connect(_networkAccessor, SIGNAL(finishSignal(const int&,const bool&)), this, SIGNAL(updateFinishedSignal()));
+    connect(_networkAccessor, SIGNAL(replySignal(const int&, const QString&, const QByteArray&)), this, SLOT(_getComicInfo(const int&, const QString&, const QByteArray&)));
+    connect(_networkAccessor, SIGNAL(finishSignal(const int&)), this, SIGNAL(updateFinishedSignal()));
 }
 
 QList<StringPair> SFComicSiteHandler::getChapters(const QString &comicKey)
 {
-    const QString html = _networkAccessor->getHtmlImmediately(QString("http://comic.sfacg.com/HTML/%1/").arg(comicKey));
+    const QString html = _networkAccessor->getDataImmediately(QString("http://comic.sfacg.com/HTML/%1/").arg(comicKey));
 
     //取得 ID
     QRegExp idExp("comicCounterID = (\\d+)");
@@ -41,7 +41,7 @@ QStringList SFComicSiteHandler::getImageUrls(const QString &comicKey, const QStr
     Q_UNUSED(comicKey)
 
     const QString url = chapterKey;
-    const QString html = _networkAccessor->getHtmlImmediately(url);
+    const QString html = _networkAccessor->getDataImmediately(url);
 
     //取得 host
     QRegExp hostExp("var hosts = \\[\"([^\"]+)");
@@ -68,7 +68,7 @@ QStringList SFComicSiteHandler::getImageUrls(const QString &comicKey, const QStr
 void SFComicSiteHandler::update()
 {
     //取得所有漫畫列表的頁面
-    const QString catalogPage = _networkAccessor->getHtmlImmediately("http://comic.sfacg.com/Catalog/");
+    const QString catalogPage = _networkAccessor->getDataImmediately("http://comic.sfacg.com/Catalog/");
 
     //找到漫畫列表最後一頁
     int maxPageNumber = 0;
@@ -94,11 +94,12 @@ void SFComicSiteHandler::update()
     _networkAccessor->get(allComicListPages);
 }
 
-void SFComicSiteHandler::_getComicInfo(const int id, QNetworkReply *reply)
+void SFComicSiteHandler::_getComicInfo(const int& id, const QString& url, const QByteArray& data)
 {
-    Q_UNUSED(id);
+    Q_UNUSED(id)
+    Q_UNUSED(url)
 
-    QString html = reply->readAll();
+    QString html(data);
 
     /*
     QRegExp regexp("<img src=\"([^\"]+)\""  //cover

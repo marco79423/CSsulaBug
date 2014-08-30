@@ -23,7 +23,7 @@ Service::Service(AComicSiteHandler *comicSiteHandler, QObject *parent)
     connect(_comicSiteHandler, SIGNAL(updateFinishedSignal()), this, SLOT(_onUpdateFinished()));
 
     connect(_fileDownloader, SIGNAL(downloadInfoSignal(const int&, const StringHash&)), SLOT(_onGettingDownloadProgress(const int&, const StringHash&)));
-    connect(_fileDownloader, SIGNAL(finishSignal(const int&, const bool&)), SLOT(_onTaskFinish(const int&, const bool&)));
+    connect(_fileDownloader, SIGNAL(finishSignal(const int&)), SLOT(_onTaskFinish(const int&)));
 }
 
 
@@ -74,7 +74,7 @@ void Service::download(const QString &comicKey, const QStringList &chapterNames)
     QModelIndex modelIndex = _proxyModel->match(_proxyModel->index(0, 0), ComicModel::Key, comicKey)[0];
     QString name = _proxyModel->data(modelIndex, ComicModel::Name).toString();
 
-    setProperty("downloadProgress", QString("準備下載 ...").arg(name));
+    setProperty("downloadProgress", QString("準備下載 ... %1").arg(name));
 
     QList<StringPair> chapters = _chapterInfo[comicKey];
     foreach(StringPair chapter, chapters)
@@ -124,10 +124,8 @@ void Service::_onGettingDownloadProgress(const int &id, const StringHash &info)
     qDebug() << "下載進度資訊" << property("downloadProgress").toString();
 }
 
-void Service::_onTaskFinish(const int &id, const bool &error)
+void Service::_onTaskFinish(const int &id)
 {
-    Q_UNUSED(error)
-
     _currentTaskIDs.removeAll(id);
     if(_currentTaskIDs.isEmpty())
     {

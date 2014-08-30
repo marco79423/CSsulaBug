@@ -33,7 +33,7 @@ private slots:
 
      void _onUpdateFinished();
      void _onGettingDownloadProgress(const int &id, const StringHash &info);
-     void _onTaskFinish(const int &id, const bool &error);
+     void _onTaskFinish(const int &id);
 
 private:
 

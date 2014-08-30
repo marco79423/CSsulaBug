@@ -161,7 +161,7 @@ void StubService::download(const QString &comicKey, const QStringList &chapterNa
 void StubService::_onUpdate()
 {
     static int i=0;
-    _model->insertOneEntry(_comicInfos[i]);
+    _model->insertComicInfo(_comicInfos[i]);
 
     if(i == _comicInfos.size() - 1)
     {

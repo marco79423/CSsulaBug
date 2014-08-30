@@ -20,12 +20,12 @@ public:
     int get(const QString &url);
     int get(const QStringList &urlList);
 
-    QString getHtmlImmediately(const QString &url);
+    QString getDataImmediately(const QString &url);
 
 signals:
     
-    void replySignal(const int &id, QNetworkReply *networkReply);
-    void finishSignal(const int &id, const bool &error);
+    void replySignal(const int &id, const QString &url, const QByteArray &data);
+    void finishSignal(const int &id);
 
 private slots:
 
@@ -33,22 +33,20 @@ private slots:
 
 private:
 
+    void _startAccess();
+    QNetworkRequest _makeRequest(const QString &url);
+
+private:
+
     struct _Task
     {
         int id;
         QStringList urlList;
-        QList<QNetworkReply*> replyList;
     };
 
+    static int _idCount;
     QNetworkAccessManager *_networkAccessManager;
-    int _idCount;
-    bool _isAccessing;
     QQueue<_Task> _taskQueue;
-    _Task _currentTask;
-
-    void _startAccess();
-    QNetworkRequest _makeRequest(const QString &url);
-
 };
 
 

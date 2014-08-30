@@ -26,7 +26,7 @@ public slots:
 
 private slots:
 
-    void _getComicInfo(const int id, QNetworkReply *reply);
+    void _getComicInfo(const int &id, const QString &url, const QByteArray &data);
 
 private:
 

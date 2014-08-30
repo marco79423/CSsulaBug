@@ -3,11 +3,10 @@
 
 #include <QObject>
 #include <QHash>
-#include <QStringList>
 
 #include "globals.h"
-#include "afilesaver.h"
 
+class AFileSaver;
 class NetworkAccessor;
 class QNetworkReply;
 
@@ -25,7 +24,7 @@ public:
 signals:
     
     void downloadInfoSignal(const int &id, const StringHash &downloadInfo);
-    void finishSignal(const int &id, const bool &error);
+    void finishSignal(const int &id);
 
 public slots:
 
@@ -33,13 +32,12 @@ public slots:
 
 private slots:
 
-    void _onAccessorReply(const int &id, QNetworkReply *networkReply);
-    void _onAccessorFinish(const int &id, const bool &error);
+    void _onAccessorReply(const int &id, const QString &url, const QByteArray &data);
+    void _onAccessorFinish(const int &id);
 
 private:
 
     AFileSaver *_fileSaver;
-
     NetworkAccessor *_networkAccessor;
     QHash<int, Task> _taskHash;
 };

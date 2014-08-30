@@ -1,5 +1,7 @@
 ﻿#include "filedownloader.h"
+#include "afilesaver.h"
 #include "networkaccessor.h"
+
 #include <QNetworkReply>
 #include <QFile>
 #include <QDir>
@@ -13,10 +15,8 @@ FileDownloader::FileDownloader(AFileSaver *fileSaver, QObject *parent) :
 
     _networkAccessor = new NetworkAccessor(this);
 
-    connect(_networkAccessor, SIGNAL(replySignal(const int&,QNetworkReply*)),
-            SLOT(_onAccessorReply(const int&,QNetworkReply*)));
-    connect(_networkAccessor, SIGNAL(finishSignal(const int&, const bool&)),
-            SLOT(_onAccessorFinish(const int&, const bool&)));
+    connect(_networkAccessor, SIGNAL(replySignal(const int&, const QString&, const QByteArray&)), SLOT(_onAccessorReply(const int&, const QString&, const QByteArray&)));
+    connect(_networkAccessor, SIGNAL(finishSignal(const int&)),  SLOT(_onAccessorFinish(const int&)));
 }
 
 int FileDownloader::download(const FileDownloader::Task &task)
@@ -25,61 +25,52 @@ int FileDownloader::download(const FileDownloader::Task &task)
       *下載 task 任務
       * task[所要下載的內容] = 所對應的檔案路徑
       */
-    int id = _networkAccessor->get(task.keys());
-    qDebug() << "Downloader:download: 下載任務 " << id;
-
+    const int id = _networkAccessor->get(task.keys());
     _taskHash[id] = task;
-
-    return id;
+    return  id;
 }
 
-void FileDownloader::_onAccessorReply(const int &id, QNetworkReply *networkReply)
+void FileDownloader::_onAccessorReply(const int &id, const QString &url, const QByteArray &data)
 {
     /*
       *處理 NetworkAccessor 的回應，把內容寫至目標路徑
       */
-    QString url = networkReply->url().toString();
     QString path = _taskHash[id][url];
 
     StringHash downloadInfo;
     downloadInfo["url"] = url;
     downloadInfo["path"] = path;
 
-    AFileSaver::SaverStatus saverStatus = _fileSaver->saveFile(networkReply->readAll(), path);
+    AFileSaver::SaverStatus saverStatus = _fileSaver->saveFile(data, path);
     switch(saverStatus)
     {
         case AFileSaver::FileExists:
-            qCritical() << "Downloader:_onAccessorReply:目標檔案存在";
+            qCritical() << "FileDownloader:_onAccessorReply:目標檔案存在";
             break;
         case AFileSaver::FailedToCreateDstDir:
-            qCritical() << "Downloader:_onAccessorReply:目標資料夾建立失敗";
+            qCritical() << "FileDownloader:_onAccessorReply:目標資料夾建立失敗";
             break;
         case AFileSaver::FailedToCreateDstFile:
-            qCritical() << "Downloader:_onAccessorReply: 目標檔案開啟失敗";
+            qCritical() << "FileDownloader:_onAccessorReply: 目標檔案開啟失敗";
             break;
         case AFileSaver::FailedToWriteDstFile:
-            qCritical() << "Downloader:_onAccessorReply: 目標檔案寫入失敗";
+            qCritical() << "FileDownloader:_onAccessorReply: 目標檔案寫入失敗";
             break;
         default:
             break;
     }
-    qDebug() << "Downloader:_onAccessorReply: 已下載 " << path;
+
     emit downloadInfoSignal(id, downloadInfo);
     _taskHash[id].remove(url);
 }
 
-void FileDownloader::_onAccessorFinish(const int &id, const bool &error)
+void FileDownloader::_onAccessorFinish(const int &id)
 {
     /*
       * 當一項任務下載完後，刪除該任務資料
       */
 
     _taskHash.remove(id);
-
-    if(error)
-        qDebug() << "Downloader:_onAccessorFinish: id " << id << " 下載失敗";
-    else
-        qDebug() << "Downloader:_onAccessorFinish: id " << id << " 下載完成";
-    emit finishSignal(id, error);
+    emit finishSignal(id);
 }
 
