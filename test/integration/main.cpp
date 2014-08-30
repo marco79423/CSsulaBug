@@ -4,6 +4,8 @@
 #include "filesavertest.h"
 #include "networkaccessortest.h"
 
+#include "sfcomicsitehandlertest.h"
+
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
@@ -15,9 +17,11 @@ int main(int argc, char *argv[])
     FileSaverTest fileSaverTest;
     ret += QTest::qExec(&fileSaverTest, argc, argv);
 
-
     NetworkAccessorTest networkAccessorTest;
     ret += QTest::qExec(&networkAccessorTest, argc, argv);
+
+    SFComicSiteHandlerTest sfComicSiteHandlerTest;
+    ret += QTest::qExec(&sfComicSiteHandlerTest, argc, argv);
 
     return ret;
 }
