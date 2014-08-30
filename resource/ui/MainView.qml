@@ -64,7 +64,7 @@ ApplicationWindow {
             id: settingButton
 
             anchors.right: parent.right
-            anchors.rightMargin: 10
+            anchors.rightMargin: 20
             anchors.bottom: parent.bottom
             anchors.bottomMargin: -25
 
