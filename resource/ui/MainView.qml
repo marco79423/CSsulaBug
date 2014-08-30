@@ -23,8 +23,6 @@ ApplicationWindow {
         id: toolbar
         height: 60
 
-        enabled: !service.isDownloadingStatus
-
         style: ToolBarStyle{
             background: Rectangle{
                 color: "#004d40"
@@ -104,8 +102,6 @@ ApplicationWindow {
 
         anchors.fill: parent
 
-        enabled: !service.isDownloadingStatus
-
         color: "transparent"
         state: "MainPageState"
 
@@ -132,6 +128,8 @@ ApplicationWindow {
 
             anchors.fill: parent
 
+            downloadButtonEnabled: !service.isDownloadingStatus
+
             model: comicModel
             focus: true
 
@@ -156,6 +154,8 @@ ApplicationWindow {
         UI.ComicDetail{
             id: comicDetail
             anchors.fill: parent
+
+            downloadButtonEnabled: !service.isDownloadingStatus
 
             function onDownloadButtonClicked(comicKey, chapters)
             {

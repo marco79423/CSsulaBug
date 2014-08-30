@@ -15,6 +15,8 @@ Rectangle{
     color: "transparent"
     visible: false
 
+    property bool downloadButtonEnabled: true
+
     property variant comicInfo: {"key": "", "coverUrl": "", "name":"", "site": "", "type": "", "author":"", "lastUpdated":""}
     property int startY
 
@@ -52,7 +54,7 @@ Rectangle{
             name: "ShowingState"
             PropertyChanges { target: comicDetail; visible: true }
             PropertyChanges { target: chapterControl; visible: true }
-            PropertyChanges { target: downloadButton; enabled: true; }
+            PropertyChanges { target: downloadButton; enabled: comicDetail.downloadButtonEnabled; }
         }
     ]
 
@@ -106,6 +108,8 @@ Rectangle{
             anchors.bottom: parent.bottom
             anchors.margins: 10
 
+            enabled: comicDetail.downloadButtonEnabled
+
             text: "下載"
 
             onClicked:{
@@ -154,7 +158,8 @@ Rectangle{
             }
 
             selectedMessage.text = "已選擇了 " + count + " 話";
-            downloadButton.enabled = (count > 0);
+
+            downloadButton.enabled = Qt.binding(function() { return count > 0 ? comicDetail.downloadButtonEnabled : false });
         }
 
         Rectangle{

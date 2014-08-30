@@ -11,6 +11,8 @@ ListView {
     width: 400
     height: 520
 
+    property bool downloadButtonEnabled: true
+
     currentIndex: 0
     boundsBehavior: Flickable.DragOverBounds
 
@@ -72,6 +74,8 @@ ListView {
             }
 
             Button{
+                enabled: comicListView.downloadButtonEnabled
+
                 text: "下載"
                 onClicked: {
                     comicListView.currentIndex = index;
