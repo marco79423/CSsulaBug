@@ -1,6 +1,7 @@
 ﻿#include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
+#include <QFont>
 
 #include <globals.h>
 #include <sfcomicsitehandler.h>
@@ -9,6 +10,10 @@
 int main(int argc, char *argv[])
 {
     QGuiApplication a(argc, argv);
+
+    QFont font("新細明體");
+    font.setPixelSize(12);
+    a.setFont(font);
 
     Q_INIT_RESOURCE(core_resource);
 
