@@ -66,8 +66,19 @@ void NetworkAccessor::_onManagerReply(QNetworkReply *networkReply)
     const QString url = networkReply->url().toString();
     qDebug() << "NetworkAccessor:_onManagerReply: 收到 " << url;
 
+    if(networkReply->error() == QNetworkReply::RemoteHostClosedError)
+    {
+        qCritical() << networkReply->error() << networkReply->errorString();
+        networkReply->deleteLater();
+
+        QNetworkRequest request = _makeRequest(url);
+        _networkAccessManager->get(request);
+        return;
+    }
+
     _Task &currentTask = _taskQueue.head();
     currentTask.urlList.removeOne(url);
+
     emit replySignal(currentTask.id, url, networkReply->readAll());
     networkReply->deleteLater();
 

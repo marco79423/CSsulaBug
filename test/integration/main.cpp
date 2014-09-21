@@ -6,8 +6,6 @@
 #include "networkaccessortest.h"
 #include "sfcomicsitehandlertest.h"
 
-#define QT_NO_DEBUG_OUTPUT
-
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);

@@ -100,8 +100,10 @@ void SFComicSiteHandler::_getComicInfo(const int& id, const QString& url, const 
     Q_UNUSED(url)
 
     QString html(data);
+    qDebug() << "aaaaaaaaaaaa" << url;
+    if(url == "http://comic.sfacg.com/Catalog/default.aspx?PageIndex=98")
+        qDebug() << html;
 
-    /*
     QRegExp regexp("<img src=\"([^\"]+)\""  //cover
                    "[^>]+></a></li>\\s+<li><strong class=\""
                    "F14PX\"><a href=\"/HTML/([^/]+)" //keyName
@@ -110,8 +112,8 @@ void SFComicSiteHandler::_getComicInfo(const int& id, const QString& url, const 
                    "[^\\]]+[^>]+>([^<]+)" //comicType
                    "</a> /([^/]+)+/" //lastUpdated
                    " \\d+<br />([^<]+)" //description
-                   );*/
-    QRegExp regexp("<img src=\"([^\"]+)\"[^>]+></a></li>\\s+<li><strong class=\"F14PX\"><a href=\"/HTML/([^/]+)[^>]+>([^<]+)[^1]+1\">([^<]+)[^\\]]+[^>]+>([^<]+)</a> /([^/]+)+/ \\d+<br />([^<]+)");
+                   );
+    //QRegExp regexp("<img src=\"([^\"]+)\"[^>]+></a></li>\\s+<li><strong class=\"F14PX\"><a href=\"/HTML/([^/]+)[^>]+>([^<]+)[^1]+1\">([^<]+)[^\\]]+[^>]+>([^<]+)</a> /([^/]+)+/ \\d+<br />([^<]+)");
 
     int pos = 0;
     while ((pos = regexp.indexIn(html, pos)) != -1)
