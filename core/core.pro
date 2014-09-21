@@ -19,9 +19,9 @@ HEADERS += \
     filedownloader.h \
     globals.h \
     acomicsitehandler.h \
-    sfcomicsitehandler.h \
     service.h \
-    aservice.h
+    aservice.h \
+    site/sfcomicsitehandler.h
 
 SOURCES += \
     comicmodel.cpp \
@@ -29,8 +29,8 @@ SOURCES += \
     networkaccessor.cpp \
     filesaver.cpp \
     filedownloader.cpp \
-    sfcomicsitehandler.cpp \
-    service.cpp
+    service.cpp \
+    site/sfcomicsitehandler.cpp
 
 RESOURCES += \
     core_resource.qrc

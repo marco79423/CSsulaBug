@@ -4,7 +4,7 @@
 #include <QFont>
 
 #include <globals.h>
-#include <sfcomicsitehandler.h>
+#include <site/sfcomicsitehandler.h>
 #include <service.h>
 
 int main(int argc, char *argv[])

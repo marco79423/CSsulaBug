@@ -1,5 +1,5 @@
 ﻿#include "sfcomicsitehandler.h"
-#include "networkaccessor.h"
+#include "../networkaccessor.h"
 
 #include <QEventLoop>
 

@@ -1,7 +1,7 @@
 ﻿#ifndef SFCOMICSITESERVICE_H
 #define SFCOMICSITESERVICE_H
 
-#include "acomicsitehandler.h"
+#include "../acomicsitehandler.h"
 #include "convertz.h"
 
 #include <QNetworkRequest>

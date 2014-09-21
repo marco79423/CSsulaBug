@@ -1,5 +1,5 @@
 ﻿#include "sfcomicsitehandlertest.h"
-#include <sfcomicsitehandler.h>
+#include <site/sfcomicsitehandler.h>
 #include <QtTest>
 
 void SFComicSiteHandlerTest::update()
