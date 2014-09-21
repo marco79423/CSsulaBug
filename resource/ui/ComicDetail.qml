@@ -15,8 +15,7 @@ Rectangle{
     color: "transparent"
     visible: false
 
-    property bool downloadButtonEnabled: true
-
+    property bool isDownloadingStatus: false
     property variant comicInfo: {"key": "", "coverUrl": "", "name":"", "site": "", "type": "", "author":"", "lastUpdated":""}
     property int startY
 
@@ -42,19 +41,18 @@ Rectangle{
             name: "StartingState"
             PropertyChanges { target: comicDetail; visible: false }
             PropertyChanges { target: chapterControl; visible: false }
+            PropertyChanges { target: downloadButton; enabled: false }
         },
 
         State {
             name: "MovingState"
             PropertyChanges { target: comicDetail; visible: true }
-            PropertyChanges { target: downloadButton; enabled: false; }
         },
 
         State {
             name: "ShowingState"
             PropertyChanges { target: comicDetail; visible: true }
             PropertyChanges { target: chapterControl; visible: true }
-            PropertyChanges { target: downloadButton; enabled: comicDetail.downloadButtonEnabled; }
         }
     ]
 
@@ -108,21 +106,11 @@ Rectangle{
             anchors.bottom: parent.bottom
             anchors.margins: 10
 
-            enabled: comicDetail.downloadButtonEnabled
-
             text: "下載"
 
-            onClicked:{
-                var selectedChapterNames = []
-                for(var i=0; i < chapterModel.count; i++)
-                {
-                    if(chapterModel.get(i).selected)
-                    {
-                        selectedChapterNames.push(chapterModel.get(i).chapterName);
-                    }
-                }
-
-                onDownloadButtonClicked(comicInfo.key, selectedChapterNames);
+            onClicked: {
+                onDownloadButtonClicked(comicInfo.key, chapterModel.getSelectedChapterNames());
+                chapterControl.updateSelectedMessage();
             }
         }
     }
@@ -144,22 +132,16 @@ Rectangle{
             var chapterNames = comicDetail.getChapterNames(comicDetail.comicInfo.key);
             for (var i = 0; i < chapterNames.length; i++)
             {
-               chapterModel.append({"chapterName": chapterNames[i], "selected": i==0 ? true:false});
+               chapterModel.append({"chapterName": chapterNames[i], "selected": false});
             }
             chapterControl.updateSelectedMessage();
         }
 
         function updateSelectedMessage()
         {
-            var count = 0;
-            for(var i=0; i < chapterModel.count; i++)
-            {
-                count += chapterModel.get(i).selected ? 1 : 0;
-            }
-
+            var count = chapterModel.getSelectedChapterNames().length;
             selectedMessage.text = "已選擇了 " + count + " 話";
-
-            downloadButton.enabled = Qt.binding(function() { return count > 0 ? comicDetail.downloadButtonEnabled : false });
+            downloadButton.enabled = !comicDetail.isDownloadingStatus && chapterModel.getSelectedChapterNames().length > 0;
         }
 
         Rectangle{
@@ -223,7 +205,23 @@ Rectangle{
             cellWidth: 100
             cellHeight: 40
 
-            model: ListModel { id: chapterModel }
+            model: ListModel {
+                id: chapterModel
+
+                function getSelectedChapterNames()
+                {
+                    var selectedChapterNames = []
+                    for(var i=0; i < chapterModel.count; i++)
+                    {
+                        if(chapterModel.get(i).selected)
+                        {
+                            selectedChapterNames.push(chapterModel.get(i).chapterName);
+                        }
+                    }
+
+                    return selectedChapterNames;
+                }
+            }
 
             delegate: Rectangle{
                 id: chapter

@@ -155,7 +155,7 @@ ApplicationWindow {
             id: comicDetail
             anchors.fill: parent
 
-            downloadButtonEnabled: !service.isDownloadingStatus
+            isDownloadingStatus: service.isDownloadingStatus
 
             function onDownloadButtonClicked(comicKey, chapters)
             {
