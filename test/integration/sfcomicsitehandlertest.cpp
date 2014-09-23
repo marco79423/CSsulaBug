@@ -14,6 +14,10 @@ void SFComicSiteHandlerTest::update()
     while(updateFinishSignalSpy.size() == 0)
         updateFinishSignalSpy.wait(1000);
 
+    //檢查有多少部漫畫
+    QCOMPARE(comicInfoSignalSpy.size(), 1591);
+
+    //檢查抓取的漫畫是否正確
     StringHash comicInfo;
     for(int i = 0; i < comicInfoSignalSpy.size(); i++)
     {

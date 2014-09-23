@@ -100,10 +100,6 @@ void SFComicSiteHandler::_getComicInfo(const int& id, const QString& url, const 
     Q_UNUSED(url)
 
     QString html(data);
-    qDebug() << "aaaaaaaaaaaa" << url;
-    if(url == "http://comic.sfacg.com/Catalog/default.aspx?PageIndex=98")
-        qDebug() << html;
-
     QRegExp regexp("<img src=\"([^\"]+)\""  //cover
                    "[^>]+></a></li>\\s+<li><strong class=\""
                    "F14PX\"><a href=\"/HTML/([^/]+)" //keyName

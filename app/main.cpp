@@ -5,6 +5,8 @@
 
 #include <globals.h>
 #include <site/sfcomicsitehandler.h>
+#include <site/blcomicsitehandler.h>
+
 #include <service.h>
 
 int main(int argc, char *argv[])
@@ -19,8 +21,8 @@ int main(int argc, char *argv[])
 
     qRegisterMetaType<StringHash>();
 
-    Service service(new SFComicSiteHandler);
-
+    //Service service(new SFComicSiteHandler);
+    Service service(new BLComicSiteHandler);
     QQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty("service", &service);
     engine.rootContext()->setContextProperty("comicModel", service.getModel());

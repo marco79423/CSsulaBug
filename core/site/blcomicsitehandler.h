@@ -1,21 +1,18 @@
-﻿#ifndef SFCOMICSITESERVICE_H
-#define SFCOMICSITESERVICE_H
+﻿#ifndef BLCOMICSITEHANDLER_H
+#define BLCOMICSITEHANDLER_H
 
 #include "../acomicsitehandler.h"
 #include "../convertz.h"
 
-#include <QNetworkRequest>
-#include <QNetworkReply>
-
 class NetworkAccessor;
 
-class SFComicSiteHandler : public AComicSiteHandler
+class BLComicSiteHandler : public AComicSiteHandler
 {
     Q_OBJECT
 
 public:
 
-    explicit SFComicSiteHandler(QObject *parent = 0);
+    explicit BLComicSiteHandler(QObject *parent = 0);
 
     QList<StringPair> getChapters(const QString &comicKey);
     QStringList getImageUrls(const QString &comicKey, const QString &chapterKey);
@@ -34,4 +31,4 @@ private:
     ConvertZ _convertz;
 };
 
-#endif // SFCOMICSITESERVICE_H
+#endif // BLCOMICSITEHANDLER_H
