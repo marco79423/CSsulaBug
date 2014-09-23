@@ -38,26 +38,21 @@ void BLComicSiteHandlerTest::update()
 
 void BLComicSiteHandlerTest::getChapters()
 {
-    /*SFComicSiteHandler *comicHandler = new SFComicSiteHandler(this);
+    BLComicSiteHandler *comicHandler = new BLComicSiteHandler(this);
 
     QList<StringPair> expectedChapters;
-    expectedChapters.append(StringPair("010話","http://comic.sfacg.com/Utility/75/010.js"));
-    expectedChapters.append(StringPair("009話","http://comic.sfacg.com/Utility/75/009.js"));
-    expectedChapters.append(StringPair("008話","http://comic.sfacg.com/Utility/75/008.js"));
-    expectedChapters.append(StringPair("007話","http://comic.sfacg.com/Utility/75/007.js"));
-    expectedChapters.append(StringPair("006話","http://comic.sfacg.com/Utility/75/006.js"));
-    expectedChapters.append(StringPair("005話","http://comic.sfacg.com/Utility/75/005.js"));
-    expectedChapters.append(StringPair("004話","http://comic.sfacg.com/Utility/75/004.js"));
-    expectedChapters.append(StringPair("003話","http://comic.sfacg.com/Utility/75/003.js"));
-    expectedChapters.append(StringPair("002話","http://comic.sfacg.com/Utility/75/002.js"));
-    expectedChapters.append(StringPair("001話","http://comic.sfacg.com/Utility/75/001.js"));
+    expectedChapters.append(StringPair("新篇04集","http://hh.3gmanhua.com/hu11687/107886.htm?s=15"));
+    expectedChapters.append(StringPair("新篇03集","http://hh.3gmanhua.com/hu11687/107885.htm?s=15"));
+    expectedChapters.append(StringPair("新篇02集","http://hh.3gmanhua.com/hu11687/101705.htm?s=15"));
+    expectedChapters.append(StringPair("新篇01集","http://hh.3gmanhua.com/hu11687/101704.htm?s=15"));
+    expectedChapters.append(StringPair("在此尋覓你的聲音 01集","http://hh.3gmanhua.com/hu11687/97961.htm?s=15"));
 
-    QList<StringPair> chapters = comicHandler->getChapters("LIVE");
+    QList<StringPair> chapters = comicHandler->getChapters("bl11687");
     for(int i = 0; i < expectedChapters.size(); i++)
     {
         QCOMPARE(chapters[i].first, expectedChapters[i].first);
         QCOMPARE(chapters[i].second, expectedChapters[i].second);
-    }*/
+    }
 }
 
 void BLComicSiteHandlerTest::getImageUrls()

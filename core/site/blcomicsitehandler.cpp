@@ -12,7 +12,23 @@ BLComicSiteHandler::BLComicSiteHandler(QObject *parent)
 
 QList<StringPair> BLComicSiteHandler::getChapters(const QString &comicKey)
 {
+    const QString html = _networkAccessor->getDataImmediately(QString("http://blmanhua.com/manhua/%1/").arg(comicKey));
 
+    //取得話數
+    QRegExp chapterExp(QString("<a title='[^']+'  href='([^']+)' target=_blank>([^<]+)</a>"));
+
+    QList<StringPair> chapters;
+    int pos = 0;
+    while ((pos = chapterExp.indexIn(html, pos)) != -1)
+    {
+        QString chapterName = _convertz.convertToTraditional(chapterExp.cap(2));
+        QString chapterUrl = chapterExp.cap(1);
+
+        chapters.append(StringPair(chapterName, chapterUrl));
+        pos += chapterExp.matchedLength();
+    }
+
+    return chapters;
 }
 
 QStringList BLComicSiteHandler::getImageUrls(const QString &comicKey, const QString &chapterKey)
