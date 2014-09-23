@@ -124,7 +124,7 @@ void SFComicSiteHandler::_getComicInfo(const int& id, const QString& url, const 
         comicInfo["lastUpdated"] = _convertz.convertToTraditional(regexp.cap(6).simplified());
         //updateInfo["description"] = regexp.cap(7).simplified();
 
-        qDebug() << "取得" << comicInfo;
+        //qDebug() << "取得" << comicInfo;
         emit comicInfoSignal(comicInfo);
 
         pos += regexp.matchedLength();

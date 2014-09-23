@@ -6,13 +6,15 @@ CONFIG += c++11 console testcase
 HEADERS += \
     filesavertest.h \
     networkaccessortest.h \
-    sfcomicsitehandlertest.h
+    sfcomicsitehandlertest.h \
+    blcomicsitehandlertest.h
 
 SOURCES += \
     filesavertest.cpp \
     main.cpp \
     networkaccessortest.cpp \
-    sfcomicsitehandlertest.cpp
+    sfcomicsitehandlertest.cpp \
+    blcomicsitehandlertest.cpp
 
 RESOURCES += \
     integration_resource.qrc

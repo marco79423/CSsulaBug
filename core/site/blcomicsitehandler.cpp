@@ -45,7 +45,7 @@ void BLComicSiteHandler::_getComicInfo(const int &id, const QString &url, const 
     Q_UNUSED(url)
 
     QString html(data);
-    QRegExp regexp("<a title='([^']+)' href='([^']+)'><img src='([^']+)'><br>[^<]+<span class='clw[12]'>\\[([^\\]]+)\\]");
+    QRegExp regexp("<a title='([^']+)' href='http://blmanhua.com/manhua/([^']+)'><img src='([^']+)'><br>[^<]+<span class='clw[12]'>\\[([^\\]]+)\\]");
 
     int pos = 0;
     while ((pos = regexp.indexIn(html, pos)) != -1)
@@ -59,7 +59,7 @@ void BLComicSiteHandler::_getComicInfo(const int &id, const QString &url, const 
         comicInfo["type"] = "耽美類";
         comicInfo["lastUpdated"] = _convertz.convertToTraditional(regexp.cap(4).simplified());
 
-        qDebug() << "取得" << comicInfo;
+        //qDebug() << "取得" << comicInfo;
         emit comicInfoSignal(comicInfo);
 
         pos += regexp.matchedLength();
