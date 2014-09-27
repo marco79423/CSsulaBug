@@ -1,6 +1,7 @@
 ﻿#include "blcomicsitehandler.h"
 #include "../networkaccessor.h"
 
+#include <QUrlQuery>
 #include <QEventLoop>
 
 BLComicSiteHandler::BLComicSiteHandler(QObject *parent)
@@ -33,7 +34,63 @@ QList<StringPair> BLComicSiteHandler::getChapters(const QString &comicKey)
 
 QStringList BLComicSiteHandler::getImageUrls(const QString &comicKey, const QString &chapterKey)
 {
+    Q_UNUSED(comicKey)
 
+    const QString url = chapterKey;
+
+    //取得 serverUrl
+    /*Qt 5.3.1 的 QUrlQuery 似乎有 Bug
+    QUrlQuery urlQuery(url);
+    qDebug() << urlQuery.queryItemValue("s");*/
+
+    QRegExp urlExp("s=(\\d+)");
+    urlExp.indexIn(url);
+    const QString serverUrl = _getServerUrl(urlExp.cap(1).toInt());
+
+    //取得 encrypted_code
+    const QString html = _networkAccessor->getDataImmediately(url);
+    QRegExp encryptedCodeExp("var PicListUrl = \"([^\"]+)\"");
+    encryptedCodeExp.indexIn(html);
+    QString encryptedCode = encryptedCodeExp.cap(1).toUtf8();
+
+
+    //code = "tazsicoewrn"
+    const QString replaceCode = "tazsicoewr";
+    const QChar splitCode = 'n';
+
+    //用 replaceCode 對應的 index 取代字串
+    for(int i=0; i < replaceCode.size(); i++)
+    {
+        encryptedCode.replace(replaceCode[i], QString::number(i));
+    }
+
+    //用 split_code 切割字串，會切出許多數字
+    QList<int> numList;
+    QStringList splitedString = encryptedCode.split(splitCode);
+    for(int i=0; i < splitedString.size(); i++)
+    {
+        numList << splitedString[i].toInt();
+    }
+
+    //把這些數字當成 ASCII 再轉成字串相連
+    QString imageListString;
+    foreach(int num, numList)
+    {
+        imageListString += QChar(num);
+    }
+
+    //再將這些字串用 | 切開
+    QStringList imageList = imageListString.split("|");
+
+
+    //取得 imageUrl
+    QStringList imageUrls;
+    foreach(QString imageString, imageList)
+    {
+        imageUrls << serverUrl + imageString;
+    }
+
+    return imageUrls;
 }
 
 void BLComicSiteHandler::update()
@@ -80,4 +137,26 @@ void BLComicSiteHandler::_getComicInfo(const int &id, const QString &url, const 
 
         pos += regexp.matchedLength();
     }
+}
+
+QString BLComicSiteHandler::_getServerUrl(const int serverIndex)
+{
+    QMap<int, QString> serverList;
+    serverList[0]="http://cdn2.3348.net:9292/dm01/";
+    serverList[1]="http://cdn2.3348.net:9292/dm02/";
+    serverList[2]="http://cdn2.3348.net:9292/dm03/";
+    serverList[3]="http://cdn2.3348.net:9292/dm04/";
+    serverList[4]="http://cdn2.3348.net:9292/dm05/";
+    serverList[5]="http://cdn2.3348.net:9292/dm06/";
+    serverList[6]="http://cdn2.3348.net:9292/dm07/";
+    serverList[7]="http://cdn2.3348.net:9292/dm08/";
+    serverList[8]="http://cdn2.3348.net:9292/dm09/";
+    serverList[9]="http://cdn2.3348.net:9292/dm10/";
+    serverList[10]="http://cdn2.3348.net:9292/dm11/";
+    serverList[11]="http://cdn2.3348.net:9292/dm12/";
+    serverList[12]="http://cdn2.3348.net:9292/dm13/";
+    serverList[13]="http://8.8.8.8:99/dm14/"; //怎麼可能？
+    serverList[14]="http://cdn2.3348.net:9292/dm15/";
+    serverList[15]="http://cdn2.3348.net:9292/dm16/";
+    return serverList[serverIndex - 1];
 }

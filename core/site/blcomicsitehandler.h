@@ -29,6 +29,8 @@ private:
 
     NetworkAccessor *_networkAccessor;
     ConvertZ _convertz;
+
+    QString _getServerUrl(const int serverIndex);
 };
 
 #endif // BLCOMICSITEHANDLER_H
