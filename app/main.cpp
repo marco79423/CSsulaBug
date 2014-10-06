@@ -21,16 +21,13 @@ int main(int argc, char *argv[])
 
     qRegisterMetaType<StringHash>();
 
-    BLComicSiteHandler handler;
-    qDebug() << handler.getImageUrls("bl23877", "http://hh.3gmanhua.com/hu23877/175558.htm?s=11");
-
     //Service service(new SFComicSiteHandler);
     Service service(new BLComicSiteHandler);
 
-    //QQmlApplicationEngine engine;
-    //engine.rootContext()->setContextProperty("service", &service);
-    //engine.rootContext()->setContextProperty("comicModel", service.getModel());
-    //engine.load(QUrl("qrc:ui/MainView.qml"));
+    QQmlApplicationEngine engine;
+    engine.rootContext()->setContextProperty("service", &service);
+    engine.rootContext()->setContextProperty("comicModel", service.getModel());
+    engine.load(QUrl("qrc:ui/MainView.qml"));
 
     return a.exec();
 }

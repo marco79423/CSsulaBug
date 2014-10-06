@@ -14,6 +14,8 @@ public:
     virtual QList<StringPair> getChapters(const QString &comicKey) = 0;
     virtual QStringList getImageUrls(const QString &comicKey, const QString &chapterKey) = 0;
 
+    virtual QString getReferer() const { return ""; }
+
 signals:
 
     void comicInfoSignal(const StringHash &info);

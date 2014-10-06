@@ -17,6 +17,8 @@ public:
     QList<StringPair> getChapters(const QString &comicKey);
     QStringList getImageUrls(const QString &comicKey, const QString &chapterKey);
 
+    virtual QString getReferer() const;
+
 public slots:
 
     void update();

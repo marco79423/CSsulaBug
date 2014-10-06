@@ -93,6 +93,11 @@ QStringList BLComicSiteHandler::getImageUrls(const QString &comicKey, const QStr
     return imageUrls;
 }
 
+QString BLComicSiteHandler::getReferer() const
+{
+    return "http://hh.3gmanhua.com/";
+}
+
 void BLComicSiteHandler::update()
 {
     //取得所有漫畫列表的頁面

@@ -95,7 +95,7 @@ void Service::download(const QString &comicKey, const QStringList &chapterNames)
             task[imageUrl] = filePath;
         }
 
-        const int id = _fileDownloader->download(task);
+        const int id = _fileDownloader->download(task, _comicSiteHandler->getReferer());
         _currentTaskIDs.append(id);
     }
 

@@ -26,7 +26,6 @@ QStringList StubComicSiteHandler::getImageUrls(const QString &comicKey, const QS
     return QStringList();
 }
 
-
 void StubComicSiteHandler::update()
 {
     for(int i=0; i< 3; i++)

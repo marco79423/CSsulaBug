@@ -12,16 +12,16 @@ NetworkAccessor::NetworkAccessor(QObject *parent)
     connect(_networkAccessManager, SIGNAL(finished(QNetworkReply*)), SLOT(_onManagerReply(QNetworkReply*)));
 }
 
-int NetworkAccessor::get(const QString &url)
+int NetworkAccessor::get(const QString &url, const QString &referer)
 {
     /*
     *   id 為識別值，url 是要下載的網址
     *   get 是決定將要下載的任務，實際的下載是由 _startAccess 操作
     */
-    return get(QStringList() << url);
+    return get(QStringList() << url, referer);
 }
 
-int NetworkAccessor::get(const QStringList &urlList)
+int NetworkAccessor::get(const QStringList &urlList, const QString &referer)
 {
     /*
      *id 為識別值，url 是要下載的網址urlList 是要下載的網址清單
@@ -31,6 +31,7 @@ int NetworkAccessor::get(const QStringList &urlList)
     _Task newTask;
     newTask.id = _idCount++;
     newTask.urlList = urlList;
+    newTask.referer = referer;
 
     _taskQueue.enqueue(newTask);
 
@@ -40,12 +41,12 @@ int NetworkAccessor::get(const QStringList &urlList)
     return newTask.id;
 }
 
-QString NetworkAccessor::getDataImmediately(const QString &url)
+QString NetworkAccessor::getDataImmediately(const QString &url, const QString &referer)
 {
     QEventLoop eventLoop;
 
     QNetworkAccessManager *networkAccessManager = new QNetworkAccessManager(this);
-    QNetworkReply *reply = networkAccessManager->get(_makeRequest(url));
+    QNetworkReply *reply = networkAccessManager->get(_makeRequest(url, referer));
     connect(networkAccessManager, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(quit()));
 
     eventLoop.exec();
@@ -62,6 +63,7 @@ void NetworkAccessor::_onManagerReply(QNetworkReply *networkReply)
       * 當 NetWorkAcessManager finish 時，若沒問題，就發送完成任務的訊號，
       * 若是發現還有其他的任務，就會繼續執行
       */
+    _Task &currentTask = _taskQueue.head();
 
     const QString url = networkReply->url().toString();
     qDebug() << "NetworkAccessor:_onManagerReply: 收到 " << url;
@@ -71,12 +73,11 @@ void NetworkAccessor::_onManagerReply(QNetworkReply *networkReply)
         qCritical() << networkReply->error() << networkReply->errorString();
         networkReply->deleteLater();
 
-        QNetworkRequest request = _makeRequest(url);
+        QNetworkRequest request = _makeRequest(url, currentTask.referer);
         _networkAccessManager->get(request);
         return;
     }
 
-    _Task &currentTask = _taskQueue.head();
     currentTask.urlList.removeOne(url);
 
     emit replySignal(currentTask.id, url, networkReply->readAll());
@@ -96,14 +97,15 @@ void NetworkAccessor::_onManagerReply(QNetworkReply *networkReply)
 
 void NetworkAccessor::_startAccess()
 {
-    foreach(QString url, _taskQueue.head().urlList)
+    _Task &currentTask = _taskQueue.head();
+    foreach(QString url, currentTask.urlList)
     {
-        QNetworkRequest request = _makeRequest(url);
+        QNetworkRequest request = _makeRequest(url, currentTask.referer);
         _networkAccessManager->get(request);
     }
 }
 
-QNetworkRequest NetworkAccessor::_makeRequest(const QString &url)
+QNetworkRequest NetworkAccessor::_makeRequest(const QString &url, const QString &referer)
 {
     /*
       *利用 url 加上一些必要的 header 模擬瀏覽器的行為製作 request
@@ -112,6 +114,11 @@ QNetworkRequest NetworkAccessor::_makeRequest(const QString &url)
     QNetworkRequest request(url);
     request.setRawHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.125 Safari/537.36");
     request.setRawHeader("Connection", "close");
+
+    if(!referer.isEmpty())
+    {
+        request.setRawHeader("Referer", referer.toUtf8());
+    }
 
     return request;
 }

@@ -28,7 +28,7 @@ signals:
 
 public slots:
 
-    int download(const Task &task);
+    int download(const Task &task, const QString &referer="");
 
 private slots:
 

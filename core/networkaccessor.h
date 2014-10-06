@@ -17,10 +17,11 @@ public:
 
     explicit NetworkAccessor(QObject *parent = 0);
     
-    int get(const QString &url);
-    int get(const QStringList &urlList);
+    int get(const QString &url, const QString &referer="");
+    int get(const QStringList &urlList, const QString &referer="");
 
-    QString getDataImmediately(const QString &url);
+    QString getDataImmediately(const QString &url, const QString &referer="");
+
 
 signals:
     
@@ -34,7 +35,7 @@ private slots:
 private:
 
     void _startAccess();
-    QNetworkRequest _makeRequest(const QString &url);
+    QNetworkRequest _makeRequest(const QString &url, const QString &referer="");
 
 private:
 
@@ -42,6 +43,7 @@ private:
     {
         int id;
         QStringList urlList;
+        QString referer;
     };
 
     static int _idCount;

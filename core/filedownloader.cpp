@@ -19,13 +19,13 @@ FileDownloader::FileDownloader(AFileSaver *fileSaver, QObject *parent) :
     connect(_networkAccessor, SIGNAL(finishSignal(const int&)),  SLOT(_onAccessorFinish(const int&)));
 }
 
-int FileDownloader::download(const FileDownloader::Task &task)
+int FileDownloader::download(const FileDownloader::Task &task, const QString &referer)
 {
     /*
       *下載 task 任務
       * task[所要下載的內容] = 所對應的檔案路徑
       */
-    const int id = _networkAccessor->get(task.keys());
+    const int id = _networkAccessor->get(task.keys(), referer);
     _taskHash[id] = task;
     return  id;
 }
