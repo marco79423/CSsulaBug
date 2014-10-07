@@ -11,8 +11,11 @@ ApplicationWindow {
 
     visible:true
     width: 400; height: 600
-    maximumWidth: width
+
+    minimumWidth: width
+    maximumWidth: minimumWidth
     minimumHeight: height
+    maximumHeight: minimumHeight
 
     title: "俗辣蟲漫畫下載器 CSsulaBug"
     color: "darkgray"
