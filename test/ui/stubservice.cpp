@@ -20,7 +20,7 @@ StubService::StubService(QObject *parent)
         comicInfo["coverUrl"] = "http://mh.sfacg.com/Logo/347639a1-530a-4550-988c-bab00a95c0fe.jpg";
         comicInfo["key"] = "JDZJ";
         comicInfo["name"] = "間諜之家";
-        comicInfo["author"] = "真刈信二";
+        //comicInfo["author"] = "真刈信二";
         comicInfo["type"] = "推理類";
         comicInfo["updateStatus"] = "[011話連載中]";
 

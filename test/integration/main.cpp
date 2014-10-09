@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
     Q_INIT_RESOURCE(core_resource);
 
     int ret = 0;
-    /*
+
     FileSaverTest fileSaverTest;
     ret += QTest::qExec(&fileSaverTest, argc, argv);
 
@@ -23,7 +23,6 @@ int main(int argc, char *argv[])
 
     SFComicSiteHandlerTest sfComicSiteHandlerTest;
     ret += QTest::qExec(&sfComicSiteHandlerTest, argc, argv);
-    */
 
     BLComicSiteHandlerTest blComicSiteHandlerTest;
     ret += QTest::qExec(&blComicSiteHandlerTest, argc, argv);
