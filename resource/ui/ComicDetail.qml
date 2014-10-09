@@ -16,7 +16,7 @@ Rectangle{
     visible: false
 
     property bool isDownloadingStatus: false
-    property variant comicInfo: {"key": "", "coverUrl": "", "name":"", "site": "", "type": "", "author":"", "lastUpdated":""}
+    property variant comicInfo: {"key": "", "coverUrl": "", "name":"", "site": "", "type": "", "author":"", "updateStatus":""}
     property int startY
 
     function onDownloadButtonClicked(comicKey, chapters){}

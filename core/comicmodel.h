@@ -19,7 +19,7 @@ public:
         Site,
         Type,
         Author,
-        LastUpdated
+        UpdateStatus
     };
 
     explicit ComicModel(QObject *parent = 0);

@@ -138,13 +138,13 @@ void BLComicSiteHandler::_getComicInfo(const int &id, const QString &url, const 
     while ((pos = regexp.indexIn(html, pos)) != -1)
     {
         StringHash comicInfo;
-        comicInfo["site"] = "BL";
+        comicInfo["site"] = "耽美漫畫";
         comicInfo["coverUrl"] = regexp.cap(3);
         comicInfo["key"] = regexp.cap(2);
         comicInfo["name"] = _convertz.convertToTraditional(regexp.cap(1).simplified());
         comicInfo["author"] = "";
         comicInfo["type"] = "耽美類";
-        comicInfo["lastUpdated"] = _convertz.convertToTraditional(regexp.cap(4).simplified());
+        comicInfo["updateStatus"] = _convertz.convertToTraditional(regexp.cap(4).simplified());
 
         //qDebug() << "取得" << comicInfo;
         emit comicInfoSignal(comicInfo);

@@ -22,7 +22,7 @@ StubService::StubService(QObject *parent)
         comicInfo["name"] = "間諜之家";
         comicInfo["author"] = "真刈信二";
         comicInfo["type"] = "推理類";
-        comicInfo["lastUpdated"] = "[011話連載中]";
+        comicInfo["updateStatus"] = "[011話連載中]";
 
         _comicInfos.append(comicInfo);
     }
@@ -35,7 +35,7 @@ StubService::StubService(QObject *parent)
         comicInfo["name"] = "椿鬼";
         comicInfo["author"] = "押切蓮介";
         comicInfo["type"] = "冒險類";
-        comicInfo["lastUpdated"] = "001卷[未完結]";
+        comicInfo["updateStatus"] = "001卷[未完結]";
 
         _comicInfos.append(comicInfo);
     }
@@ -48,7 +48,7 @@ StubService::StubService(QObject *parent)
         comicInfo["name"] = "SUGARLESS無糖";
         comicInfo["author"] = "細川雅巳";
         comicInfo["type"] = "熱血類";
-        comicInfo["lastUpdated"] = "023話[未完結]";
+        comicInfo["updateStatus"] = "023話[未完結]";
 
         _comicInfos.append(comicInfo);
     }
@@ -61,7 +61,7 @@ StubService::StubService(QObject *parent)
         comicInfo["name"] = "怪物獵人Epic";
         comicInfo["author"] = "布施龍太";
         comicInfo["type"] = "冒險類";
-        comicInfo["lastUpdated"] = "007話[未完結]";
+        comicInfo["updateStatus"] = "007話[未完結]";
 
         _comicInfos.append(comicInfo);
     }
@@ -74,7 +74,7 @@ StubService::StubService(QObject *parent)
         comicInfo["name"] = "地獄刀鋒";
         comicInfo["author"] = "柳濟泰";
         comicInfo["type"] = "魔幻類";
-        comicInfo["lastUpdated"] = "021話[未完結]";
+        comicInfo["updateStatus"] = "021話[未完結]";
 
         _comicInfos.append(comicInfo);
     }
@@ -87,7 +87,7 @@ StubService::StubService(QObject *parent)
         comicInfo["name"] = "我的青春戀愛喜劇果然有問題";
         comicInfo["author"] = "佳月玲茅";
         comicInfo["type"] = "校園類";
-        comicInfo["lastUpdated"] = "022話[未完結]";
+        comicInfo["updateStatus"] = "022話[未完結]";
 
         _comicInfos.append(comicInfo);
     }
@@ -100,7 +100,7 @@ StubService::StubService(QObject *parent)
         comicInfo["name"] = "獵殺瓦達漢加";
         comicInfo["author"] = "藤澤勇希";
         comicInfo["type"] = "冒險類";
-        comicInfo["lastUpdated"] = "003卷[已完結]";
+        comicInfo["updateStatus"] = "003卷[已完結]";
 
         _comicInfos.append(comicInfo);
     }

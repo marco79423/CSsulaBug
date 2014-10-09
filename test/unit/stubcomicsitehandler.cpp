@@ -45,7 +45,7 @@ void StubComicSiteHandler::_onUpdate()
     comicInfo["name"] = QString("name%1").arg(i);
     comicInfo["author"] = QString("author%1").arg(i);
     comicInfo["type"] = QString("type%1").arg(i);
-    comicInfo["lastUpdated"] = QString("lastUpdated%1").arg(i);
+    comicInfo["updateStatus"] = QString("updateStatus%1").arg(i);
     emit comicInfoSignal(comicInfo);
 
     if(i == 2)

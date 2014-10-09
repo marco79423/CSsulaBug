@@ -106,7 +106,7 @@ void SFComicSiteHandler::_getComicInfo(const int& id, const QString& url, const 
                    "[^>]+>([^<]+)" //name
                    "[^1]+1\">([^<]+)" //comicAuthor
                    "[^\\]]+[^>]+>([^<]+)" //comicType
-                   "</a> /([^/]+)+/" //lastUpdated
+                   "</a> /([^/]+)+/" //updateStatus
                    " \\d+<br />([^<]+)" //description
                    );
     //QRegExp regexp("<img src=\"([^\"]+)\"[^>]+></a></li>\\s+<li><strong class=\"F14PX\"><a href=\"/HTML/([^/]+)[^>]+>([^<]+)[^1]+1\">([^<]+)[^\\]]+[^>]+>([^<]+)</a> /([^/]+)+/ \\d+<br />([^<]+)");
@@ -115,13 +115,13 @@ void SFComicSiteHandler::_getComicInfo(const int& id, const QString& url, const 
     while ((pos = regexp.indexIn(html, pos)) != -1)
     {
         StringHash comicInfo;
-        comicInfo["site"] = "SF";
+        comicInfo["site"] = "SF 互動傳媒網";
         comicInfo["coverUrl"] = regexp.cap(1);
         comicInfo["key"] = regexp.cap(2);
         comicInfo["name"] = _convertz.convertToTraditional(regexp.cap(3).simplified());
         comicInfo["author"] = _convertz.convertToTraditional(regexp.cap(4).simplified());
         comicInfo["type"] = _convertz.convertToTraditional(regexp.cap(5).simplified());
-        comicInfo["lastUpdated"] = _convertz.convertToTraditional(regexp.cap(6).simplified());
+        comicInfo["updateStatus"] = _convertz.convertToTraditional(regexp.cap(6).simplified());
         //updateInfo["description"] = regexp.cap(7).simplified();
 
         //qDebug() << "取得" << comicInfo;

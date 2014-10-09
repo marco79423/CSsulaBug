@@ -60,7 +60,7 @@ Rectangle {
         Text { text: "漫畫來源：" + comicInfo.site }
         Text { text: "漫畫類型：" + comicInfo.type }
         Text { text: "作者：" + comicInfo.author}
-        Text { text: "最新更新：" + comicInfo.lastUpdated}
+        Text { text: "更新狀態：" + comicInfo.updateStatus}
     }
 }
 

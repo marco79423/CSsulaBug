@@ -28,13 +28,13 @@ void SFComicSiteHandlerTest::update()
         }
     }
 
-    QCOMPARE(comicInfo["site"], QString("SF"));
+    QCOMPARE(comicInfo["site"], QString("SF 互動傳媒網"));
     QCOMPARE(comicInfo["coverUrl"], QString("http://mh.sfacg.com/Logo/LIVE.jpg"));
     QCOMPARE(comicInfo["key"], QString("LIVE"));
     QCOMPARE(comicInfo["name"], QString("LIVE"));
     QCOMPARE(comicInfo["author"], QString("梅澤春人"));
     QCOMPARE(comicInfo["type"], QString("熱血類"));
-    QCOMPARE(comicInfo["lastUpdated"], QString("010話[已完結]"));
+    QCOMPARE(comicInfo["updateStatus"], QString("010話[已完結]"));
 }
 
 void SFComicSiteHandlerTest::getChapters()

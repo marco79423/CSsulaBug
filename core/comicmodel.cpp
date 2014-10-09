@@ -32,7 +32,7 @@ QHash<int, QByteArray> ComicModel::roleNames() const
     roleNames[Site] = "site";
     roleNames[Type] = "type";
     roleNames[Author] = "author";
-    roleNames[LastUpdated] = "lastUpdated";
+    roleNames[UpdateStatus] = "updateStatus";
     return roleNames;
 }
 

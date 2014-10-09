@@ -35,7 +35,7 @@ void ServiceTest::update()
         QCOMPARE(model->data(index, 3).toString(), QString("site%1").arg(i));
         QCOMPARE(model->data(index, 4).toString(), QString("type%1").arg(i));
         QCOMPARE(model->data(index, 5).toString(), QString("author%1").arg(i));
-        QCOMPARE(model->data(index, 6).toString(), QString("lastUpdated%1").arg(i));
+        QCOMPARE(model->data(index, 6).toString(), QString("updateStatus%1").arg(i));
 
 
     }
