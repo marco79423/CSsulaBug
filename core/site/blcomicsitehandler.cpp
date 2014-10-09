@@ -144,7 +144,15 @@ void BLComicSiteHandler::_getComicInfo(const int &id, const QString &url, const 
         comicInfo["name"] = _convertz.convertToTraditional(regexp.cap(1).simplified());
         comicInfo["author"] = "";
         comicInfo["type"] = "耽美類";
+
         comicInfo["updateStatus"] = _convertz.convertToTraditional(regexp.cap(4).simplified());
+
+        //如果只有數字，補上 話(卷)
+        QRegExp updateStatusExp("\\d+");
+        if(updateStatusExp.indexIn(comicInfo["updateStatus"], 0) != -1)
+        {
+            comicInfo["updateStatus"] += "話(卷)";
+        }
 
         //qDebug() << "取得" << comicInfo;
         emit comicInfoSignal(comicInfo);
