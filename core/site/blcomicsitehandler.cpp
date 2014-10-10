@@ -16,7 +16,7 @@ QList<StringPair> BLComicSiteHandler::getChapters(const QString &comicKey)
     const QString html = _networkAccessor->getDataImmediately(QString("http://blmanhua.com/manhua/%1/").arg(comicKey));
 
     //取得話數
-    QRegExp chapterExp(QString("<a title='[^']+'  href='([^']+)' target=_blank>([^<]+)</a>"));
+    QRegExp chapterExp(QString("<a title='[^']+'[^h]*href='([^']+)' target=_blank>([^<]+)"));
 
     QList<StringPair> chapters;
     int pos = 0;
