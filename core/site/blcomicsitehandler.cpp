@@ -26,7 +26,7 @@ QList<StringPair> BLComicSiteHandler::getChapters(const QString &comicKey)
         QString chapterUrl = chapterExp.cap(1);
 
         //去掉話數名稱多餘或不常用的字
-        QRegExp chapterNameExp(QString("(\\d+ ?[卷集])"));
+        QRegExp chapterNameExp(QString("([^ ]*\\d+ ?[卷集])"));
         if(chapterNameExp.indexIn(chapterName, 0) != -1)
         {
             chapterName = chapterNameExp.cap(1);
