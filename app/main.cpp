@@ -21,8 +21,9 @@ int main(int argc, char *argv[])
 
     qRegisterMetaType<StringHash>();
 
-    //Service service(new SFComicSiteHandler);
-    Service service(new BLComicSiteHandler);
+    Service service;
+    service.addComicSiteHandler(new SFComicSiteHandler);
+    service.addComicSiteHandler(new BLComicSiteHandler);
 
     QQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty("service", &service);

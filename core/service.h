@@ -16,7 +16,8 @@ class Service : public AService
 
 public:
 
-    explicit Service(AComicSiteHandler *comicSiteHandler, QObject *parent = 0);
+    explicit Service(QObject *parent = 0);
+    void addComicSiteHandler(AComicSiteHandler *comicSiteHandler);
 
     QSortFilterProxyModel* getModel();
     QStringList getChapterNames(const QString &comicKey);
@@ -37,7 +38,7 @@ private slots:
 
 private:
 
-    AComicSiteHandler *_comicSiteHandler;
+    QMap<QString, AComicSiteHandler*> _comicSiteHandlers;
 
     ComicModel *_model;
     QSortFilterProxyModel *_proxyModel;

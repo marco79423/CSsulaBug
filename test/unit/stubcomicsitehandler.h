@@ -9,6 +9,7 @@ class StubComicSiteHandler : public AComicSiteHandler
 
 public:
 
+    QString getComicSiteName() const;
     QList<StringPair> getChapters(const QString &comicKey);
     QStringList getImageUrls(const QString &comicKey, const QString &chapterKey);
 

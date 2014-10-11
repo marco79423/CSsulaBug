@@ -11,6 +11,14 @@ BLComicSiteHandler::BLComicSiteHandler(QObject *parent)
     connect(_networkAccessor, SIGNAL(finishSignal(const int&)), this, SIGNAL(updateFinishedSignal()));
 }
 
+QString BLComicSiteHandler::getComicSiteName() const
+{
+    /*
+     * http://blmanhua.com/
+     */
+    return "耽美漫畫";
+}
+
 QList<StringPair> BLComicSiteHandler::getChapters(const QString &comicKey)
 {
     const QString html = _networkAccessor->getDataImmediately(QString("http://blmanhua.com/manhua/%1/").arg(comicKey));
@@ -138,7 +146,7 @@ void BLComicSiteHandler::_getComicInfo(const int &id, const QString &url, const 
     while ((pos = regexp.indexIn(html, pos)) != -1)
     {
         StringHash comicInfo;
-        comicInfo["site"] = "耽美漫畫";
+        comicInfo["site"] = getComicSiteName();
         comicInfo["coverUrl"] = regexp.cap(3);
         comicInfo["key"] = regexp.cap(2);
         comicInfo["name"] = _convertz.convertToTraditional(regexp.cap(1).simplified());

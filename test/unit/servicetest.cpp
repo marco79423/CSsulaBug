@@ -10,9 +10,9 @@
 #include <QDebug>
 
 ServiceTest::ServiceTest(QObject *parent)
-    :QObject(parent), _service(new Service(new StubComicSiteHandler))
+    :QObject(parent), _service(new Service)
 {
-
+    _service->addComicSiteHandler(new StubComicSiteHandler);
 }
 
 void ServiceTest::update()
@@ -32,7 +32,7 @@ void ServiceTest::update()
         QCOMPARE(model->data(index, 0).toString(), QString("coverUrl%1").arg(i));
         QCOMPARE(model->data(index, 1).toString(), QString("name%1").arg(i));
         QCOMPARE(model->data(index, 2).toString(), QString("key%1").arg(i));
-        QCOMPARE(model->data(index, 3).toString(), QString("site%1").arg(i));
+        QCOMPARE(model->data(index, 3).toString(), QString("Stub ComicSiteHandler"));
         QCOMPARE(model->data(index, 4).toString(), QString("type%1").arg(i));
         QCOMPARE(model->data(index, 5).toString(), QString("author%1").arg(i));
         QCOMPARE(model->data(index, 6).toString(), QString("updateStatus%1").arg(i));

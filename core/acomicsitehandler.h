@@ -11,6 +11,8 @@ class AComicSiteHandler : public QObject
 
 public:
 
+    virtual QString getComicSiteName() const = 0;
+
     virtual QList<StringPair> getChapters(const QString &comicKey) = 0;
     virtual QStringList getImageUrls(const QString &comicKey, const QString &chapterKey) = 0;
 

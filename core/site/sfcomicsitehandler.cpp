@@ -10,6 +10,14 @@ SFComicSiteHandler::SFComicSiteHandler(QObject *parent)
     connect(_networkAccessor, SIGNAL(finishSignal(const int&)), this, SIGNAL(updateFinishedSignal()));
 }
 
+QString SFComicSiteHandler::getComicSiteName() const
+{
+    /*
+     * http://comic.sfacg.com
+     */
+    return "SF 互動傳媒網";
+}
+
 QList<StringPair> SFComicSiteHandler::getChapters(const QString &comicKey)
 {
     const QString html = _networkAccessor->getDataImmediately(QString("http://comic.sfacg.com/HTML/%1/").arg(comicKey));
@@ -115,7 +123,7 @@ void SFComicSiteHandler::_getComicInfo(const int& id, const QString& url, const 
     while ((pos = regexp.indexIn(html, pos)) != -1)
     {
         StringHash comicInfo;
-        comicInfo["site"] = "SF 互動傳媒網";
+        comicInfo["site"] = getComicSiteName();
         comicInfo["coverUrl"] = regexp.cap(1);
         comicInfo["key"] = regexp.cap(2);
         comicInfo["name"] = _convertz.convertToTraditional(regexp.cap(3).simplified());

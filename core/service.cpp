@@ -9,21 +9,26 @@
 #include <QDebug>
 
 
-Service::Service(AComicSiteHandler *comicSiteHandler, QObject *parent)
-    :AService(parent), _comicSiteHandler(comicSiteHandler)
+Service::Service(QObject *parent)
+    :AService(parent)
 {
-    _comicSiteHandler->setParent(this);
     _fileDownloader = new FileDownloader(new FileSaver);
 
     _model = new ComicModel(this);
     _proxyModel = new QSortFilterProxyModel(this);
     _proxyModel->setSourceModel(_model);
 
-    connect(_comicSiteHandler, SIGNAL(comicInfoSignal(const StringHash&)), _model,  SLOT(insertComicInfo(const StringHash&)));
-    connect(_comicSiteHandler, SIGNAL(updateFinishedSignal()), this, SLOT(_onUpdateFinished()));
-
     connect(_fileDownloader, SIGNAL(downloadInfoSignal(const int&, const StringHash&)), SLOT(_onGettingDownloadProgress(const int&, const StringHash&)));
     connect(_fileDownloader, SIGNAL(finishSignal(const int&)), SLOT(_onTaskFinish(const int&)));
+}
+
+void Service::addComicSiteHandler(AComicSiteHandler *comicSiteHandler)
+{
+    comicSiteHandler->setParent(this);
+    connect(comicSiteHandler, SIGNAL(comicInfoSignal(const StringHash&)), _model,  SLOT(insertComicInfo(const StringHash&)));
+    connect(comicSiteHandler, SIGNAL(updateFinishedSignal()), this, SLOT(_onUpdateFinished()));
+
+    _comicSiteHandlers[comicSiteHandler->getComicSiteName()] = comicSiteHandler;
 }
 
 
@@ -36,7 +41,10 @@ QStringList Service::getChapterNames(const QString &comicKey)
 {
     if(!_chapterInfo.contains(comicKey))
     {
-        _chapterInfo[comicKey] = _comicSiteHandler->getChapters(comicKey);
+        QModelIndex modelIndex = _proxyModel->match(_proxyModel->index(0, 0), ComicModel::Key, comicKey)[0];
+        QString site = _proxyModel->data(modelIndex, ComicModel::Site).toString();
+
+        _chapterInfo[comicKey] = _comicSiteHandlers[site]->getChapters(comicKey);
     }
     QStringList chapterNames;
     foreach(StringPair chapter, _chapterInfo[comicKey])
@@ -50,7 +58,10 @@ void Service::update()
 {
     setProperty("isUpdatingStatus", true);
 
-    _comicSiteHandler->update();
+    foreach(AComicSiteHandler* comicSiteHandler, _comicSiteHandlers)
+    {
+        comicSiteHandler->update();
+    }
 }
 
 void Service::setFilter(const QString &pattern)
@@ -73,6 +84,9 @@ void Service::download(const QString &comicKey, const QStringList &chapterNames)
 
     QModelIndex modelIndex = _proxyModel->match(_proxyModel->index(0, 0), ComicModel::Key, comicKey)[0];
     QString name = _proxyModel->data(modelIndex, ComicModel::Name).toString();
+    QString site = _proxyModel->data(modelIndex, ComicModel::Site).toString();
+
+    AComicSiteHandler *comicSiteHandler = _comicSiteHandlers[site];
 
     setProperty("downloadProgress", QString("準備下載 ... %1").arg(name));
 
@@ -85,7 +99,7 @@ void Service::download(const QString &comicKey, const QStringList &chapterNames)
             continue;
         }
 
-        QStringList imageUrls = _comicSiteHandler->getImageUrls(comicKey, chapter.second);
+        QStringList imageUrls = comicSiteHandler->getImageUrls(comicKey, chapter.second);
 
         FileDownloader::Task task;
         for(int i=0; i < imageUrls.size(); i++)
@@ -95,7 +109,7 @@ void Service::download(const QString &comicKey, const QStringList &chapterNames)
             task[imageUrl] = filePath;
         }
 
-        const int id = _fileDownloader->download(task, _comicSiteHandler->getReferer());
+        const int id = _fileDownloader->download(task, comicSiteHandler->getReferer());
         _currentTaskIDs.append(id);
     }
 

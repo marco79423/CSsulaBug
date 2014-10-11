@@ -3,7 +3,7 @@
 
 #include <QObject>
 
-class AService;
+class Service;
 
 class ServiceTest : public QObject
 {
@@ -19,7 +19,7 @@ private slots:
 
 private:
 
-    AService *_service;
+    Service *_service;
 };
 
 #endif // SERVICETEST_H

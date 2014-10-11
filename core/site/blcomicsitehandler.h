@@ -13,6 +13,7 @@ class BLComicSiteHandler : public AComicSiteHandler
 public:
 
     explicit BLComicSiteHandler(QObject *parent = 0);
+    QString getComicSiteName() const;
 
     QList<StringPair> getChapters(const QString &comicKey);
     QStringList getImageUrls(const QString &comicKey, const QString &chapterKey);

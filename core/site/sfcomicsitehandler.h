@@ -16,6 +16,7 @@ class SFComicSiteHandler : public AComicSiteHandler
 public:
 
     explicit SFComicSiteHandler(QObject *parent = 0);
+    QString getComicSiteName() const;
 
     QList<StringPair> getChapters(const QString &comicKey);
     QStringList getImageUrls(const QString &comicKey, const QString &chapterKey);

@@ -4,6 +4,11 @@
 #include <QTimer>
 
 
+QString StubComicSiteHandler::getComicSiteName() const
+{
+    return "Stub ComicSiteHandler";
+}
+
 QList<StringPair> StubComicSiteHandler::getChapters(const QString &comicKey)
 {
     if(comicKey == "key0")
@@ -39,7 +44,7 @@ void StubComicSiteHandler::_onUpdate()
     static int i=0;
 
     StringHash comicInfo;
-    comicInfo["site"] = QString("site%1").arg(i);
+    comicInfo["site"] = getComicSiteName();
     comicInfo["coverUrl"] = QString("coverUrl%1").arg(i);
     comicInfo["key"] = QString("key%1").arg(i);
     comicInfo["name"] = QString("name%1").arg(i);
