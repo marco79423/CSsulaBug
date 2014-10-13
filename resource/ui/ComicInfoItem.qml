@@ -38,13 +38,16 @@ Rectangle {
             contentWidth: nameText.width
             clip: true
 
-            Text {
+            TextEdit {
                 id: nameText
-                text: comicInfo.name;
-                font.family: "標楷體";
+                text: comicInfo.name
+                font.family: "標楷體"
                 font.pixelSize: 25
-                font.bold: true;
+                font.bold: true
                 horizontalAlignment: Text.AlignLeft
+
+                readOnly: true
+                selectByMouse: true
             }
 
             SequentialAnimation{
@@ -57,10 +60,10 @@ Rectangle {
             }
         }
 
-        Text { text: "漫畫來源：" + comicInfo.site }
-        Text { text: "漫畫類型：" + comicInfo.type }
-        Text { text: "作者：" + comicInfo.author; visible: comicInfo.author !== "" }
-        Text { text: "更新狀態：" + comicInfo.updateStatus}
+        TextEdit { readOnly: true; selectByMouse: true; text: "漫畫來源：" + comicInfo.site }
+        TextEdit { readOnly: true; selectByMouse: true;  text: "漫畫類型：" + comicInfo.type }
+        TextEdit { readOnly: true; selectByMouse: true;  text: "作者：" + comicInfo.author; visible: comicInfo.author !== "" }
+        TextEdit { readOnly: true; selectByMouse: true;  text: "更新狀態：" + comicInfo.updateStatus}
     }
 
 }

@@ -51,6 +51,7 @@ ListView {
         highlight: ListView.isCurrentItem
 
         MouseArea {
+            visible: comicListView.currentIndex != index;
             anchors.fill: parent
             hoverEnabled: true
             onClicked: {
