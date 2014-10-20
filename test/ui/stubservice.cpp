@@ -1,6 +1,7 @@
 ﻿#include "stubservice.h"
 
 #include <comicmodel.h>
+#include <sortfilterproxycomicmodel.h>
 
 #include <QTimer>
 #include <QThread>
@@ -10,7 +11,7 @@ StubService::StubService(QObject *parent)
     :AService(parent)
 {
     _model = new ComicModel(this);
-    _proxyModel = new QSortFilterProxyModel(this);
+    _proxyModel = new SortFilterProxyComicModel(this);
     _proxyModel->setSourceModel(_model);
 
 
@@ -106,7 +107,7 @@ StubService::StubService(QObject *parent)
     }
 }
 
-QSortFilterProxyModel *StubService::getModel()
+SortFilterProxyComicModel *StubService::getModel()
 {
     return _proxyModel;
 }
@@ -133,11 +134,16 @@ void StubService::update()
     }
 }
 
-void StubService::setFilter(const QString &pattern)
+void StubService::setComicTypeFilter(const QString &pattern)
 {
-    _proxyModel->setFilterRole(ComicModel::Name);
-    _proxyModel->setFilterRegExp(QRegExp(pattern, Qt::CaseInsensitive, QRegExp::FixedString));
+    _proxyModel->setComicTypeFilter(pattern);
 }
+
+void StubService::setComicNameFilter(const QString &pattern)
+{
+    _proxyModel->setComicNameFilter(pattern);
+}
+
 
 void StubService::download(const QString &comicKey)
 {

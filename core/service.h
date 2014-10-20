@@ -19,13 +19,14 @@ public:
     explicit Service(QObject *parent = 0);
     void addComicSiteHandler(AComicSiteHandler *comicSiteHandler);
 
-    QSortFilterProxyModel* getModel();
+    SortFilterProxyComicModel* getModel();
     QStringList getChapterNames(const QString &comicKey);
 
 public slots:
 
     void update();
-    void setFilter(const QString &pattern);
+    void setComicTypeFilter(const QString &pattern);
+    void setComicNameFilter(const QString &pattern);
 
     void download(const QString &comicKey);
     void download(const QString &comicKey, const QStringList &chapterNames);
@@ -41,7 +42,7 @@ private:
     QMap<QString, AComicSiteHandler*> _comicSiteHandlers;
 
     ComicModel *_model;
-    QSortFilterProxyModel *_proxyModel;
+    SortFilterProxyComicModel *_proxyModel;
 
     QHash<QString, QList<StringPair> > _chapterInfo;
 

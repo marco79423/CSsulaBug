@@ -2,7 +2,8 @@
 #define A_SERVICE_H
 
 #include <QObject>
-#include <QSortFilterProxyModel>
+
+#include "sortfilterproxycomicmodel.h"
 
 class AService : public QObject
 {
@@ -14,7 +15,7 @@ class AService : public QObject
 
 public:
 
-    virtual QSortFilterProxyModel* getModel() = 0;
+    virtual SortFilterProxyComicModel* getModel() = 0;
 
     Q_INVOKABLE virtual QStringList getChapterNames(const QString &comicKey) = 0;
 
@@ -30,7 +31,8 @@ signals:
 public slots:
 
     virtual void update() = 0;
-    virtual void setFilter(const QString &pattern) = 0;
+    virtual void setComicTypeFilter(const QString &pattern) = 0;
+    virtual void setComicNameFilter(const QString &pattern) = 0;
 
     virtual void download(const QString &comicKey) = 0;
     virtual void download(const QString &comicKey, const QStringList &chapterNames) = 0;

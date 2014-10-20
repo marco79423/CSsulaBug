@@ -14,14 +14,15 @@ public:
 
     explicit StubService(QObject *parent = 0);
 
-    QSortFilterProxyModel* getModel();
+    SortFilterProxyComicModel* getModel();
 
     QStringList getChapterNames(const QString &comicKey);
 
 public slots:
 
     void update();
-    void setFilter(const QString &pattern);
+    void setComicTypeFilter(const QString &pattern);
+    void setComicNameFilter(const QString &pattern);
 
     void download(const QString &comicKey);
     void download(const QString &comicKey, const QStringList &chapterNames);
@@ -34,7 +35,7 @@ private slots:
 private:
 
     ComicModel *_model;
-    QSortFilterProxyModel *_proxyModel;
+    SortFilterProxyComicModel *_proxyModel;
 
     QList<StringHash> _comicInfos;
 

@@ -3,6 +3,7 @@
 #include "filedownloader.h"
 #include "filesaver.h"
 #include "comicmodel.h"
+#include "sortfilterproxycomicmodel.h"
 
 #include <QStandardPaths>
 #include <QFileInfo>
@@ -15,7 +16,7 @@ Service::Service(QObject *parent)
     _fileDownloader = new FileDownloader(new FileSaver);
 
     _model = new ComicModel(this);
-    _proxyModel = new QSortFilterProxyModel(this);
+    _proxyModel = new SortFilterProxyComicModel(this);
     _proxyModel->setSourceModel(_model);
 
     connect(_fileDownloader, SIGNAL(downloadInfoSignal(const int&, const StringHash&)), SLOT(_onGettingDownloadProgress(const int&, const StringHash&)));
@@ -32,7 +33,7 @@ void Service::addComicSiteHandler(AComicSiteHandler *comicSiteHandler)
 }
 
 
-QSortFilterProxyModel *Service::getModel()
+SortFilterProxyComicModel *Service::getModel()
 {
     return _proxyModel;
 }
@@ -64,11 +65,16 @@ void Service::update()
     }
 }
 
-void Service::setFilter(const QString &pattern)
+void Service::setComicTypeFilter(const QString &pattern)
 {
     QString tpattern = _convertz.convertToTraditional(pattern);
-    _proxyModel->setFilterRole(ComicModel::Name);
-    _proxyModel->setFilterRegExp(QRegExp(tpattern, Qt::CaseInsensitive, QRegExp::FixedString));
+    _proxyModel->setComicTypeFilter(tpattern);
+}
+
+void Service::setComicNameFilter(const QString &pattern)
+{
+    QString tpattern = _convertz.convertToTraditional(pattern);
+    _proxyModel->setComicNameFilter(tpattern);
 }
 
 void Service::download(const QString &comicKey)

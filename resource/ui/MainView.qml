@@ -48,7 +48,7 @@ ApplicationWindow {
             }
 
             placeholderText: "點此搜尋想下載的漫畫至桌面 ..."
-            onTextChanged: { service.setFilter(text); }
+            onTextChanged: { service.setComicNameFilter(text); }
         }
 
         Button{
@@ -69,7 +69,7 @@ ApplicationWindow {
             anchors.right: parent.right
             anchors.rightMargin: 20
             anchors.bottom: parent.bottom
-            anchors.bottomMargin: -25
+            anchors.bottomMargin: -20
 
             width: 50
             height: 50
@@ -105,7 +105,7 @@ ApplicationWindow {
 
         anchors.fill: parent
 
-        color: "transparent"
+        color: "#004d40"
         state: "MainPageState"
 
         states:[
@@ -114,7 +114,7 @@ ApplicationWindow {
                 when: !comicDetail.visible
                 PropertyChanges { target: searchField ; visible: true; }
                 PropertyChanges { target: backButton ; visible: false; }
-                PropertyChanges { target: comicListView; visible: true; }
+                PropertyChanges { target: comicList; visible: true; }
             },
 
             State {
@@ -122,12 +122,12 @@ ApplicationWindow {
                 when: comicDetail.visible
                 PropertyChanges { target: searchField ; visible: false; }
                 PropertyChanges { target: backButton ; visible: true; }
-                PropertyChanges { target: comicListView; visible: false; }
+                PropertyChanges { target: comicList; visible: false; }
             }
         ]
 
-        UI.ComicListView {
-            id: comicListView
+        UI.ComicList {
+            id: comicList
 
             anchors.fill: parent
 
@@ -138,9 +138,14 @@ ApplicationWindow {
 
             state: "BusyState"
 
-            function onAdvanceButtonClicked(comicInfo)
+            function setComicTypeFilter(comicType)
             {
-                comicDetail.startEnterAnimation(comicInfo, comicListView.currentItem.y);
+                service.setComicTypeFilter(comicType);
+            }
+
+            function onAdvanceButtonClicked(comicInfo, startY)
+            {
+                comicDetail.startEnterAnimation(comicInfo, startY);
             }
 
             function onDownloadButtonClicked(comicKey)
@@ -150,7 +155,7 @@ ApplicationWindow {
 
             Connections {
                 target: service
-                onUpdateFinishedSignal: if(comicListView.state == "BusyState") comicListView.state = "DefaultState"
+                onUpdateFinishedSignal: if(comicList.state == "BusyState") comicList.state = "DefaultState"
             }
         }
 

@@ -152,7 +152,7 @@ Rectangle{
 
             z: 1
 
-            color: "#006064"   
+            color: "#00695c"
 
             Row{
                 anchors.verticalCenter: parent.verticalCenter
