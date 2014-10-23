@@ -69,16 +69,16 @@ ApplicationWindow {
             anchors.right: parent.right
             anchors.rightMargin: 20
             anchors.bottom: parent.bottom
-            anchors.bottomMargin: -20
+            anchors.bottomMargin: -10
 
-            width: 50
-            height: 50
+            width: 30
+            height: 30
 
             style: ButtonStyle{
                 background: Rectangle{
 
                     color: "#ffeb3b"
-                    radius: 100
+                    radius: 80
                 }
             }
 
