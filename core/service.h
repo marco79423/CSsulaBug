@@ -25,8 +25,8 @@ public:
 public slots:
 
     void update();
-    void setComicTypeFilter(const QString &pattern);
-    void setComicNameFilter(const QString &pattern);
+    void setComicTypeFilter(const QString &comicTypePattern);
+    void setComicNameFilter(const QString &comicNamePattern);
 
     void download(const QString &comicKey);
     void download(const QString &comicKey, const QStringList &chapterNames);

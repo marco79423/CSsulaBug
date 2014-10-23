@@ -65,16 +65,14 @@ void Service::update()
     }
 }
 
-void Service::setComicTypeFilter(const QString &pattern)
+void Service::setComicTypeFilter(const QString &comicTypePattern)
 {
-    QString tpattern = _convertz.convertToTraditional(pattern);
-    _proxyModel->setComicTypeFilter(tpattern);
+    _proxyModel->setComicTypeFilter( _convertz.convertToTraditional(comicTypePattern));
 }
 
-void Service::setComicNameFilter(const QString &pattern)
+void Service::setComicNameFilter(const QString &comicNamePattern)
 {
-    QString tpattern = _convertz.convertToTraditional(pattern);
-    _proxyModel->setComicNameFilter(tpattern);
+    _proxyModel->setComicNameFilter(_convertz.convertToTraditional(comicNamePattern));
 }
 
 void Service::download(const QString &comicKey)
@@ -131,9 +129,15 @@ void Service::download(const QString &comicKey, const QStringList &chapterNames)
 
 void Service::_onUpdateFinished()
 {
-    qDebug() << "更新結束";
-    setProperty("isUpdatingStatus", false);
-    emit updateFinishedSignal();
+    static int updateFinishedCounter = 0;
+    if(++updateFinishedCounter == _comicSiteHandlers.size())
+    {
+        updateFinishedCounter = 0;
+
+        qDebug() << "更新結束";
+        setProperty("isUpdatingStatus", false);
+        emit updateFinishedSignal();
+    }
 }
 
 void Service::_onGettingDownloadProgress(const int &id, const StringHash &info)

@@ -25,7 +25,7 @@ RESOURCES += \
 INCLUDEPATH += $$PWD/../core
 
 win32-g++:CONFIG(debug, debug|release): {
-    CONFIG += console
+    #CONFIG += console
 
     LIBS += -L$$OUT_PWD/../core/debug -lcore
     PRE_TARGETDEPS += $$OUT_PWD/../core/debug/libcore.a

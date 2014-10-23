@@ -15,7 +15,7 @@ void BLComicSiteHandlerTest::update()
         updateFinishSignalSpy.wait(1000);
 
     //檢查有多少部漫畫
-    QCOMPARE(comicInfoSignalSpy.size(), 8608);
+    QCOMPARE(comicInfoSignalSpy.size(), 8660);
 
     //檢查抓取的漫畫是否正確
     StringHash comicInfo;
