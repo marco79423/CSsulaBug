@@ -31,6 +31,8 @@ Rectangle {
         anchors.left: coverImage.right
         anchors.leftMargin: 20
 
+        spacing: 3
+
         Flickable {
             id: nameFlick
             width: 290
