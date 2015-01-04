@@ -65,11 +65,6 @@ void Service::update()
     }
 }
 
-void Service::setComicTypeFilter(const QString &comicTypePattern)
-{
-    _proxyModel->setComicTypeFilter( _convertz.convertToTraditional(comicTypePattern));
-}
-
 void Service::setComicNameFilter(const QString &comicNamePattern)
 {
     _proxyModel->setComicNameFilter(_convertz.convertToTraditional(comicNamePattern));

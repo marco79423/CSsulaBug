@@ -134,10 +134,6 @@ void StubService::update()
     }
 }
 
-void StubService::setComicTypeFilter(const QString &pattern)
-{
-    _proxyModel->setComicTypeFilter(pattern);
-}
 
 void StubService::setComicNameFilter(const QString &pattern)
 {

@@ -12,7 +12,6 @@ public:
 
 public slots:
 
-    void setComicTypeFilter(const QString &comicTypePattern);
     void setComicNameFilter(const QString &comicNamePattern);
 
 protected:
@@ -21,7 +20,6 @@ protected:
 
 private:
 
-    QString _comicTypePattern;
     QString _comicNamePattern;
 };
 

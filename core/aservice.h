@@ -31,7 +31,6 @@ signals:
 public slots:
 
     virtual void update() = 0;
-    virtual void setComicTypeFilter(const QString &pattern) = 0;
     virtual void setComicNameFilter(const QString &pattern) = 0;
 
     virtual void download(const QString &comicKey) = 0;

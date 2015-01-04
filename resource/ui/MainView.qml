@@ -138,11 +138,6 @@ ApplicationWindow {
 
             state: "BusyState"
 
-            function setComicTypeFilter(comicType)
-            {
-                service.setComicTypeFilter(comicType);
-            }
-
             function onAdvanceButtonClicked(comicInfo, startY)
             {
                 comicDetail.startEnterAnimation(comicInfo, startY);
