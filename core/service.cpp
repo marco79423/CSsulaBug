@@ -4,6 +4,7 @@
 #include "filesaver.h"
 #include "comicmodel.h"
 #include "sortfilterproxycomicmodel.h"
+#include "comicdownloader.h"
 
 #include <QStandardPaths>
 #include <QFileInfo>
@@ -13,23 +14,24 @@
 Service::Service(QObject *parent)
     :AService(parent)
 {
-    _fileDownloader = new FileDownloader(new FileSaver);
-
     _model = new ComicModel(this);
     _proxyModel = new SortFilterProxyComicModel(this);
     _proxyModel->setSourceModel(_model);
 
-    connect(_fileDownloader, SIGNAL(downloadInfoSignal(const int&, const StringHash&)), SLOT(_onGettingDownloadProgress(const int&, const StringHash&)));
-    connect(_fileDownloader, SIGNAL(finishSignal(const int&)), SLOT(_onTaskFinish(const int&)));
+    _comicDownloader = new ComicDownloader(this);
+    connect(_comicDownloader, SIGNAL(downloadProgressChangedSignal(const QVariantMap&)), SLOT(_onDownloadProgressChanged(const QVariantMap&)));
+    connect(_comicDownloader, SIGNAL(downloadFinishSignal()), SLOT(_onDownloadFinished()));
 }
 
 void Service::addComicSiteHandler(AComicSiteHandler *comicSiteHandler)
 {
     comicSiteHandler->setParent(this);
-    connect(comicSiteHandler, SIGNAL(comicInfoSignal(const StringHash&)), _model,  SLOT(insertComicInfo(const StringHash&)));
+    connect(comicSiteHandler, SIGNAL(comicInfoSignal(const QVariantMap&)), _model,  SLOT(insertComicInfo(const QVariantMap&)));
     connect(comicSiteHandler, SIGNAL(updateFinishedSignal()), this, SLOT(_onUpdateFinished()));
 
     _comicSiteHandlers[comicSiteHandler->getComicSiteName()] = comicSiteHandler;
+
+    _comicDownloader->addComicSiteHandler(comicSiteHandler);
 }
 
 
@@ -40,19 +42,25 @@ SortFilterProxyComicModel *Service::getModel()
 
 QStringList Service::getChapterNames(const QString &comicKey)
 {
-    if(!_chapterInfo.contains(comicKey))
-    {
-        QModelIndex modelIndex = _proxyModel->match(_proxyModel->index(0, 0), ComicModel::Key, comicKey)[0];
-        QString site = _proxyModel->data(modelIndex, ComicModel::Site).toString();
+    QVariantMap comicInfo = _model->getComicInfo(comicKey);
 
-        _chapterInfo[comicKey] = _comicSiteHandlers[site]->getChapters(comicKey);
+    if(!comicInfo.contains("chapters"))
+    {
+        QString site = comicInfo["site"].toString();
+        comicInfo["chapters"].setValue(_comicSiteHandlers[site]->getChapters(comicKey));
+        _model->setComicInfo(comicInfo);
     }
     QStringList chapterNames;
-    foreach(StringPair chapter, _chapterInfo[comicKey])
+    foreach(StringPair chapter, comicInfo["chapters"].value<QList<StringPair> >())
     {
         chapterNames.append(chapter.first);
     }
     return chapterNames;
+}
+
+ComicModel *Service::getDownloadComicModel()
+{
+    return _comicDownloader->getDownloadComicModel();
 }
 
 void Service::update()
@@ -79,47 +87,20 @@ void Service::download(const QString &comicKey, const QStringList &chapterNames)
 {
     setProperty("isDownloadingStatus", true);
 
-    QString dstDir = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
+    QVariantMap comicInfo = _model->getComicInfo(comicKey);
 
-    QModelIndex modelIndex = _proxyModel->match(_proxyModel->index(0, 0), ComicModel::Key, comicKey)[0];
-    QString name = _proxyModel->data(modelIndex, ComicModel::Name).toString();
-    QString site = _proxyModel->data(modelIndex, ComicModel::Site).toString();
+    QList<StringPair> results;
 
-    AComicSiteHandler *comicSiteHandler = _comicSiteHandlers[site];
-
-    setProperty("downloadProgress", QString("準備下載 ... %1").arg(name));
-
-    QList<StringPair> chapters = _chapterInfo[comicKey];
+    QList<StringPair> chapters = comicInfo["chapters"].value<QList<StringPair> >();
     foreach(StringPair chapter, chapters)
     {
-        QFileInfo fileInfo(QString("%1/%2/%3").arg(dstDir).arg(name).arg(chapter.first));
-        if(!chapterNames.contains(chapter.first) || fileInfo.exists())
+        if(chapterNames.contains(chapter.first))
         {
-            continue;
+            results.append(chapter);
         }
-
-        QStringList imageUrls = comicSiteHandler->getImageUrls(comicKey, chapter.second);
-
-        FileDownloader::Task task;
-        for(int i=0; i < imageUrls.size(); i++)
-        {
-            QString imageUrl = imageUrls[i];
-            QString filePath = QString("%1/%2/%3/%4.%5").arg(dstDir).arg(name).arg(chapter.first).arg(i, 3, 10, QChar('0')).arg(imageUrl.right(3));
-            task[imageUrl] = filePath;
-        }
-
-        const int id = _fileDownloader->download(task, comicSiteHandler->getReferer());
-        _currentTaskIDs.append(id);
     }
-
-    _currentTaskSize = _currentTaskIDs.size();
-
-    if(_currentTaskIDs.isEmpty())
-    {
-        qDebug() << "下載結束";
-        setProperty("isDownloadingStatus", false);
-        emit downloadFinishSignal();
-    }
+    comicInfo["chapters"].setValue(results);
+    _comicDownloader->download(comicInfo);
 }
 
 void Service::_onUpdateFinished()
@@ -135,21 +116,14 @@ void Service::_onUpdateFinished()
     }
 }
 
-void Service::_onGettingDownloadProgress(const int &id, const StringHash &info)
+void Service::_onDownloadProgressChanged(const QVariantMap &downloadProgress)
 {
-    Q_UNUSED(id)
-
-    setProperty("downloadProgress", QString("[進度 %2/%3 ] 下載 %4").arg(_currentTaskSize - _currentTaskIDs.size()).arg(_currentTaskSize).arg(info["path"]));
-    qDebug() << "下載進度資訊" << property("downloadProgress").toString();
+    setProperty("downloadProgress", downloadProgress);
 }
 
-void Service::_onTaskFinish(const int &id)
+void Service::_onDownloadFinished()
 {
-    _currentTaskIDs.removeAll(id);
-    if(_currentTaskIDs.isEmpty())
-    {
-        qDebug() << "下載結束";
-        setProperty("isDownloadingStatus", false);
-        emit downloadFinishSignal();
-    }
+    qDebug() << "下載結束";
+    setProperty("isDownloadingStatus", false);
+    emit downloadFinishSignal();
 }

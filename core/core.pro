@@ -23,7 +23,8 @@ HEADERS += \
     aservice.h \
     site/sfcomicsitehandler.h \
     site/blcomicsitehandler.h \
-    sortfilterproxycomicmodel.h
+    sortfilterproxycomicmodel.h \
+    comicdownloader.h
 
 SOURCES += \
     comicmodel.cpp \
@@ -34,7 +35,8 @@ SOURCES += \
     service.cpp \
     site/sfcomicsitehandler.cpp \
     site/blcomicsitehandler.cpp \
-    sortfilterproxycomicmodel.cpp
+    sortfilterproxycomicmodel.cpp \
+    comicdownloader.cpp
 
 RESOURCES += \
     core_resource.qrc

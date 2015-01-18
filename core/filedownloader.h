@@ -23,7 +23,7 @@ public:
 
 signals:
     
-    void downloadInfoSignal(const int &id, const StringHash &downloadInfo);
+    void downloadInfoSignal(const int &id, const QVariantMap &downloadInfo);
     void finishSignal(const int &id);
 
 public slots:

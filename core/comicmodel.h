@@ -2,7 +2,6 @@
 #define COMICMODEL_H
 
 #include <QAbstractListModel>
-
 #include "globals.h"
 
 class ComicModel : public QAbstractListModel
@@ -19,22 +18,34 @@ public:
         Site,
         Type,
         Author,
-        UpdateStatus
+        UpdateStatus,
+        Chapters
     };
 
     explicit ComicModel(QObject *parent = 0);
     
+    QVariantMap getComicInfo(const QString &comicKey);
+    QVariantMap getComicInfo(const int &row);
+    Q_INVOKABLE bool hasComicInfo(const QString &comicKey);
+
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     QVariant data(const QModelIndex &index, int role) const;
     QHash<int, QByteArray> roleNames() const;
 
+signals:
+
+    void comicInfoInsertedSignal(const QString &comicKey);
+    void comicInfoRemovedSignal(const QString &comicKey);
+
 public slots:
 
-    void insertComicInfo(const StringHash &info);
+    void insertComicInfo(const QVariantMap &info);
+    void removeComicInfo(const int &row);
+    void setComicInfo(const QVariantMap &comicInfo);
 
 private:
 
-    QList<StringHash> _comicList;
+    QList<QVariantMap> _comicList;
 };
 
 #endif // COMICMODEL_H

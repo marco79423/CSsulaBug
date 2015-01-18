@@ -43,7 +43,7 @@ void StubComicSiteHandler::_onUpdate()
 {
     static int i=0;
 
-    StringHash comicInfo;
+    QVariantMap comicInfo;
     comicInfo["site"] = getComicSiteName();
     comicInfo["coverUrl"] = QString("coverUrl%1").arg(i);
     comicInfo["key"] = QString("key%1").arg(i);

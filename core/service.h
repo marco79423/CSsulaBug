@@ -8,6 +8,7 @@
 
 class AComicSiteHandler;
 class ComicModel;
+class ComicDownloader;
 class FileDownloader;
 
 class Service : public AService
@@ -21,6 +22,7 @@ public:
 
     SortFilterProxyComicModel* getModel();
     QStringList getChapterNames(const QString &comicKey);
+    ComicModel *getDownloadComicModel();
 
 public slots:
 
@@ -33,8 +35,9 @@ public slots:
 private slots:
 
      void _onUpdateFinished();
-     void _onGettingDownloadProgress(const int &id, const StringHash &info);
-     void _onTaskFinish(const int &id);
+
+     void _onDownloadProgressChanged(const QVariantMap& downloadProgress);
+     void _onDownloadFinished();
 
 private:
 
@@ -42,11 +45,7 @@ private:
 
     ComicModel *_model;
     SortFilterProxyComicModel *_proxyModel;
-
-    QHash<QString, QList<StringPair> > _chapterInfo;
-
-    QList<int> _currentTaskIDs;
-    int _currentTaskSize;
+    ComicDownloader *_comicDownloader;
 
     FileDownloader *_fileDownloader;
 

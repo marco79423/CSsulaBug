@@ -4,6 +4,7 @@
 #include <QObject>
 
 #include "sortfilterproxycomicmodel.h"
+#include "comicmodel.h"
 
 class AService : public QObject
 {
@@ -11,12 +12,12 @@ class AService : public QObject
 
     Q_PROPERTY(bool isUpdatingStatus MEMBER _isUpdatingStatus NOTIFY isUpdatingStatusChangedSignal)
     Q_PROPERTY(bool isDownloadingStatus MEMBER _isDownloadingStatus NOTIFY isDownloadingStatusChangedSignal)
-    Q_PROPERTY(QString downloadProgress MEMBER _downloadProgress NOTIFY isUpdatingStatusChangedSignal)
+    Q_PROPERTY(QVariantMap downloadProgress MEMBER _downloadProgress NOTIFY isUpdatingStatusChangedSignal)
 
 public:
 
     virtual SortFilterProxyComicModel* getModel() = 0;
-
+    Q_INVOKABLE virtual ComicModel* getDownloadComicModel() = 0;
     Q_INVOKABLE virtual QStringList getChapterNames(const QString &comicKey) = 0;
 
 signals:
@@ -44,7 +45,7 @@ private:
 
     bool _isUpdatingStatus;
     bool _isDownloadingStatus;
-    QString _downloadProgress;
+    QVariantMap _downloadProgress;
 };
 
 #endif // A_SERVICE_H

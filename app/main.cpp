@@ -23,11 +23,12 @@ int main(int argc, char *argv[])
 
     Service service;
     service.addComicSiteHandler(new SFComicSiteHandler);
-    service.addComicSiteHandler(new BLComicSiteHandler);
+    //service.addComicSiteHandler(new BLComicSiteHandler);
 
     QQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty("service", &service);
     engine.rootContext()->setContextProperty("comicModel", service.getModel());
+    engine.rootContext()->setContextProperty("downloadComicModel", service.getDownloadComicModel());
     engine.load(QUrl("qrc:ui/MainView.qml"));
 
     return a.exec();

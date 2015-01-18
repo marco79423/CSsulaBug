@@ -145,7 +145,7 @@ void BLComicSiteHandler::_getComicInfo(const int &id, const QString &url, const 
     int pos = 0;
     while ((pos = regexp.indexIn(html, pos)) != -1)
     {
-        StringHash comicInfo;
+        QVariantMap comicInfo;
         comicInfo["site"] = getComicSiteName();
         comicInfo["coverUrl"] = regexp.cap(3);
         comicInfo["key"] = regexp.cap(2);
@@ -157,9 +157,9 @@ void BLComicSiteHandler::_getComicInfo(const int &id, const QString &url, const 
 
         //如果只有數字，補上 話(卷)
         QRegExp updateStatusExp("\\d+");
-        if(updateStatusExp.indexIn(comicInfo["updateStatus"], 0) != -1)
+        if(updateStatusExp.indexIn(comicInfo["updateStatus"].toString(), 0) != -1)
         {
-            comicInfo["updateStatus"] += "話(卷)";
+            comicInfo["updateStatus"] = comicInfo["updateStatus"].toString() + "話(卷)";
         }
 
         //qDebug() << "取得" << comicInfo;

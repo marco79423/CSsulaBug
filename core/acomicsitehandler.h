@@ -20,7 +20,7 @@ public:
 
 signals:
 
-    void comicInfoSignal(const StringHash &info);
+    void comicInfoSignal(const QVariantMap &info);
     void updateFinishedSignal();
 
 public slots:

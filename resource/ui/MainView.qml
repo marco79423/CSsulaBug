@@ -62,38 +62,40 @@ ApplicationWindow {
             onClicked: {comicDetail.startLeaveAnimation(); }
         }
 
-        Button{
+        /*Button{
 
-            id: settingButton
+            id: settingPageButton
 
             anchors.right: parent.right
-            anchors.rightMargin: 20
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: -10
+            anchors.rightMargin: 10
+            anchors.verticalCenter: parent.verticalCenter
 
-            width: 30
-            height: 30
-
-            style: ButtonStyle{
-                background: Rectangle{
-
-                    color: "#ffeb3b"
-                    radius: 80
-                }
-            }
-
-            /*text: "設定"
+            text: "設定"
             onClicked: {
                 console.log("setting");
-            }*/
+            }
+        }*/
+
+
+        Button{
+
+            id: downloadPageButton
+
+            anchors.right: parent.right//settingPageButton.left
+            anchors.rightMargin: 10
+            anchors.verticalCenter: parent.verticalCenter
+
+            checkable: true
+            text: "我的下載"
         }
     }
 
     statusBar: StatusBar{
         Text {
             text: {
-                if(service.isDownloadingStatus) return service.downloadProgress;
-                else if(service.isUpdatingStatus) return "正在抓取漫畫資訊，請稍等 ...";
+                if(service.isDownloadingStatus){
+                    return "[進度 " + Math.round(service.downloadProgress.ratio * 100) + "% ] " + service.downloadProgress.message;
+                }else if(service.isUpdatingStatus) return "正在抓取漫畫資訊，請稍等 ...";
                 else return "準備完成，可以選擇要下載的漫畫"
             }
         }
@@ -111,7 +113,7 @@ ApplicationWindow {
         states:[
             State {
                 name: "MainPageState"
-                when: !comicDetail.visible
+                when: !comicDetail.visible && !downloadPageButton.checked
                 PropertyChanges { target: searchField ; visible: true; }
                 PropertyChanges { target: backButton ; visible: false; }
                 PropertyChanges { target: comicList; visible: true; }
@@ -119,10 +121,18 @@ ApplicationWindow {
 
             State {
                 name: "DetailPageState"
-                when: comicDetail.visible
+                when: comicDetail.visible && !downloadPageButton.checked
                 PropertyChanges { target: searchField ; visible: false; }
                 PropertyChanges { target: backButton ; visible: true; }
                 PropertyChanges { target: comicList; visible: false; }
+            },
+
+            State {
+                name: "DownloadPageState"
+                when: downloadPageButton.checked
+                PropertyChanges { target: downloadPage ; x: 0 }
+                PropertyChanges { target: searchField ; visible: false; }
+                PropertyChanges { target: backButton ; visible: false; }
             }
         ]
 
@@ -130,10 +140,6 @@ ApplicationWindow {
             id: comicList
 
             anchors.fill: parent
-
-            downloadButtonEnabled: !service.isDownloadingStatus
-
-            model: comicModel
             focus: true
 
             state: "BusyState"
@@ -141,11 +147,6 @@ ApplicationWindow {
             function onAdvanceButtonClicked(comicInfo, startY)
             {
                 comicDetail.startEnterAnimation(comicInfo, startY);
-            }
-
-            function onDownloadButtonClicked(comicKey)
-            {
-                service.download(comicKey);
             }
 
             Connections {
@@ -157,18 +158,15 @@ ApplicationWindow {
         UI.ComicDetail{
             id: comicDetail
             anchors.fill: parent
+        }
+    }
 
-            isDownloadingStatus: service.isDownloadingStatus
+    UI.DownloadPage {
+        id:　downloadPage
+        x: downloadPage.width
 
-            function onDownloadButtonClicked(comicKey, chapters)
-            {
-                service.download(comicKey, chapters);
-            }
-
-            function getChapterNames(comicKey)
-            {
-                return service.getChapterNames(comicKey);
-            }
+        Behavior on x {
+            NumberAnimation { duration: 500; easing.type: Easing.InOutQuad }
         }
     }
 }

@@ -15,6 +15,7 @@ public:
     explicit StubService(QObject *parent = 0);
 
     SortFilterProxyComicModel* getModel();
+    ComicModel* getDownloadComicModel();
 
     QStringList getChapterNames(const QString &comicKey);
 
@@ -35,8 +36,9 @@ private:
 
     ComicModel *_model;
     SortFilterProxyComicModel *_proxyModel;
+    ComicModel *_downloadComicModel;
 
-    QList<StringHash> _comicInfos;
+    QList<QVariantMap> _comicInfos;
 
     QString _currentTask;
     QString _downloadProgress;

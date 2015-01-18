@@ -122,7 +122,7 @@ void SFComicSiteHandler::_getComicInfo(const int& id, const QString& url, const 
     int pos = 0;
     while ((pos = regexp.indexIn(html, pos)) != -1)
     {
-        StringHash comicInfo;
+        QVariantMap comicInfo;
         comicInfo["site"] = getComicSiteName();
         comicInfo["coverUrl"] = regexp.cap(1);
         comicInfo["key"] = regexp.cap(2);

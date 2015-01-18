@@ -37,7 +37,7 @@ void FileDownloader::_onAccessorReply(const int &id, const QString &url, const Q
       */
     QString path = _taskHash[id][url];
 
-    StringHash downloadInfo;
+    QVariantMap downloadInfo;
     downloadInfo["url"] = url;
     downloadInfo["path"] = path;
 

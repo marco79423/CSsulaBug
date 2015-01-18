@@ -15,12 +15,8 @@ Rectangle{
     color: "transparent"
     visible: false
 
-    property bool isDownloadingStatus: false
     property variant comicInfo: {"key": "", "coverUrl": "", "name":"", "site": "", "type": "", "author":"", "updateStatus":""}
     property int startY
-
-    function onDownloadButtonClicked(comicKey, chapters){}
-    function getChapterNames(comicKey){}
 
     function startEnterAnimation(comicInfo, startY)
     {
@@ -32,6 +28,16 @@ Rectangle{
     function startLeaveAnimation()
     {
         comicDetail.state = "StartingState";
+    }
+
+    Connections {
+        target: downloadComicModel
+        onComicInfoInsertedSignal: downloadButton.checkStatus();
+    }
+
+    Connections {
+        target: downloadComicModel
+        onComicInfoRemovedSignal: downloadButton.checkStatus();
     }
 
     state: "StartingState"
@@ -106,11 +112,20 @@ Rectangle{
             anchors.bottom: parent.bottom
             anchors.margins: 10
 
+            enabled: false
+
             text: "下載"
 
             onClicked: {
-                onDownloadButtonClicked(comicInfo.key, chapterModel.getSelectedChapterNames());
+                enabled = false;
+                service.download(comicInfo.key, chapterModel.getSelectedChapterNames());
                 chapterControl.updateSelectedMessage();
+                checkStatus();
+            }
+
+            function checkStatus()
+            {
+                enabled = !downloadComicModel.hasComicInfo(comicInfo.key) && chapterModel.getSelectedChapterNames().length > 0;;
             }
         }
     }
@@ -129,20 +144,21 @@ Rectangle{
         function prepareChapterModel()
         {
             chapterModel.clear();
-            var chapterNames = comicDetail.getChapterNames(comicDetail.comicInfo.key);
+            var chapterNames = service.getChapterNames(comicDetail.comicInfo.key);
             for (var i = 0; i < chapterNames.length; i++)
             {
                chapterModel.append({"chapterName": chapterNames[i], "selected": false});
             }
             chapterControl.updateSelectedMessage();
+            downloadButton.checkStatus();
         }
 
         function updateSelectedMessage()
         {
             var count = chapterModel.getSelectedChapterNames().length;
             selectedMessage.text = "已選擇了 " + count + " 話";
-            downloadButton.enabled = !comicDetail.isDownloadingStatus && chapterModel.getSelectedChapterNames().length > 0;
         }
+
 
         Rectangle{
             id: selectionControl
@@ -169,6 +185,7 @@ Rectangle{
                             chapterModel.get(i).selected = true;
                         }
                         chapterControl.updateSelectedMessage();
+                        downloadButton.checkStatus();
                     }
                 }
 
@@ -180,6 +197,7 @@ Rectangle{
                             chapterModel.get(i).selected = false;
                         }
                         chapterControl.updateSelectedMessage();
+                        downloadButton.checkStatus();
                     }
                 }
 
@@ -242,6 +260,7 @@ Rectangle{
                     onClicked: {
                         chapterModel.get(index).selected = !chapterModel.get(index).selected;
                         chapterControl.updateSelectedMessage();
+                        downloadButton.checkStatus();
                     }
                 }
             }

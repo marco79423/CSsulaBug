@@ -14,9 +14,10 @@ StubService::StubService(QObject *parent)
     _proxyModel = new SortFilterProxyComicModel(this);
     _proxyModel->setSourceModel(_model);
 
+    _downloadComicModel = new ComicModel(this);
 
     {
-        StringHash comicInfo;
+        QVariantMap comicInfo;
         comicInfo["site"] = "SF";
         comicInfo["coverUrl"] = "http://mh.sfacg.com/Logo/347639a1-530a-4550-988c-bab00a95c0fe.jpg";
         comicInfo["key"] = "JDZJ";
@@ -29,7 +30,7 @@ StubService::StubService(QObject *parent)
     }
 
     {
-        StringHash comicInfo;
+        QVariantMap comicInfo;
         comicInfo["site"] = "SF";
         comicInfo["coverUrl"] = "http://mh.sfacg.com/Logo/04595fd1-746a-4ddc-9c82-05a28ba42aec.jpg";
         comicInfo["key"] = "CGX";
@@ -42,7 +43,7 @@ StubService::StubService(QObject *parent)
     }
 
     {
-        StringHash comicInfo;
+        QVariantMap comicInfo;
         comicInfo["site"] = "SF";
         comicInfo["coverUrl"] = "http://mh.sfacg.com/Logo/fd877ece-1ce2-45a3-9589-7f1893f23420.jpg";
         comicInfo["key"] = "SUGAR";
@@ -55,7 +56,7 @@ StubService::StubService(QObject *parent)
     }
 
     {
-        StringHash comicInfo;
+        QVariantMap comicInfo;
         comicInfo["site"] = "SF";
         comicInfo["coverUrl"] = "http://mh.sfacg.com/Logo/baa9dd71-d46e-4e65-96bd-26ab8efa27a3.jpg";
         comicInfo["key"] = "GWLRE";
@@ -68,7 +69,7 @@ StubService::StubService(QObject *parent)
     }
 
     {
-        StringHash comicInfo;
+        QVariantMap comicInfo;
         comicInfo["site"] = "SF";
         comicInfo["coverUrl"] = "http://mh.sfacg.com/Logo/e9e72c53-323c-410e-bf64-d3797515d4f1.jpg";
         comicInfo["key"] = "DYDF";
@@ -81,7 +82,7 @@ StubService::StubService(QObject *parent)
     }
 
     {
-        StringHash comicInfo;
+        QVariantMap comicInfo;
         comicInfo["site"] = "SF";
         comicInfo["coverUrl"] = "http://mh.sfacg.com/Logo/167a1629-5581-480d-aebc-2474323a48a6.jpg";
         comicInfo["key"] = "WDQCL";
@@ -94,7 +95,7 @@ StubService::StubService(QObject *parent)
     }
 
     {
-        StringHash comicInfo;
+        QVariantMap comicInfo;
         comicInfo["site"] = "SF";
         comicInfo["coverUrl"] = "http://mh.sfacg.com/Logo/c235c24f-40d3-4593-8387-4b3b5e5a815b.jpg";
         comicInfo["key"] = "LSWDH";
@@ -125,6 +126,11 @@ QStringList StubService::getChapterNames(const QString &comicKey)
 
 }
 
+ComicModel *StubService::getDownloadComicModel()
+{
+    return _downloadComicModel;
+}
+
 void StubService::update()
 {
     setProperty("isUpdatingStatus", true);
@@ -151,12 +157,13 @@ void StubService::download(const QString &comicKey, const QStringList &chapterNa
     setProperty("isDownloadingStatus", true);
 
     qDebug() << "下載" << chapterNames;
-    QModelIndex modelIndex = _proxyModel->match(_proxyModel->index(0, 0), 2, comicKey)[0];
+    QVariantMap comicInfo = _model->getComicInfo(comicKey);
+    _downloadComicModel->insertComicInfo(comicInfo);
 
-    _currentTask = _proxyModel->data(modelIndex, ComicModel::Name).toString();
+    _currentTask = comicInfo["name"].toString();
     for(int i=0; i< 10; i++)
     {
-        QTimer::singleShot(i * 1000, this, SLOT(_onDownload()));
+        QTimer::singleShot(i * 10000, this, SLOT(_onDownload()));
     }
 }
 
@@ -179,17 +186,22 @@ void StubService::_onDownload()
 {
     static int i=1;
 
-    setProperty("downloadProgress", QString("[進度 %1%] 下載 %2").arg(i * 10).arg(_currentTask));
+    QVariantMap downloadProgress;
+    downloadProgress["message"] = QString("下載 %1/%2.jpg").arg(_currentTask).arg(i);
+    downloadProgress["ratio"] = 0.1 * i;
+
+    setProperty("downloadProgress", downloadProgress);
     if(i == 10)
     {
         i = 1;
         setProperty("isDownloadingStatus", false);
-
+        _downloadComicModel->removeComicInfo(0);
         emit downloadFinishSignal();
     }
 
     i+=1;
 }
+
 
 
 

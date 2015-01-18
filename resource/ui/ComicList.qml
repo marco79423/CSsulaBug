@@ -12,11 +12,7 @@ Rectangle{
     height: 520
     color:  "transparent"
 
-    property variant model
-    property bool downloadButtonEnabled: true
-
     function onAdvanceButtonClicked(comicInfo, startY){}
-    function onDownloadButtonClicked(comicInfo){}
 
     state: "DefaultState"
 
@@ -41,7 +37,7 @@ Rectangle{
         currentIndex: 0
         boundsBehavior: Flickable.DragOverBounds
 
-        model: comicList.model
+        model: comicModel
 
         AnimatedImage {
             id: loadingImage
@@ -84,12 +80,24 @@ Rectangle{
                 }
 
                 Button{
-                    enabled: comicList.downloadButtonEnabled
+                    id: downloadButton
+
+                    enabled: true
 
                     text: "下載"
                     onClicked: {
                         comicListView.currentIndex = index;
-                        comicList.onDownloadButtonClicked(comicInfo.key);
+                        service.download(comicInfo.key);
+                    }
+
+                    Connections {
+                        target: downloadComicModel
+                        onComicInfoInsertedSignal: downloadButton.enabled = !downloadComicModel.hasComicInfo(comicInfo.key);
+                    }
+
+                    Connections {
+                        target: downloadComicModel
+                        onComicInfoRemovedSignal: downloadButton.enabled = !downloadComicModel.hasComicInfo(comicInfo.key);
                     }
                 }
             }

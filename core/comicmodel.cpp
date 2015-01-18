@@ -8,6 +8,35 @@ ComicModel::ComicModel(QObject *parent) :
 
 }
 
+QVariantMap ComicModel::getComicInfo(const QString &comicKey)
+{
+    foreach(QVariantMap comicInfo, _comicList)
+    {
+        if(comicInfo["key"] == comicKey)
+        {
+            return comicInfo;
+        }
+    }
+    return QVariantMap();
+}
+
+QVariantMap ComicModel::getComicInfo(const int &row)
+{
+    return _comicList[row];
+}
+
+bool ComicModel::hasComicInfo(const QString &comicKey)
+{
+    foreach(QVariantMap comicInfo, _comicList)
+    {
+        if(comicInfo["key"] == comicKey)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 int ComicModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent)
@@ -19,7 +48,7 @@ QVariant ComicModel::data(const QModelIndex &index, int role) const
     if(index.row() < 0 || index.row() >= _comicList.size())
         return QVariant();
 
-    StringHash comicInfo = _comicList[index.row()];
+    QVariantMap comicInfo = _comicList[index.row()];
     return comicInfo[roleNames()[role]];
 }
 
@@ -33,13 +62,38 @@ QHash<int, QByteArray> ComicModel::roleNames() const
     roleNames[Type] = "type";
     roleNames[Author] = "author";
     roleNames[UpdateStatus] = "updateStatus";
+    roleNames[Chapters] = "chapters";
     return roleNames;
 }
 
-void ComicModel::insertComicInfo(const StringHash &info)
+void ComicModel::insertComicInfo(const QVariantMap &info)
 {
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
     _comicList << info;
     endInsertRows();
+
+    emit comicInfoInsertedSignal(info["key"].toString());
+}
+
+void ComicModel::removeComicInfo(const int &row)
+{
+    QString comicKey = _comicList[row]["key"].toString();
+    beginRemoveRows(QModelIndex(), row, row);
+    _comicList.removeAt(row);
+    endRemoveRows();
+
+    emit comicInfoRemovedSignal(comicKey);
+}
+
+void ComicModel::setComicInfo(const QVariantMap &comicInfo)
+{
+    for(int i=0; i< _comicList.size(); i++)
+    {
+        if(_comicList[i]["key"] == comicInfo["key"])
+        {
+            _comicList[i] = comicInfo;
+            break;
+        }
+    }
 }
 
