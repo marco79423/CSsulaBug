@@ -5,7 +5,7 @@
 int NetworkAccessor::_idCount = 0;
 
 NetworkAccessor::NetworkAccessor(QObject *parent)
-    :QObject(parent)
+    :ANetworkAccessor(parent)
 {
     _networkAccessManager = new QNetworkAccessManager(this);
 

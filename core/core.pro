@@ -24,7 +24,8 @@ HEADERS += \
     site/sfcomicsitehandler.h \
     site/blcomicsitehandler.h \
     sortfilterproxycomicmodel.h \
-    comicdownloader.h
+    comicdownloader.h \
+    anetworkaccessor.h
 
 SOURCES += \
     comicmodel.cpp \

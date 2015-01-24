@@ -1,7 +1,5 @@
-﻿#include <QTest>
-
-#include "convertztest.h"
-#include "servicetest.h"
+﻿#include <QCoreApplication>
+#include <gmock/gmock.h>
 
 int main(int argc, char *argv[])
 {
@@ -9,7 +7,7 @@ int main(int argc, char *argv[])
 
     Q_INIT_RESOURCE(core_resource);
 
-    int ret = 0;
+    /*int ret = 0;
 
     ConvertZTest convertZTest;
     ret += QTest::qExec(&convertZTest, argc, argv);
@@ -17,6 +15,9 @@ int main(int argc, char *argv[])
     ServiceTest serviceTest;
     ret += QTest::qExec(&serviceTest, argc, argv);
 
-    return ret;
+    return ret;*/
+
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
 }
 

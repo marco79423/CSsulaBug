@@ -1,6 +1,6 @@
 ﻿#include "filedownloader.h"
 #include "afilesaver.h"
-#include "networkaccessor.h"
+#include "anetworkaccessor.h"
 
 #include <QNetworkReply>
 #include <QFile>
@@ -8,12 +8,11 @@
 #include <QDebug>
 #include <QFileInfo>
 
-FileDownloader::FileDownloader(AFileSaver *fileSaver, QObject *parent) :
-    QObject(parent), _fileSaver(fileSaver)
+FileDownloader::FileDownloader(QObject *parent, AFileSaver *fileSaver, ANetworkAccessor *networkAccessor) :
+    QObject(parent), _fileSaver(fileSaver), _networkAccessor(networkAccessor)
 {
     _fileSaver->setParent(this);
-
-    _networkAccessor = new NetworkAccessor(this);
+    _networkAccessor->setParent(this);
 
     connect(_networkAccessor, SIGNAL(replySignal(const int&, const QString&, const QByteArray&)), SLOT(_onAccessorReply(const int&, const QString&, const QByteArray&)));
     connect(_networkAccessor, SIGNAL(finishSignal(const int&)),  SLOT(_onAccessorFinish(const int&)));

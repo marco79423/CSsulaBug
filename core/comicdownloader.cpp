@@ -1,6 +1,5 @@
 #include "comicdownloader.h"
 #include "acomicsitehandler.h"
-#include "filesaver.h"
 #include "comicmodel.h"
 
 #include <QStandardPaths>
@@ -9,7 +8,7 @@
 
 ComicDownloader::ComicDownloader(QObject *parent)
     :QObject(parent),
-      _fileDownloader(new FileDownloader(new FileSaver, this)),
+      _fileDownloader(new FileDownloader(this)),
       _downloadComicModel(new ComicModel(this)),
       _isDownloading(false)
 {

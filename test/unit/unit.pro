@@ -9,17 +9,21 @@ QT += testlib network
 TARGET = unittest
 CONFIG += console testcase
 
+INCLUDEPATH += $$PWD/gmock/include
+LIBS += -L$$PWD/gmock/lib -lgmock
 
 SOURCES += \
-    convertztest.cpp \
     main.cpp \
     stubcomicsitehandler.cpp \
-    servicetest.cpp
+    servicetest.cpp \
+    convertz_unittest.cpp \
+    filedownloader_unittest.cpp
 
 HEADERS += \
-    convertztest.h \
     stubcomicsitehandler.h \
-    servicetest.h
+    servicetest.h \
+    mocknetworkaccessor.h \
+    mockfilesaver.h
 
 INCLUDEPATH += $$PWD/../../core
 

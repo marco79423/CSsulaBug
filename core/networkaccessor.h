@@ -6,10 +6,12 @@
 #include <QQueue>
 #include <QNetworkReply>
 
+#include "anetworkaccessor.h"
+
 class QNetworkAccessManager;
 class QNetworkRequest;
 
-class NetworkAccessor : public QObject
+class NetworkAccessor : public ANetworkAccessor
 {
     Q_OBJECT
 
@@ -21,12 +23,6 @@ public:
     int get(const QStringList &urlList, const QString &referer="");
 
     QString getDataImmediately(const QString &url, const QString &referer="");
-
-
-signals:
-    
-    void replySignal(const int &id, const QString &url, const QByteArray &data);
-    void finishSignal(const int &id);
 
 private slots:
 
