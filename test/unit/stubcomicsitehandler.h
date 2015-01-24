@@ -15,7 +15,7 @@ public:
 
 public slots:
 
-    void update();
+    void collectComicInfos();
 
 private slots:
 

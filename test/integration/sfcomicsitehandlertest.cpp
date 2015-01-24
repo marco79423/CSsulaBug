@@ -2,14 +2,14 @@
 #include <site/sfcomicsitehandler.h>
 #include <QtTest>
 
-void SFComicSiteHandlerTest::update()
+void SFComicSiteHandlerTest::collectComicInfos()
 {
     SFComicSiteHandler *comicHandler = new SFComicSiteHandler(this);
 
     QSignalSpy comicInfoSignalSpy(comicHandler, SIGNAL(comicInfoSignal(const QVariantMap&)));
     QSignalSpy updateFinishSignalSpy(comicHandler, SIGNAL(updateFinishedSignal()));
 
-    comicHandler->update();
+    comicHandler->collectComicInfos();
 
     while(updateFinishSignalSpy.size() == 0)
         updateFinishSignalSpy.wait(1000);

@@ -115,7 +115,7 @@ QString BLComicSiteHandler::getReferer() const
     return "http://hh.3gmanhua.com/";
 }
 
-void BLComicSiteHandler::update()
+void BLComicSiteHandler::collectComicInfos()
 {
     //取得所有漫畫列表的頁面
     const QString comicListPage = _networkAccessor->getDataImmediately("http://blmanhua.com/bllist/0/");

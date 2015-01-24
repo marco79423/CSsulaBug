@@ -27,7 +27,7 @@ signals:
 
 public slots:
 
-    virtual void update() = 0;
+    virtual void collectComicInfos() = 0;
 
 };
 

@@ -2,14 +2,14 @@
 #include <site/blcomicsitehandler.h>
 #include <QtTest>
 
-void BLComicSiteHandlerTest::update()
+void BLComicSiteHandlerTest::collectComicInfos()
 {
     BLComicSiteHandler *comicHandler = new BLComicSiteHandler(this);
 
     QSignalSpy comicInfoSignalSpy(comicHandler, SIGNAL(comicInfoSignal(const StringHash&)));
     QSignalSpy updateFinishSignalSpy(comicHandler, SIGNAL(updateFinishedSignal()));
 
-    comicHandler->update();
+    comicHandler->collectComicInfos();
 
     while(updateFinishSignalSpy.size() == 0)
         updateFinishSignalSpy.wait(1000);

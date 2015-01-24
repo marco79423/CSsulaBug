@@ -69,7 +69,7 @@ void Service::update()
 
     foreach(AComicSiteHandler* comicSiteHandler, _comicSiteHandlers)
     {
-        comicSiteHandler->update();
+        comicSiteHandler->collectComicInfos();
     }
 }
 

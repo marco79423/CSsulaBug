@@ -9,7 +9,7 @@ class BLComicSiteHandlerTest : public QObject
 
 private slots:
 
-    void update();
+    void collectComicInfos();
     void getChapters();
     void getImageUrls();
 };

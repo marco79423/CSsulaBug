@@ -73,7 +73,7 @@ QStringList SFComicSiteHandler::getImageUrls(const QString &comicKey, const QStr
     return imageUrls;
 }
 
-void SFComicSiteHandler::update()
+void SFComicSiteHandler::collectComicInfos()
 {
     //取得所有漫畫列表的頁面
     const QString catalogPage = _networkAccessor->getDataImmediately("http://comic.sfacg.com/Catalog/");
