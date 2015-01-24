@@ -4,6 +4,7 @@ import QtQuick.Controls.Styles 1.2
 import QtQuick.Layouts 1.1
 
 import "qrc:/ui" as UI
+import "qrc:/ui/globals.js" as Globals
 
 ApplicationWindow {
 
@@ -28,7 +29,7 @@ ApplicationWindow {
 
         style: ToolBarStyle{
             background: Rectangle{
-                color: "#004d40"
+                color: Globals.MainColor1
             }
         }
 
@@ -43,7 +44,7 @@ ApplicationWindow {
 
             style: TextFieldStyle {
                 background: Rectangle{
-                    color: "#f5f5f5"
+                    color: Globals.SoftWhite
                 }
             }
 
@@ -107,7 +108,7 @@ ApplicationWindow {
 
         anchors.fill: parent
 
-        color: "#004d40"
+        color: Globals.MainColor1
         state: "MainPageState"
 
         states:[

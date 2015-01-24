@@ -2,6 +2,8 @@
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 1.2
 
+import "qrc:/ui/globals.js" as Globals
+
 Rectangle {
     id: comicInfoItem
 
@@ -11,7 +13,7 @@ Rectangle {
     property variant comicInfo
     property bool highlight: false
 
-    color: highlight ? "#009688": "#f5f5f5"
+    color: highlight ? Globals.MainColor3: Globals.SoftWhite
 
     Image {
         id: coverImage

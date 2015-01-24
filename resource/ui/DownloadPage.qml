@@ -3,12 +3,14 @@ import QtQuick.Layouts 1.1
 import QtQuick.Controls 1.2
 import QtQuick.Controls.Styles 1.2
 
+import "qrc:/ui/globals.js" as Globals
+
 Rectangle {
     id: downloadPage
     width: 400 //暫定
     height: 540 //暫定
 
-    color: "#00695c"
+    color: Globals.MainColor2
 
     ListView {
         anchors.fill: parent
@@ -21,7 +23,7 @@ Rectangle {
             width: parent.width
             height: isCurrent ? 90 : 60
 
-            color: isCurrent ? "#009688" : "#F5F5F5"
+            color: isCurrent ? Globals.MainColor3 : Globals.SoftWhite
 
             Image {
                 id: downloadComicImage
@@ -102,13 +104,13 @@ Rectangle {
                     value: service.downloadProgress.ratio
                     style: ProgressBarStyle {
                         background: Rectangle {
-                            color: "#F5F5F5"
+                            color: Globals.SoftWhite
                             implicitWidth: 290
                             implicitHeight: 15
                         }
 
                         progress: Rectangle {
-                            color: "#FFEB3B"
+                            color: Globals.ProgressBarColor
                         }
                     }
 

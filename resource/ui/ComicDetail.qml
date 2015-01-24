@@ -4,6 +4,7 @@ import QtQuick.Controls 1.2
 import QtQuick.Controls.Styles 1.2
 
 import "qrc:/ui" as UI
+import "qrc:/ui/globals.js" as Globals
 
 Rectangle{
 
@@ -168,7 +169,7 @@ Rectangle{
 
             z: 1
 
-            color: "#00695c"
+            color: Globals.MainColor2
 
             Row{
                 anchors.verticalCenter: parent.verticalCenter
@@ -207,7 +208,7 @@ Rectangle{
                     anchors.verticalCenter: parent.verticalCenter
                     Layout.fillWidth: parent
 
-                    color:  "#f5f5f5"
+                    color:  Globals.SoftWhite
                 }
             }
         }
@@ -247,7 +248,7 @@ Rectangle{
                 width: chapterGrid.cellWidth
                 height: chapterGrid.cellHeight
 
-                color: model.selected ? "#00bcd4" : "#f5f5f5"
+                color: model.selected ? Globals.ItemSelectedColor : Globals.SoftWhite
 
                 Text{                   
                     anchors.centerIn: parent

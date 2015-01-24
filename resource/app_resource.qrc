@@ -7,5 +7,6 @@
         <file>ui/ComicList.qml</file>
         <file>ui/ComicDetail.qml</file>
         <file>ui/DownloadPage.qml</file>
+        <file>ui/globals.js</file>
     </qresource>
 </RCC>

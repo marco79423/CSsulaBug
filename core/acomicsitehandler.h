@@ -11,6 +11,8 @@ class AComicSiteHandler : public QObject
 
 public:
 
+    explicit AComicSiteHandler(QObject *parent = 0):QObject(parent){}
+
     virtual QString getComicSiteName() const = 0;
 
     virtual QList<StringPair> getChapters(const QString &comicKey) = 0;
@@ -27,9 +29,6 @@ public slots:
 
     virtual void update() = 0;
 
-protected:
-
-    explicit AComicSiteHandler(QObject *parent = 0):QObject(parent){}
 };
 
 #endif // ACOMICSITEHANDLER_H

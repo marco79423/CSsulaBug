@@ -11,7 +11,7 @@ public:
 
     FileSaver(QObject *parent = NULL);
 
-    virtual SaverStatus saveFile(const QByteArray& data, const QString& filePath);
+    SaverStatus saveFile(const QByteArray& data, const QString& filePath);
 
 };
 
