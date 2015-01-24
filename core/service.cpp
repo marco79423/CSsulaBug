@@ -14,9 +14,9 @@
 Service::Service(QObject *parent)
     :AService(parent)
 {
-    _model = new ComicModel(this);
+    _comicModel = new ComicModel(this);
     _proxyModel = new SortFilterProxyComicModel(this);
-    _proxyModel->setSourceModel(_model);
+    _proxyModel->setSourceModel(_comicModel);
 
     _comicDownloader = new ComicDownloader(this);
     connect(_comicDownloader, SIGNAL(downloadProgressChangedSignal(const QVariantMap&)), SLOT(_onDownloadProgressChanged(const QVariantMap&)));
@@ -26,7 +26,7 @@ Service::Service(QObject *parent)
 void Service::addComicSiteHandler(AComicSiteHandler *comicSiteHandler)
 {
     comicSiteHandler->setParent(this);
-    connect(comicSiteHandler, SIGNAL(comicInfoSignal(const QVariantMap&)), _model,  SLOT(insertComicInfo(const QVariantMap&)));
+    connect(comicSiteHandler, SIGNAL(comicInfoSignal(const QVariantMap&)), _comicModel,  SLOT(insertComicInfo(const QVariantMap&)));
     connect(comicSiteHandler, SIGNAL(updateFinishedSignal()), this, SLOT(_onUpdateFinished()));
 
     _comicSiteHandlers[comicSiteHandler->getComicSiteName()] = comicSiteHandler;
@@ -35,20 +35,20 @@ void Service::addComicSiteHandler(AComicSiteHandler *comicSiteHandler)
 }
 
 
-SortFilterProxyComicModel *Service::getModel()
+SortFilterProxyComicModel *Service::getComicModel()
 {
     return _proxyModel;
 }
 
 QStringList Service::getChapterNames(const QString &comicKey)
 {
-    QVariantMap comicInfo = _model->getComicInfo(comicKey);
+    QVariantMap comicInfo = _comicModel->getComicInfo(comicKey);
 
     if(!comicInfo.contains("chapters"))
     {
         QString site = comicInfo["site"].toString();
         comicInfo["chapters"].setValue(_comicSiteHandlers[site]->getChapters(comicKey));
-        _model->setComicInfo(comicInfo);
+        _comicModel->updateComicInfo(comicInfo);
     }
     QStringList chapterNames;
     foreach(StringPair chapter, comicInfo["chapters"].value<QList<StringPair> >())
@@ -87,7 +87,7 @@ void Service::download(const QString &comicKey, const QStringList &chapterNames)
 {
     setProperty("isDownloadingStatus", true);
 
-    QVariantMap comicInfo = _model->getComicInfo(comicKey);
+    QVariantMap comicInfo = _comicModel->getComicInfo(comicKey);
 
     QList<StringPair> results;
 

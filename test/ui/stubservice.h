@@ -14,7 +14,7 @@ public:
 
     explicit StubService(QObject *parent = 0);
 
-    SortFilterProxyComicModel* getModel();
+    SortFilterProxyComicModel* getComicModel();
     ComicModel* getDownloadComicModel();
 
     QStringList getChapterNames(const QString &comicKey);

@@ -24,7 +24,7 @@ void ServiceTest::update()
     while(updateFinishSpy.size() == 0)
         updateFinishSpy.wait(100);
 
-    QSortFilterProxyModel *model = _service->getModel();
+    QSortFilterProxyModel *model = _service->getComicModel();
     model->sort(0);
     for(int i = 0; i < 3; i++)
     {

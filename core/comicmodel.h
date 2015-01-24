@@ -41,7 +41,7 @@ public slots:
 
     void insertComicInfo(const QVariantMap &info);
     void removeComicInfo(const int &row);
-    void setComicInfo(const QVariantMap &comicInfo);
+    void updateComicInfo(const QVariantMap &comicInfo);
 
 private:
 

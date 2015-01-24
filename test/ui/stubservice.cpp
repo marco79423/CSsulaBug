@@ -108,7 +108,7 @@ StubService::StubService(QObject *parent)
     }
 }
 
-SortFilterProxyComicModel *StubService::getModel()
+SortFilterProxyComicModel *StubService::getComicModel()
 {
     return _proxyModel;
 }

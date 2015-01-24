@@ -85,7 +85,7 @@ void ComicModel::removeComicInfo(const int &row)
     emit comicInfoRemovedSignal(comicKey);
 }
 
-void ComicModel::setComicInfo(const QVariantMap &comicInfo)
+void ComicModel::updateComicInfo(const QVariantMap &comicInfo)
 {
     for(int i=0; i< _comicList.size(); i++)
     {

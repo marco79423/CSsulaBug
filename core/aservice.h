@@ -16,8 +16,9 @@ class AService : public QObject
 
 public:
 
-    virtual SortFilterProxyComicModel* getModel() = 0;
-    Q_INVOKABLE virtual ComicModel* getDownloadComicModel() = 0;
+    virtual SortFilterProxyComicModel* getComicModel() = 0;
+    virtual ComicModel* getDownloadComicModel() = 0;
+
     Q_INVOKABLE virtual QStringList getChapterNames(const QString &comicKey) = 0;
 
 signals:
