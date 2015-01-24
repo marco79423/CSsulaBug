@@ -19,8 +19,6 @@ int main(int argc, char *argv[])
 
     Q_INIT_RESOURCE(core_resource);
 
-    qRegisterMetaType<StringHash>();
-
     Service service;
     service.addComicSiteHandler(new SFComicSiteHandler);
     //service.addComicSiteHandler(new BLComicSiteHandler);

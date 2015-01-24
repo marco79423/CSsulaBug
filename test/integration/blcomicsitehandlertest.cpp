@@ -18,21 +18,21 @@ void BLComicSiteHandlerTest::update()
     QCOMPARE(comicInfoSignalSpy.size(), 8660);
 
     //檢查抓取的漫畫是否正確
-    StringHash comicInfo;
+    QVariantMap comicInfo;
     for(int i = 0; i < comicInfoSignalSpy.size(); i++)
     {
-        comicInfo = comicInfoSignalSpy[i].at(0).value<StringHash>();
+        comicInfo = comicInfoSignalSpy[i].at(0).value<QVariantMap>();
         if(comicInfo["name"] == "獻給你的戀曲")
         {
             break;
         }
     }
-    QCOMPARE(comicInfo["site"], QString("耽美漫畫"));
-    QCOMPARE(comicInfo["coverUrl"], QString("http://imgs.hhcomic.com/comicui/24887.jpg"));
-    QCOMPARE(comicInfo["key"], QString("bl24887"));
-    QCOMPARE(comicInfo["name"], QString("獻給你的戀曲"));
-    QCOMPARE(comicInfo["type"], QString("耽美類"));
-    QCOMPARE(comicInfo["updateStatus"], QString("完結"));
+    QCOMPARE(comicInfo["site"].toString(), QString("耽美漫畫"));
+    QCOMPARE(comicInfo["coverUrl"].toString(), QString("http://imgs.hhcomic.com/comicui/24887.jpg"));
+    QCOMPARE(comicInfo["key"].toString(), QString("bl24887"));
+    QCOMPARE(comicInfo["name"].toString(), QString("獻給你的戀曲"));
+    QCOMPARE(comicInfo["type"].toString(), QString("耽美類"));
+    QCOMPARE(comicInfo["updateStatus"].toString(), QString("完結"));
 }
 
 void BLComicSiteHandlerTest::getChapters()

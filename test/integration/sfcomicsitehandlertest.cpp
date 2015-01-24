@@ -6,7 +6,7 @@ void SFComicSiteHandlerTest::update()
 {
     SFComicSiteHandler *comicHandler = new SFComicSiteHandler(this);
 
-    QSignalSpy comicInfoSignalSpy(comicHandler, SIGNAL(comicInfoSignal(const StringHash&)));
+    QSignalSpy comicInfoSignalSpy(comicHandler, SIGNAL(comicInfoSignal(const QVariantMap&)));
     QSignalSpy updateFinishSignalSpy(comicHandler, SIGNAL(updateFinishedSignal()));
 
     comicHandler->update();
@@ -18,23 +18,23 @@ void SFComicSiteHandlerTest::update()
     QCOMPARE(comicInfoSignalSpy.size(), 1592);
 
     //檢查抓取的漫畫是否正確
-    StringHash comicInfo;
+    QVariantMap comicInfo;
     for(int i = 0; i < comicInfoSignalSpy.size(); i++)
     {
-        comicInfo = comicInfoSignalSpy[i].at(0).value<StringHash>();
-        if(comicInfo["name"] == "LIVE")
+        comicInfo = comicInfoSignalSpy[i].at(0).value<QVariantMap>();
+        if(comicInfo["name"].toString() == "LIVE")
         {
             break;
         }
     }
 
-    QCOMPARE(comicInfo["site"], QString("SF 互動傳媒網"));
-    QCOMPARE(comicInfo["coverUrl"], QString("http://mh.sfacg.com/Logo/LIVE.jpg"));
-    QCOMPARE(comicInfo["key"], QString("LIVE"));
-    QCOMPARE(comicInfo["name"], QString("LIVE"));
-    QCOMPARE(comicInfo["author"], QString("梅澤春人"));
-    QCOMPARE(comicInfo["type"], QString("熱血類"));
-    QCOMPARE(comicInfo["updateStatus"], QString("010話[已完結]"));
+    QCOMPARE(comicInfo["site"].toString(), QString("SF 互動傳媒網"));
+    QCOMPARE(comicInfo["coverUrl"].toString(), QString("http://mh.sfacg.com/Logo/LIVE.jpg"));
+    QCOMPARE(comicInfo["key"].toString(), QString("LIVE"));
+    QCOMPARE(comicInfo["name"].toString(), QString("LIVE"));
+    QCOMPARE(comicInfo["author"].toString(), QString("梅澤春人"));
+    QCOMPARE(comicInfo["type"].toString(), QString("熱血類"));
+    QCOMPARE(comicInfo["updateStatus"].toString(), QString("010話[已完結]"));
 }
 
 void SFComicSiteHandlerTest::getChapters()
