@@ -167,6 +167,11 @@ void StubService::download(const QString &comicKey, const QStringList &chapterNa
     }
 }
 
+void StubService::cancelDownload(const QString &comicKey)
+{
+    _downloadComicModel->removeComicInfo(comicKey);
+}
+
 void StubService::_onUpdate()
 {
     static int i=0;

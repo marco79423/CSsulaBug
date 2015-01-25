@@ -26,6 +26,7 @@ public slots:
 
     void download(const QString &comicKey);
     void download(const QString &comicKey, const QStringList &chapterNames);
+    void cancelDownload(const QString &comicKey);
 
 private slots:
 

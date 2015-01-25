@@ -82,7 +82,7 @@ Rectangle {
 
                     Button {
                         text: "刪除"
-                        onClicked: downloadComicModel.removeComicInfo(model.key);
+                        onClicked: service.cancelDownload(model.key);
                         style: ButtonStyle {
                             background: Rectangle {
                                 implicitWidth: 30

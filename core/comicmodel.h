@@ -40,7 +40,7 @@ signals:
 public slots:
 
     void insertComicInfo(const QVariantMap &info);
-    void removeComicInfo(const int &row);
+    void removeComicInfo(const QString &comicKey);
     void updateComicInfo(const QVariantMap &comicInfo);
 
 private:

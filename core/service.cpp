@@ -103,6 +103,11 @@ void Service::download(const QString &comicKey, const QStringList &chapterNames)
     _comicDownloader->download(comicInfo);
 }
 
+void Service::cancelDownload(const QString &comicKey)
+{
+    _comicDownloader->getDownloadComicModel()->removeComicInfo(comicKey);
+}
+
 void Service::_onUpdateFinished()
 {
     static int updateFinishedCounter = 0;
