@@ -82,7 +82,7 @@ Rectangle {
 
                     Button {
                         text: "刪除"
-                        onClicked: service.cancelDownload(model.key);
+                        onClicked: service.abort(model.key);
                         style: ButtonStyle {
                             background: Rectangle {
                                 implicitWidth: 30

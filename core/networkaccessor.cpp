@@ -41,6 +41,35 @@ int NetworkAccessor::get(const QStringList &urlList, const QString &referer)
     return newTask.id;
 }
 
+void NetworkAccessor::abort(const int &id)
+{
+    for(int i=0; i < _taskQueue.size(); i++)
+    {
+        _Task &task = _taskQueue[i];
+        if(task.id == id)
+        {
+            if(i == 0)
+            {
+                foreach(QNetworkReply *reply, task.replyList)
+                {
+                    reply->abort();
+                }
+                _taskQueue.removeAt(i);
+                if(!_taskQueue.isEmpty())
+                {
+                    _startAccess();
+                }
+            }
+            else
+            {
+                _taskQueue.removeAt(i);
+            }
+
+            break;
+        }
+    }
+}
+
 QString NetworkAccessor::getDataImmediately(const QString &url, const QString &referer)
 {
     QEventLoop eventLoop;
@@ -68,17 +97,25 @@ void NetworkAccessor::_onManagerReply(QNetworkReply *networkReply)
     const QString url = networkReply->url().toString();
     qDebug() << "NetworkAccessor:_onManagerReply: 收到 " << url;
 
-    if(networkReply->error() == QNetworkReply::RemoteHostClosedError)
+    if(networkReply->error() == QNetworkReply::OperationCanceledError)
+    {
+        networkReply->deleteLater();
+        return;
+    }
+    else if(networkReply->error() == QNetworkReply::RemoteHostClosedError)
     {
         qCritical() << networkReply->error() << networkReply->errorString();
         networkReply->deleteLater();
+        currentTask.replyList.removeOne(networkReply);
 
         QNetworkRequest request = _makeRequest(url, currentTask.referer);
-        _networkAccessManager->get(request);
+        QNetworkReply *newReply = _networkAccessManager->get(request);
+        currentTask.replyList.append(newReply);
         return;
     }
 
     currentTask.urlList.removeOne(url);
+    currentTask.replyList.removeOne(networkReply);
 
     emit replySignal(currentTask.id, url, networkReply->readAll());
     networkReply->deleteLater();
@@ -101,7 +138,8 @@ void NetworkAccessor::_startAccess()
     foreach(QString url, currentTask.urlList)
     {
         QNetworkRequest request = _makeRequest(url, currentTask.referer);
-        _networkAccessManager->get(request);
+        QNetworkReply *reply = _networkAccessManager->get(request);
+        currentTask.replyList.append(reply);
     }
 }
 

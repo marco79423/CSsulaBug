@@ -93,6 +93,16 @@ void ComicModel::removeComicInfo(const QString &comicKey)
     emit comicInfoRemovedSignal(comicKey);
 }
 
+void ComicModel::removeComicInfo(const int &row)
+{
+    QString comicKey = _comicList[row]["key"].toString();
+    beginRemoveRows(QModelIndex(), row, row);
+    _comicList.removeAt(row);
+    endRemoveRows();
+
+    emit comicInfoRemovedSignal(comicKey);
+}
+
 void ComicModel::updateComicInfo(const QVariantMap &comicInfo)
 {
     for(int i=0; i< _comicList.size(); i++)

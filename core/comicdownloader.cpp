@@ -12,8 +12,8 @@ ComicDownloader::ComicDownloader(QObject *parent)
       _downloadComicModel(new ComicModel(this)),
       _isDownloading(false)
 {
-    connect(_fileDownloader, SIGNAL(downloadInfoSignal(const int&, const QVariantMap&)), SLOT(_onDownloadInfoUpdated(const int&, const QVariantMap&)));
-    connect(_fileDownloader, SIGNAL(finishSignal(const int&)), SLOT(_onTaskFinish(const int&)));
+    connect(_fileDownloader, SIGNAL(downloadInfoSignal(const QVariantMap&)), SLOT(_onDownloadInfoUpdated(const QVariantMap&)));
+    connect(_fileDownloader, SIGNAL(finishSignal()), SLOT(_onTaskFinish()));
 }
 
 ComicModel *ComicDownloader::getDownloadComicModel() const
@@ -31,55 +31,19 @@ void ComicDownloader::download(const QVariantMap &comicInfo)
 {
     _downloadComicModel->insertComicInfo(comicInfo);
 
-    if(!_isDownloading)
+    if(_downloadComicModel->rowCount() == 1)
     {
-        _isDownloading = true;
         _downloadProcess();
     }
 }
 
-void ComicDownloader::_downloadProcess()
+void ComicDownloader::abort(const QString &comicKey)
 {
-    if(!_isDownloading)
+    if(_downloadComicModel->getComicInfo(0)["key"].toString() == comicKey)
     {
-        return;
-    }
+        _downloadComicModel->removeComicInfo(comicKey);
+        _fileDownloader->abort();
 
-    QVariantMap comicInfo = _downloadComicModel->getComicInfo(0);
-    QVariantMap downloadProgress;
-    downloadProgress["message"] = "準備下載 " + comicInfo["name"].toString();
-    downloadProgress["ratio"] = 0.0;
-    emit downloadProgressChangedSignal(downloadProgress);
-
-    AComicSiteHandler *comicSiteHandler = _comicSiteHandlers[comicInfo["site"].toString()];
-
-    QList<FileDownloader::Task> tasks = _makeTasks(comicInfo);
-    foreach(FileDownloader::Task task, tasks)
-    {
-        const int id = _fileDownloader->download(task, comicSiteHandler->getReferer());
-        _taskIDs.append(id);
-    }
-}
-
-void ComicDownloader::_onDownloadInfoUpdated(const int &id, const QVariantMap &downloadInfo)
-{
-    Q_UNUSED(id)
-
-    QVariantMap downloadProgress;
-    downloadProgress["message"] = "下載 " + downloadInfo["path"].toString();
-
-    int total = _downloadComicModel->getComicInfo(0)["chapters"].value<QList<StringPair> >().size();
-    downloadProgress["ratio"] = float(total - _taskIDs.size()) / total;
-
-    emit downloadProgressChangedSignal(downloadProgress);
-}
-
-void ComicDownloader::_onTaskFinish(const int &id)
-{
-    _taskIDs.removeAll(id);
-    if(_taskIDs.isEmpty())
-    {
-        _downloadComicModel->removeComicInfo(0);
         if(_downloadComicModel->rowCount() > 0)
         {
             _downloadProcess();
@@ -89,11 +53,51 @@ void ComicDownloader::_onTaskFinish(const int &id)
             emit downloadFinishSignal();
         }
     }
+    else
+    {
+        _downloadComicModel->removeComicInfo(comicKey);
+    }
 }
 
-QList<FileDownloader::Task> ComicDownloader::_makeTasks(const QVariantMap &comicInfo)
+void ComicDownloader::_downloadProcess()
 {
-    QList<FileDownloader::Task> tasks;
+    QVariantMap comicInfo = _downloadComicModel->getComicInfo(0);
+    QVariantMap downloadProgress;
+    downloadProgress["message"] = "準備下載 " + comicInfo["name"].toString();
+    downloadProgress["ratio"] = 0.0;
+    emit downloadProgressChangedSignal(downloadProgress);
+
+    AComicSiteHandler *comicSiteHandler = _comicSiteHandlers[comicInfo["site"].toString()];
+
+    FileDownloader::Task task = _makeTask(comicInfo);
+    _fileDownloader->download(task, comicSiteHandler->getReferer());
+}
+
+void ComicDownloader::_onDownloadInfoUpdated(const QVariantMap &downloadInfo)
+{
+    QVariantMap downloadProgress;
+    downloadProgress["message"] = "下載 " + downloadInfo["path"].toString();
+    downloadProgress["ratio"] = downloadInfo["ratio"];
+
+    emit downloadProgressChangedSignal(downloadProgress);
+}
+
+void ComicDownloader::_onTaskFinish()
+{
+    _downloadComicModel->removeComicInfo(0);
+    if(_downloadComicModel->rowCount() > 0)
+    {
+        _downloadProcess();
+    }
+    else
+    {
+        emit downloadFinishSignal();
+    }
+}
+
+FileDownloader::Task ComicDownloader::_makeTask(const QVariantMap &comicInfo)
+{
+    FileDownloader::Task task;
 
     QString dstDir = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
 
@@ -101,23 +105,20 @@ QList<FileDownloader::Task> ComicDownloader::_makeTasks(const QVariantMap &comic
     QList<StringPair> chapters = comicInfo["chapters"].value<QList<StringPair> >();
     foreach(StringPair chapter, chapters)
     {
-        QFileInfo fileInfo(QString("%1/%2/%3").arg(dstDir).arg(comicInfo["name"].toString()).arg(chapter.first));
-        if(fileInfo.exists())
-        {
-            continue;
-        }
-
         QStringList imageUrls = comicSiteHandler->getImageUrls(comicInfo["key"].toString(), chapter.second);
 
-        FileDownloader::Task task;
         for(int i=0; i < imageUrls.size(); i++)
         {
             QString imageUrl = imageUrls[i];
             QString filePath = QString("%1/%2/%3/%4.%5").arg(dstDir).arg(comicInfo["name"].toString()).arg(chapter.first).arg(i, 3, 10, QChar('0')).arg(imageUrl.right(3));
+            QFileInfo fileInfo(filePath);
+            if(fileInfo.exists())
+            {
+                continue;
+            }
             task[imageUrl] = filePath;
         }
-        tasks.append(task);
     }
-    return tasks;
+    return task;
 }
 

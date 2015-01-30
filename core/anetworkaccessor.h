@@ -13,6 +13,7 @@ public:
 
     virtual int get(const QString &url, const QString &referer="") = 0;
     virtual int get(const QStringList &urlList, const QString &referer="") = 0;
+    virtual void abort(const int &id) = 0;
 
     virtual QString getDataImmediately(const QString &url, const QString &referer="") = 0;
 

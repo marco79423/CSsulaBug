@@ -37,7 +37,7 @@ public slots:
 
     virtual void download(const QString &comicKey) = 0;
     virtual void download(const QString &comicKey, const QStringList &chapterNames) = 0;
-    virtual void cancelDownload(const QString &comicKey) = 0;
+    virtual void abort(const QString &comicKey) = 0;
 
 protected:
 

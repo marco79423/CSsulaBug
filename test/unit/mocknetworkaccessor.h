@@ -11,6 +11,7 @@ public:
 
     MOCK_METHOD2(get, int(const QString &url, const QString &referer));
     MOCK_METHOD2(get, int(const QStringList &urlList, const QString &referer));
+    MOCK_METHOD1(abort, void(const int &id));
     MOCK_METHOD2(getDataImmediately, QString(const QString &url, const QString &referer));
 };
 

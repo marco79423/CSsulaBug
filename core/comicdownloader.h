@@ -28,13 +28,14 @@ public slots:
 
     void addComicSiteHandler(AComicSiteHandler *comicSiteHandler);
     void download(const QVariantMap &comicInfo);
+    void abort(const QString &comicKey);
 
 private slots:
 
     void _downloadProcess();
 
-    void _onDownloadInfoUpdated(const int &id, const QVariantMap &downloadInfo);
-    void _onTaskFinish(const int &id);
+    void _onDownloadInfoUpdated(const QVariantMap &downloadInfo);
+    void _onTaskFinish();
 
 private:
 
@@ -46,7 +47,7 @@ private:
     bool _isDownloading;
     QList<int> _taskIDs;
 
-    QList<FileDownloader::Task> _makeTasks(const QVariantMap &comicInfo);
+    FileDownloader::Task _makeTask(const QVariantMap &comicInfo);
 };
 
 #endif // COMICDOWNLOADER_H

@@ -9,7 +9,7 @@
 #include <QFileInfo>
 
 FileDownloader::FileDownloader(QObject *parent, AFileSaver *fileSaver, ANetworkAccessor *networkAccessor) :
-    QObject(parent), _fileSaver(fileSaver), _networkAccessor(networkAccessor)
+    QObject(parent), _counter(0), _downloading(false), _fileSaver(fileSaver), _networkAccessor(networkAccessor)
 {
     _fileSaver->setParent(this);
     _networkAccessor->setParent(this);
@@ -20,13 +20,23 @@ FileDownloader::FileDownloader(QObject *parent, AFileSaver *fileSaver, ANetworkA
 
 int FileDownloader::download(const FileDownloader::Task &task, const QString &referer)
 {
-    /*
-      *下載 task 任務
-      * task[所要下載的內容] = 所對應的檔案路徑
-      */
-    const int id = _networkAccessor->get(task.keys(), referer);
-    _taskHash[id] = task;
-    return  id;
+    if(_downloading)
+        return -1;
+
+    _downloading = true;
+    _currentTask = task;
+    _taskId = _networkAccessor->get(_currentTask.keys(), referer);
+    return _taskId;
+}
+
+void FileDownloader::abort()
+{
+    if(_downloading)
+    {
+        _networkAccessor->abort(_taskId);
+        _downloading = false;
+        _counter = 0;
+    }
 }
 
 void FileDownloader::_onAccessorReply(const int &id, const QString &url, const QByteArray &data)
@@ -34,7 +44,7 @@ void FileDownloader::_onAccessorReply(const int &id, const QString &url, const Q
     /*
       *處理 NetworkAccessor 的回應，把內容寫至目標路徑
       */
-    QString path = _taskHash[id][url];
+    QString path = _currentTask[url];
 
     QVariantMap downloadInfo;
     downloadInfo["url"] = url;
@@ -59,17 +69,17 @@ void FileDownloader::_onAccessorReply(const int &id, const QString &url, const Q
             break;
     }
 
-    emit downloadInfoSignal(id, downloadInfo);
-    _taskHash[id].remove(url);
+
+    _counter += 1;
+    downloadInfo["ratio"] = float(_counter) / _currentTask.size();
+    emit downloadInfoSignal(downloadInfo);
 }
 
 void FileDownloader::_onAccessorFinish(const int &id)
 {
-    /*
-      * 當一項任務下載完後，刪除該任務資料
-      */
-
-    _taskHash.remove(id);
-    emit finishSignal(id);
+    Q_UNUSED(id)
+    _downloading = false;
+    _counter = 0;
+    emit finishSignal();
 }
 

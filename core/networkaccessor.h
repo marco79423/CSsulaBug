@@ -21,6 +21,7 @@ public:
     
     int get(const QString &url, const QString &referer="");
     int get(const QStringList &urlList, const QString &referer="");
+    void abort(const int &id);
 
     QString getDataImmediately(const QString &url, const QString &referer="");
 
@@ -40,6 +41,7 @@ private:
         int id;
         QStringList urlList;
         QString referer;
+        QList<QNetworkReply*> replyList;
     };
 
     static int _idCount;

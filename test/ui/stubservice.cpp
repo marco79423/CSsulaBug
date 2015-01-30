@@ -116,7 +116,7 @@ SortFilterProxyComicModel *StubService::getComicModel()
 QStringList StubService::getChapterNames(const QString &comicKey)
 {
     Q_UNUSED(comicKey)
-    QThread::sleep(2);
+    //QThread::sleep(2);
     return QStringList() << "024話" << "023話" << "022話" << "021話"
                          << "020話" << "019話" << "018話" << "017話"
                          << "016話" << "015話" << "014話" << "013話"
@@ -160,14 +160,14 @@ void StubService::download(const QString &comicKey, const QStringList &chapterNa
     QVariantMap comicInfo = _model->getComicInfo(comicKey);
     _downloadComicModel->insertComicInfo(comicInfo);
 
-    _currentTask = comicInfo["name"].toString();
+    _currentTask = _downloadComicModel->getComicInfo(0)["name"].toString();
     for(int i=0; i< 10; i++)
     {
         QTimer::singleShot(i * 10000, this, SLOT(_onDownload()));
     }
 }
 
-void StubService::cancelDownload(const QString &comicKey)
+void StubService::abort(const QString &comicKey)
 {
     _downloadComicModel->removeComicInfo(comicKey);
 }

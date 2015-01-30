@@ -23,12 +23,13 @@ public:
 
 signals:
     
-    void downloadInfoSignal(const int &id, const QVariantMap &downloadInfo);
-    void finishSignal(const int &id);
+    void downloadInfoSignal(const QVariantMap &downloadInfo);
+    void finishSignal();
 
 public slots:
 
     int download(const Task &task, const QString &referer="");
+    void abort();
 
 private slots:
 
@@ -37,9 +38,13 @@ private slots:
 
 private:
 
+    bool _downloading;
+    Task _currentTask;
+    int _taskId;
+    int _counter;
+
     AFileSaver *_fileSaver;
     ANetworkAccessor *_networkAccessor;
-    QHash<int, Task> _taskHash;
 };
 
 #endif // FILEDOWNLOADER_H
