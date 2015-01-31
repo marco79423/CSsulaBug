@@ -12,6 +12,7 @@ private slots:
     void download();
     void abort();
 
+    void cleanupTestCase();
 };
 
 #endif // FILEDOWNLOADERTEST_H

@@ -7,7 +7,6 @@ HEADERS += \
     networkaccessortest.h \
     sfcomicsitehandlertest.h \
     blcomicsitehandlertest.h \
-    mocknetworkaccessor.h \
     servicetest.h \
     stubcomicsitehandler.h \
     stubservice.h \

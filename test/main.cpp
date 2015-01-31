@@ -30,8 +30,8 @@ int main(int argc, char *argv[])
     NetworkAccessorTest networkAccessorTest;
     ret += QTest::qExec(&networkAccessorTest, argc, argv);
 
-    //FileDownloaderTest fileDownloaderTest;
-    //ret += QTest::qExec(&fileDownloaderTest, argc, argv);
+    FileDownloaderTest fileDownloaderTest;
+    ret += QTest::qExec(&fileDownloaderTest, argc, argv);
 
     //ComicSites
     //SFComicSiteHandlerTest sfComicSiteHandlerTest;
