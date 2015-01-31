@@ -1,5 +1,4 @@
 ﻿#include "filedownloader.h"
-#include "afilesaver.h"
 #include "anetworkaccessor.h"
 
 #include <QNetworkReply>
@@ -8,10 +7,9 @@
 #include <QDebug>
 #include <QFileInfo>
 
-FileDownloader::FileDownloader(QObject *parent, AFileSaver *fileSaver, ANetworkAccessor *networkAccessor) :
-    QObject(parent), _taskSize(0), _fileSaver(fileSaver), _networkAccessor(networkAccessor)
+FileDownloader::FileDownloader(QObject *parent, ANetworkAccessor *networkAccessor) :
+    QObject(parent), _taskSize(0), _networkAccessor(networkAccessor)
 {
-    _fileSaver->setParent(this);
     _networkAccessor->setParent(this);
 
     connect(_networkAccessor, SIGNAL(replySignal(QNetworkReply*)), SLOT(_onAccessorReply(QNetworkReply*)));
@@ -50,7 +48,7 @@ void FileDownloader::_onAccessorReply(QNetworkReply* reply)
     }
     else
     {
-        _fileSaver->saveFile(reply->readAll(), path);
+        _saveFile(reply->readAll(), path);
 
         QVariantMap downloadInfo;
         downloadInfo["url"] = url;
@@ -65,5 +63,38 @@ void FileDownloader::_onAccessorReply(QNetworkReply* reply)
 void FileDownloader::_onAccessorFinish()
 {
     emit finishSignal();
+}
+
+bool FileDownloader::_saveFile(const QByteArray &data, const QString &filePath)
+{
+    //檢查目標檔案是否存在
+    QFileInfo fileInfo(filePath);
+    if(fileInfo.exists())
+    {
+        return false;
+    }
+
+    //檢查對應的資料夾是否存在，若不存在則建立
+    QDir dir = fileInfo.absoluteDir();
+    if(!dir.exists() && !dir.mkpath(dir.absolutePath()))
+    {
+        return false;
+    }
+
+    //檢查是可以開啟目標檔案
+    QFile file(filePath);
+    if(!file.open(QFile::WriteOnly))
+    {
+        return false;
+    }
+
+    //寫入檔案
+    if(file.write(data) == -1)
+    {
+        return false;
+    }
+    file.close();
+
+    return true;
 }
 

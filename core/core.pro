@@ -14,8 +14,6 @@ HEADERS += \
     comicmodel.h \
     convertz.h \
     networkaccessor.h \
-    filesaver.h \
-    afilesaver.h \
     filedownloader.h \
     globals.h \
     acomicsitehandler.h \
@@ -31,7 +29,6 @@ SOURCES += \
     comicmodel.cpp \
     convertz.cpp \
     networkaccessor.cpp \
-    filesaver.cpp \
     filedownloader.cpp \
     service.cpp \
     site/sfcomicsitehandler.cpp \

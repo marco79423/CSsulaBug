@@ -1,4 +1,4 @@
-#ifndef COMICDOWNLOADER_H
+﻿#ifndef COMICDOWNLOADER_H
 #define COMICDOWNLOADER_H
 
 #include <QObject>
@@ -44,7 +44,6 @@ private:
     FileDownloader *_fileDownloader;
     ComicModel *_downloadComicModel;
 
-    bool _isDownloading;
     QList<int> _taskIDs;
 
     FileDownloader::Task _makeTask(const QVariantMap &comicInfo);

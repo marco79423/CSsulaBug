@@ -6,7 +6,6 @@
 
 #include "globals.h"
 #include "networkaccessor.h"
-#include "filesaver.h"
 
 class QNetworkReply;
 
@@ -19,7 +18,7 @@ public:
     //Task => (Url, FilePath)
     typedef QHash<QString, QString> Task;
 
-    explicit FileDownloader(QObject *parent = 0, AFileSaver *fileSaver=new FileSaver, ANetworkAccessor *networkAccessor=new NetworkAccessor);
+    explicit FileDownloader(QObject *parent = 0, ANetworkAccessor *networkAccessor=new NetworkAccessor);
 
 signals:
     
@@ -41,8 +40,9 @@ private:
     Task _currentTask;
     int _taskSize;
 
-    AFileSaver *_fileSaver;
     ANetworkAccessor *_networkAccessor;
+
+    bool _saveFile(const QByteArray& data, const QString& filePath);
 };
 
 #endif // FILEDOWNLOADER_H

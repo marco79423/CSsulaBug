@@ -9,8 +9,7 @@
 ComicDownloader::ComicDownloader(QObject *parent)
     :QObject(parent),
       _fileDownloader(new FileDownloader(this)),
-      _downloadComicModel(new ComicModel(this)),
-      _isDownloading(false)
+      _downloadComicModel(new ComicModel(this))
 {
     connect(_fileDownloader, SIGNAL(downloadInfoSignal(const QVariantMap&)), SLOT(_onDownloadInfoUpdated(const QVariantMap&)));
     connect(_fileDownloader, SIGNAL(finishSignal()), SLOT(_onTaskFinish()));

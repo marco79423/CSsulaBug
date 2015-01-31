@@ -37,8 +37,7 @@ SOURCES += \
 HEADERS += \
     stubcomicsitehandler.h \
     servicetest.h \
-    mocknetworkaccessor.h \
-    mockfilesaver.h
+    mocknetworkaccessor.h
 
 INCLUDEPATH += $$PWD/../../core
 
