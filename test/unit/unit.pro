@@ -10,7 +10,22 @@ TARGET = unittest
 CONFIG += console testcase
 
 INCLUDEPATH += $$PWD/gmock/include
-LIBS += -L$$PWD/gmock/lib -lgmock
+
+
+win32-g++:CONFIG(debug, debug|release):{
+    LIBS += -L$$OUT_PWD/../../core/debug -lcore
+    LIBS += -L$$PWD/gmock/lib -lgmock-win
+}
+
+win32-g++:CONFIG(release, debug|release):{
+    LIBS += -L$$OUT_PWD/../../core/release -lcore
+    LIBS += -L$$PWD/gmock/lib -lgmock-win
+}
+
+unix:CONFIG(release, debug|release){
+    LIBS += -L$$OUT_PWD/../../core -lcore
+    LIBS += -L$$PWD/gmock/lib -lgmock
+}
 
 SOURCES += \
     main.cpp \
