@@ -28,20 +28,18 @@ signals:
 
 public slots:
 
-    int download(const Task &task, const QString &referer="");
+    bool download(const Task &task, const QString &referer="");
     void abort();
 
 private slots:
 
-    void _onAccessorReply(const int &id, const QString &url, const QByteArray &data);
-    void _onAccessorFinish(const int &id);
+    void _onAccessorReply(QNetworkReply *reply);
+    void _onAccessorFinish();
 
 private:
 
-    bool _downloading;
     Task _currentTask;
-    int _taskId;
-    int _counter;
+    int _taskSize;
 
     AFileSaver *_fileSaver;
     ANetworkAccessor *_networkAccessor;

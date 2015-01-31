@@ -20,8 +20,8 @@ int main(int argc, char *argv[])
     Q_INIT_RESOURCE(core_resource);
 
     Service service;
-    service.addComicSiteHandler(new SFComicSiteHandler);
-    //service.addComicSiteHandler(new BLComicSiteHandler);
+    //service.addComicSiteHandler(new SFComicSiteHandler);
+    service.addComicSiteHandler(new BLComicSiteHandler);
 
     QQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty("service", &service);

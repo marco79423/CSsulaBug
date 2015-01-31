@@ -7,8 +7,8 @@
 BLComicSiteHandler::BLComicSiteHandler(QObject *parent)
     :AComicSiteHandler(parent), _networkAccessor(new NetworkAccessor(this))
 {
-    connect(_networkAccessor, SIGNAL(replySignal(const int&, const QString&, const QByteArray&)), this, SLOT(_getComicInfo(const int&, const QString&, const QByteArray&)));
-    connect(_networkAccessor, SIGNAL(finishSignal(const int&)), this, SIGNAL(updateFinishedSignal()));
+    connect(_networkAccessor, SIGNAL(replySignal(QNetworkReply*)), this, SLOT(_onAccessorReply(QNetworkReply*)));
+    connect(_networkAccessor, SIGNAL(finishSignal()), this, SIGNAL(updateFinishedSignal()));
 }
 
 QString BLComicSiteHandler::getComicSiteName() const
@@ -134,12 +134,15 @@ void BLComicSiteHandler::collectComicInfos()
     _networkAccessor->get(allComicListPages);
 }
 
-void BLComicSiteHandler::_getComicInfo(const int &id, const QString &url, const QByteArray &data)
+void BLComicSiteHandler::_onAccessorReply(QNetworkReply* reply)
 {
-    Q_UNUSED(id)
-    Q_UNUSED(url)
+    if(reply->error() != QNetworkReply::NoError)
+    {
+        qCritical() << reply->errorString();
+        return;
+    }
 
-    QString html(data);
+    QString html(reply->readAll());
     QRegExp regexp("<a title='([^']+)' href='http://blmanhua.com/manhua/([^']+)'><img src='([^']+)'><br>[^<]+<span class='clw[12]'>\\[([^\\]]+)\\]");
 
     int pos = 0;

@@ -4,6 +4,8 @@
 #include "../acomicsitehandler.h"
 #include "../convertz.h"
 
+class QNetworkReply;
+
 class NetworkAccessor;
 
 class BLComicSiteHandler : public AComicSiteHandler
@@ -26,7 +28,7 @@ public slots:
 
 private slots:
 
-    void _getComicInfo(const int &id, const QString &url, const QByteArray &data);
+    void _onAccessorReply(QNetworkReply* reply);
 
 private:
 

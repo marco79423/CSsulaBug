@@ -1,4 +1,4 @@
-#include "comicdownloader.h"
+﻿#include "comicdownloader.h"
 #include "acomicsitehandler.h"
 #include "comicmodel.h"
 
@@ -41,17 +41,7 @@ void ComicDownloader::abort(const QString &comicKey)
 {
     if(_downloadComicModel->getComicInfo(0)["key"].toString() == comicKey)
     {
-        _downloadComicModel->removeComicInfo(comicKey);
         _fileDownloader->abort();
-
-        if(_downloadComicModel->rowCount() > 0)
-        {
-            _downloadProcess();
-        }
-        else
-        {
-            emit downloadFinishSignal();
-        }
     }
     else
     {
@@ -69,6 +59,7 @@ void ComicDownloader::_downloadProcess()
 
     AComicSiteHandler *comicSiteHandler = _comicSiteHandlers[comicInfo["site"].toString()];
 
+    qDebug() << "ComicDownloader" << comicInfo;
     FileDownloader::Task task = _makeTask(comicInfo);
     _fileDownloader->download(task, comicSiteHandler->getReferer());
 }

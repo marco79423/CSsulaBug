@@ -6,8 +6,8 @@
 SFComicSiteHandler::SFComicSiteHandler(QObject *parent)
     :AComicSiteHandler(parent), _networkAccessor(new NetworkAccessor(this))
 {
-    connect(_networkAccessor, SIGNAL(replySignal(const int&, const QString&, const QByteArray&)), this, SLOT(_getComicInfo(const int&, const QString&, const QByteArray&)));
-    connect(_networkAccessor, SIGNAL(finishSignal(const int&)), this, SIGNAL(updateFinishedSignal()));
+    connect(_networkAccessor, SIGNAL(replySignal(QNetworkReply*)), this, SLOT(_onAccessorReply(QNetworkReply*)));
+    connect(_networkAccessor, SIGNAL(finishSignal()), this, SIGNAL(updateFinishedSignal()));
 }
 
 QString SFComicSiteHandler::getComicSiteName() const
@@ -102,12 +102,15 @@ void SFComicSiteHandler::collectComicInfos()
     _networkAccessor->get(allComicListPages);
 }
 
-void SFComicSiteHandler::_getComicInfo(const int& id, const QString& url, const QByteArray& data)
+void SFComicSiteHandler::_onAccessorReply(QNetworkReply *reply)
 {
-    Q_UNUSED(id)
-    Q_UNUSED(url)
+    if(reply->error() != QNetworkReply::NoError)
+    {
+        qCritical() << reply->errorString();
+        return;
+    }
 
-    QString html(data);
+    QString html(reply->readAll());
     QRegExp regexp("<img src=\"([^\"]+)\""  //cover
                    "[^>]+></a></li>\\s+<li><strong class=\""
                    "F14PX\"><a href=\"/HTML/([^/]+)" //keyName

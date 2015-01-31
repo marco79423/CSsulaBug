@@ -19,11 +19,12 @@ public:
 
     explicit NetworkAccessor(QObject *parent = 0);
     
-    int get(const QString &url, const QString &referer="");
-    int get(const QStringList &urlList, const QString &referer="");
-    void abort(const int &id);
+    bool isBusy() const;
+    bool get(const QString &url, const QString &referer="");
+    bool get(const QStringList &urlList, const QString &referer="");
+    void abort();
 
-    QString getDataImmediately(const QString &url, const QString &referer="");
+    QByteArray getDataImmediately(const QString &url, const QString &referer="");
 
 private slots:
 
@@ -36,17 +37,10 @@ private:
 
 private:
 
-    struct _Task
-    {
-        int id;
-        QStringList urlList;
-        QString referer;
-        QList<QNetworkReply*> replyList;
-    };
-
-    static int _idCount;
     QNetworkAccessManager *_networkAccessManager;
-    QQueue<_Task> _taskQueue;
+
+    QList<QNetworkReply*> _replyList;
+    QString _referer;
 };
 
 

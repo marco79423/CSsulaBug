@@ -9,77 +9,61 @@
 #include <QFileInfo>
 
 FileDownloader::FileDownloader(QObject *parent, AFileSaver *fileSaver, ANetworkAccessor *networkAccessor) :
-    QObject(parent), _counter(0), _downloading(false), _fileSaver(fileSaver), _networkAccessor(networkAccessor)
+    QObject(parent), _taskSize(0), _fileSaver(fileSaver), _networkAccessor(networkAccessor)
 {
     _fileSaver->setParent(this);
     _networkAccessor->setParent(this);
 
-    connect(_networkAccessor, SIGNAL(replySignal(const int&, const QString&, const QByteArray&)), SLOT(_onAccessorReply(const int&, const QString&, const QByteArray&)));
-    connect(_networkAccessor, SIGNAL(finishSignal(const int&)),  SLOT(_onAccessorFinish(const int&)));
+    connect(_networkAccessor, SIGNAL(replySignal(QNetworkReply*)), SLOT(_onAccessorReply(QNetworkReply*)));
+    connect(_networkAccessor, SIGNAL(finishSignal()),  SLOT(_onAccessorFinish()));
 }
 
-int FileDownloader::download(const FileDownloader::Task &task, const QString &referer)
+bool FileDownloader::download(const FileDownloader::Task &task, const QString &referer)
 {
-    if(_downloading)
-        return -1;
-
-    _downloading = true;
+    if(_networkAccessor->isBusy())
+    {
+        return false;
+    }
     _currentTask = task;
-    _taskId = _networkAccessor->get(_currentTask.keys(), referer);
-    return _taskId;
+    _taskSize = task.size();
+    return _networkAccessor->get(_currentTask.keys(), referer);
 }
 
 void FileDownloader::abort()
 {
-    if(_downloading)
-    {
-        _networkAccessor->abort(_taskId);
-        _downloading = false;
-        _counter = 0;
-    }
+    return _networkAccessor->abort();
 }
 
-void FileDownloader::_onAccessorReply(const int &id, const QString &url, const QByteArray &data)
+void FileDownloader::_onAccessorReply(QNetworkReply* reply)
 {
-    /*
-      *處理 NetworkAccessor 的回應，把內容寫至目標路徑
-      */
+    QString url = reply->url().toString();
     QString path = _currentTask[url];
 
-    QVariantMap downloadInfo;
-    downloadInfo["url"] = url;
-    downloadInfo["path"] = path;
+    _currentTask.remove(url);
 
-    AFileSaver::SaverStatus saverStatus = _fileSaver->saveFile(data, path);
-    switch(saverStatus)
+    if(reply->error() != QNetworkReply::NoError)
     {
-        case AFileSaver::FileExists:
-            qCritical() << "FileDownloader:_onAccessorReply:目標檔案存在";
-            break;
-        case AFileSaver::FailedToCreateDstDir:
-            qCritical() << "FileDownloader:_onAccessorReply:目標資料夾建立失敗";
-            break;
-        case AFileSaver::FailedToCreateDstFile:
-            qCritical() << "FileDownloader:_onAccessorReply: 目標檔案開啟失敗";
-            break;
-        case AFileSaver::FailedToWriteDstFile:
-            qCritical() << "FileDownloader:_onAccessorReply: 目標檔案寫入失敗";
-            break;
-        default:
-            break;
+        if(!QNetworkReply::OperationCanceledError)
+        {
+            qCritical() << reply->errorString();
+        }
+    }
+    else
+    {
+        _fileSaver->saveFile(reply->readAll(), path);
+
+        QVariantMap downloadInfo;
+        downloadInfo["url"] = url;
+        downloadInfo["path"] = path;
+        downloadInfo["ratio"] = float(_taskSize - _currentTask.size()) / _taskSize;
+        emit downloadInfoSignal(downloadInfo);
     }
 
-
-    _counter += 1;
-    downloadInfo["ratio"] = float(_counter) / _currentTask.size();
-    emit downloadInfoSignal(downloadInfo);
+    reply->deleteLater();
 }
 
-void FileDownloader::_onAccessorFinish(const int &id)
+void FileDownloader::_onAccessorFinish()
 {
-    Q_UNUSED(id)
-    _downloading = false;
-    _counter = 0;
     emit finishSignal();
 }
 

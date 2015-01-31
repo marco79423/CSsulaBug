@@ -1,4 +1,4 @@
-#ifndef MOCKNETWORKACCESSOR_H
+﻿#ifndef MOCKNETWORKACCESSOR_H
 #define MOCKNETWORKACCESSOR_H
 
 #include <gmock/gmock.h>
@@ -9,10 +9,11 @@ class MockNetworkAccessor: public ANetworkAccessor
 {
 public:
 
-    MOCK_METHOD2(get, int(const QString &url, const QString &referer));
-    MOCK_METHOD2(get, int(const QStringList &urlList, const QString &referer));
-    MOCK_METHOD1(abort, void(const int &id));
-    MOCK_METHOD2(getDataImmediately, QString(const QString &url, const QString &referer));
+    MOCK_METHOD0(isBusy, bool());
+    MOCK_METHOD2(get, bool(const QString &url, const QString &referer));
+    MOCK_METHOD2(get, bool(const QStringList &urlList, const QString &referer));
+    MOCK_METHOD0(abort, void());
+    MOCK_METHOD2(getDataImmediately, QByteArray(const QString &url, const QString &referer));
 };
 
 #endif // MOCKNETWORKACCESSOR_H
