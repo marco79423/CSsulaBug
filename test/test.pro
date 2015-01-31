@@ -14,7 +14,8 @@ HEADERS += \
     filedownloadertest.h \
     comicdownloadertest.h \
     comicmodeltest.h \
-    sortfilterproxycomicmodeltest.h
+    sortfilterproxycomicmodeltest.h \
+    testglobals.h
 
 SOURCES += \
     main.cpp \

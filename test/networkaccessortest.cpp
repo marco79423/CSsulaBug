@@ -1,10 +1,16 @@
 ﻿#include "networkaccessortest.h"
+#include "testglobals.h"
 
 #include <networkaccessor.h>
 
 #include <QtTest>
 #include <QDebug>
 #include <QNetworkReply>
+
+void NetworkAccessorTest::initTestCase()
+{
+    qInstallMessageHandler(noMessageOutput);
+}
 
 void NetworkAccessorTest::get()
 {

@@ -1,6 +1,8 @@
 ﻿#include <QCoreApplication>
 #include <QTest>
 
+#include "testglobals.h"
+
 #include "convertztest.h"
 #include "networkaccessortest.h"
 #include "filedownloadertest.h"
@@ -13,6 +15,7 @@
 #include "comicdownloadertest.h"
 #include "servicetest.h"
 
+void noMessageOutput(QtMsgType, const QMessageLogContext&, const QString&){}
 
 int main(int argc, char *argv[])
 {
@@ -34,11 +37,11 @@ int main(int argc, char *argv[])
     ret += QTest::qExec(&fileDownloaderTest, argc, argv);
 
     //ComicSites
-    //SFComicSiteHandlerTest sfComicSiteHandlerTest;
-    //ret += QTest::qExec(&sfComicSiteHandlerTest, argc, argv);
+    SFComicSiteHandlerTest sfComicSiteHandlerTest;
+    ret += QTest::qExec(&sfComicSiteHandlerTest, argc, argv);
 
-    //BLComicSiteHandlerTest blComicSiteHandlerTest;
-    //ret += QTest::qExec(&blComicSiteHandlerTest, argc, argv);
+    BLComicSiteHandlerTest blComicSiteHandlerTest;
+    ret += QTest::qExec(&blComicSiteHandlerTest, argc, argv);
 
     //Core
     //ComicModelTest comicModelTest;

@@ -9,6 +9,7 @@ class SFComicSiteHandlerTest : public QObject
 
 private slots:
 
+    void initTestCase();
     void collectComicInfos();
     void getChapters();
     void getImageUrls();

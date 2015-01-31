@@ -9,6 +9,7 @@ class NetworkAccessorTest : public QObject
 
 private slots:
 
+    void initTestCase();
     void get();
     void abort();
     void getDataImmediately();
