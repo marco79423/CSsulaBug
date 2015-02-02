@@ -1,8 +1,13 @@
 ﻿#include "filedownloadertest.h"
+#include "testglobals.h"
 
 #include <filedownloader.h>
 #include <QtTest>
 
+void FileDownloaderTest::initTestCase()
+{
+    qInstallMessageHandler(noMessageOutput);
+}
 
 void FileDownloaderTest::download()
 {

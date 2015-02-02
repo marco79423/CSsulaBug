@@ -8,14 +8,15 @@ HEADERS += \
     sfcomicsitehandlertest.h \
     blcomicsitehandlertest.h \
     servicetest.h \
-    stubcomicsitehandler.h \
-    stubservice.h \
     convertztest.h \
     filedownloadertest.h \
     comicdownloadertest.h \
     comicmodeltest.h \
     sortfilterproxycomicmodeltest.h \
-    testglobals.h
+    testglobals.h \
+    fakedata.h \
+    fakecomicsitehandler.h \
+    fakenetworkaccessor.h
 
 SOURCES += \
     main.cpp \
@@ -23,13 +24,14 @@ SOURCES += \
     sfcomicsitehandlertest.cpp \
     blcomicsitehandlertest.cpp \
     servicetest.cpp \
-    stubcomicsitehandler.cpp \
-    stubservice.cpp \
     convertztest.cpp \
     filedownloadertest.cpp \
     comicdownloadertest.cpp \
     comicmodeltest.cpp \
-    sortfilterproxycomicmodeltest.cpp
+    sortfilterproxycomicmodeltest.cpp \
+    fakedata.cpp \
+    fakecomicsitehandler.cpp \
+    fakenetworkaccessor.cpp
 
 RESOURCES += \
     test_resource.qrc
@@ -47,7 +49,7 @@ win32-g++:CONFIG(release, debug|release):{
 }
 
 unix:CONFIG(release, debug|release){
-    LIBS += -L$$OUT_PWD/../../core -lcore
+    LIBS += -L$$OUT_PWD/../core -lcore
     PRE_TARGETDEPS += $$OUT_PWD/../core/libcore.a
 }
 

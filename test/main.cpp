@@ -44,8 +44,8 @@ int main(int argc, char *argv[])
     ret += QTest::qExec(&blComicSiteHandlerTest, argc, argv);
 
     //Core
-    //ComicModelTest comicModelTest;
-    //ret += QTest::qExec(&comicModelTest, argc, argv);
+    ComicModelTest comicModelTest;
+    ret += QTest::qExec(&comicModelTest, argc, argv);
 
     //SortFilterProxyComicModelTest sortFilterProxyComicModelTest;
     //ret += QTest::qExec(&sortFilterProxyComicModelTest, argc, argv);

@@ -69,5 +69,5 @@ void NetworkAccessorTest::getDataImmediately()
 
     QFile file(":/images/marco.jpg");
     QVERIFY(file.open(QFile::ReadOnly));
-    QCOMPARE(data, file.readAll());
+    QCOMPARE(file.readAll(), data);
 }

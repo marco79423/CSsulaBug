@@ -9,6 +9,8 @@ class FileDownloaderTest : public QObject
 
 private slots:
 
+    void initTestCase();
+
     void download();
     void abort();
 

@@ -1,21 +1,8 @@
-﻿#include "stubservice.h"
+#include "fakedata.h"
+#include <globals.h>
 
-#include <comicmodel.h>
-#include <sortfilterproxycomicmodel.h>
-
-#include <QTimer>
-#include <QThread>
-#include <QDebug>
-
-StubService::StubService(QObject *parent)
-    :AService(parent)
+FakeData::FakeData()
 {
-    _model = new ComicModel(this);
-    _proxyModel = new SortFilterProxyComicModel(this);
-    _proxyModel->setSourceModel(_model);
-
-    _downloadComicModel = new ComicModel(this);
-
     {
         QVariantMap comicInfo;
         comicInfo["site"] = "SF";
@@ -24,7 +11,7 @@ StubService::StubService(QObject *parent)
         comicInfo["name"] = "間諜之家";
         //comicInfo["author"] = "真刈信二";
         comicInfo["type"] = "推理類";
-        comicInfo["updateStatus"] = "[011話連載中]";
+        comicInfo["updateStatus"] = "[011話連載中]";  
 
         _comicInfos.append(comicInfo);
     }
@@ -108,105 +95,40 @@ StubService::StubService(QObject *parent)
     }
 }
 
-SortFilterProxyComicModel *StubService::getComicModel()
+QVariantMap FakeData::getComicInfo(const int &index, const bool &withoutChapters)
 {
-    return _proxyModel;
-}
-
-QStringList StubService::getChapterNames(const QString &comicKey)
-{
-    Q_UNUSED(comicKey)
-    //QThread::sleep(2);
-    return QStringList() << "024話" << "023話" << "022話" << "021話"
-                         << "020話" << "019話" << "018話" << "017話"
-                         << "016話" << "015話" << "014話" << "013話"
-                         << "012話" << "011話" << "010話" << "009話"
-                         << "008話" << "007話" << "006話" << "005話"
-                         << "004話" << "003話" << "002話" << "001話";
-
-}
-
-ComicModel *StubService::getDownloadComicModel()
-{
-    return _downloadComicModel;
-}
-
-void StubService::update()
-{
-    setProperty("isUpdatingStatus", true);
-    for(int i=0; i< _comicInfos.size(); i++)
+    QVariantMap comicInfo = _comicInfos[index];
+    if(!withoutChapters)
     {
-        QTimer::singleShot(i * 500, this, SLOT(_onUpdate()));
+        comicInfo["chapters"].setValue(getChapters(comicInfo["key"].toString()));
     }
+    return comicInfo;
+}
+
+int FakeData::getComicInfoCount()
+{
+    return _comicInfos.size();
 }
 
 
-void StubService::setComicNameFilter(const QString &pattern)
+QStringList FakeData::getImageUrls(const QString &comicKey, const QString &chapterKey)
 {
-    _proxyModel->setComicNameFilter(pattern);
-}
-
-
-void StubService::download(const QString &comicKey)
-{
-    download(comicKey, getChapterNames(comicKey));
-}
-
-void StubService::download(const QString &comicKey, const QStringList &chapterNames)
-{
-    setProperty("isDownloadingStatus", true);
-
-    qDebug() << "下載" << chapterNames;
-    QVariantMap comicInfo = _model->getComicInfo(comicKey);
-    _downloadComicModel->insertComicInfo(comicInfo);
-
-    _currentTask = _downloadComicModel->getComicInfo(0)["name"].toString();
-    for(int i=0; i< 10; i++)
+    QStringList imageUrls;
+    for(int i = 0; i < 5; i++)
     {
-        QTimer::singleShot(i * 10000, this, SLOT(_onDownload()));
+        imageUrls << QString("image%1%2%3").arg(comicKey).arg(chapterKey).arg(i);
     }
+    return imageUrls;
 }
 
-void StubService::abort(const QString &comicKey)
+QList<StringPair> FakeData::getChapters(const QString &comicKey)
 {
-    _downloadComicModel->removeComicInfo(comicKey);
-}
-
-void StubService::_onUpdate()
-{
-    static int i=0;
-    _model->insertComicInfo(_comicInfos[i]);
-
-    if(i == _comicInfos.size() - 1)
+    QList<StringPair> chapters;
+    for(int i=0; i < 10; i++)
     {
-        setProperty("isUpdatingStatus", false);
-
-        emit updateFinishedSignal();
+        QString chapterName = QString("第%1話").arg(i, 3, 10, QChar('0'));
+        QString chapterKey = QString("chapterKey%1%2").arg(comicKey).arg(i);
+        chapters.append(StringPair(chapterName, chapterKey));
     }
-
-    i+=1;
+    return chapters;
 }
-
-void StubService::_onDownload()
-{
-    static int i=1;
-
-    QVariantMap downloadProgress;
-    downloadProgress["message"] = QString("下載 %1/%2.jpg").arg(_currentTask).arg(i);
-    downloadProgress["ratio"] = 0.1 * i;
-
-    setProperty("downloadProgress", downloadProgress);
-    if(i == 10)
-    {
-        i = 1;
-        setProperty("isDownloadingStatus", false);
-        _downloadComicModel->removeComicInfo(0);
-        emit downloadFinishSignal();
-    }
-
-    i+=1;
-}
-
-
-
-

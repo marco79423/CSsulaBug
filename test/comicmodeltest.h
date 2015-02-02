@@ -10,8 +10,6 @@ class ComicModelTest : public QObject
 private slots:
 
     void insertComicInfo();
-    void hasComicInfo();
-    void getComicImfo();
     void updateComicInfo();
     void removeComicInfo();
 
