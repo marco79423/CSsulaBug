@@ -21,7 +21,7 @@ ApplicationWindow {
     title: "俗辣蟲漫畫下載器 CSsulaBug"
     color: "darkgray"
 
-    Component.onCompleted: service.update()
+    Component.onCompleted: service.collectComicInfos()
 
     toolBar: ToolBar{
         id: toolbar
@@ -96,7 +96,7 @@ ApplicationWindow {
             text: {
                 if(service.isDownloadingStatus){
                     return "[進度 " + Math.round(service.downloadProgress.ratio * 100) + "% ] " + service.downloadProgress.message;
-                }else if(service.isUpdatingStatus) return "正在抓取漫畫資訊，請稍等 ...";
+                }else if(service.isCollectingStatus) return "正在抓取漫畫資訊，請稍等 ...";
                 else return "準備完成，可以選擇要下載的漫畫"
             }
         }
@@ -152,7 +152,7 @@ ApplicationWindow {
 
             Connections {
                 target: service
-                onUpdateFinishedSignal: if(comicList.state == "BusyState") comicList.state = "DefaultState"
+                onCollectingFinishedSignal: if(comicList.state == "BusyState") comicList.state = "DefaultState"
             }
         }
 

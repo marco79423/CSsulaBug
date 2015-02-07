@@ -7,7 +7,7 @@ SFComicSiteHandler::SFComicSiteHandler(QObject *parent)
     :AComicSiteHandler(parent), _networkAccessor(new NetworkAccessor(this))
 {
     connect(_networkAccessor, SIGNAL(replySignal(QNetworkReply*)), this, SLOT(_onAccessorReply(QNetworkReply*)));
-    connect(_networkAccessor, SIGNAL(finishSignal()), this, SIGNAL(updateFinishedSignal()));
+    connect(_networkAccessor, SIGNAL(finishSignal()), this, SIGNAL(collectingFinishedSignal()));
 }
 
 QString SFComicSiteHandler::getComicSiteName() const

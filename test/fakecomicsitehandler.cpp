@@ -32,7 +32,7 @@ void FakeComicSiteHandler::onComicInfoSignal()
     emit comicInfoSignal(_fakeData.getComicInfo(i));
     if(i == _fakeData.getComicInfoCount() - 1)
     {
-        emit updateFinishedSignal();
+        emit collectingFinishedSignal();
         i=0;
     }
 

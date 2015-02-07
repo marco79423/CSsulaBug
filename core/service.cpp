@@ -26,7 +26,7 @@ void Service::addComicSiteHandler(AComicSiteHandler *comicSiteHandler)
 {
     comicSiteHandler->setParent(this);
     connect(comicSiteHandler, SIGNAL(comicInfoSignal(const QVariantMap&)), _comicModel,  SLOT(insertComicInfo(const QVariantMap&)));
-    connect(comicSiteHandler, SIGNAL(updateFinishedSignal()), this, SLOT(_onUpdateFinished()));
+    connect(comicSiteHandler, SIGNAL(collectingFinishedSignal()), this, SLOT(_onCollectingFinished()));
 
     _comicSiteHandlers[comicSiteHandler->getComicSiteName()] = comicSiteHandler;
 
@@ -62,9 +62,9 @@ ComicModel *Service::getDownloadComicModel()
     return _comicDownloader->getDownloadComicModel();
 }
 
-void Service::update()
+void Service::collectComicInfos()
 {
-    setProperty("isUpdatingStatus", true);
+    setProperty("isCollectingStatus", true);
 
     foreach(AComicSiteHandler* comicSiteHandler, _comicSiteHandlers)
     {
@@ -107,16 +107,16 @@ void Service::abort(const QString &comicKey)
     _comicDownloader->abort(comicKey);
 }
 
-void Service::_onUpdateFinished()
+void Service::_onCollectingFinished()
 {
-    static int updateFinishedCounter = 0;
-    if(++updateFinishedCounter == _comicSiteHandlers.size())
+    static int collectingFinishedCounter = 0;
+    if(++collectingFinishedCounter == _comicSiteHandlers.size())
     {
-        updateFinishedCounter = 0;
+        collectingFinishedCounter = 0;
 
         qDebug() << "更新結束";
-        setProperty("isUpdatingStatus", false);
-        emit updateFinishedSignal();
+        setProperty("isCollectingStatus", false);
+        emit collectingFinishedSignal();
     }
 }
 

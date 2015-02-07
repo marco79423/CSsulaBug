@@ -26,7 +26,7 @@ public:
 
 public slots:
 
-    void update();
+    void collectComicInfos();
     void setComicNameFilter(const QString &comicNamePattern);
 
     void download(const QString &comicKey);
@@ -35,7 +35,7 @@ public slots:
 
 private slots:
 
-     void _onUpdateFinished();
+     void _onCollectingFinished();
 
      void _onDownloadProgressChanged(const QVariantMap& downloadProgress);
      void _onDownloadFinished();

@@ -14,12 +14,12 @@ void BLComicSiteHandlerTest::collectComicInfos()
     BLComicSiteHandler *comicHandler = new BLComicSiteHandler(this);
 
     QSignalSpy comicInfoSignalSpy(comicHandler, SIGNAL(comicInfoSignal(const QVariantMap&)));
-    QSignalSpy updateFinishSignalSpy(comicHandler, SIGNAL(updateFinishedSignal()));
+    QSignalSpy collectingFinishSignalSpy(comicHandler, SIGNAL(collectingFinishedSignal()));
 
     comicHandler->collectComicInfos();
 
-    while(updateFinishSignalSpy.size() == 0)
-        updateFinishSignalSpy.wait(1000);
+    while(collectingFinishSignalSpy.size() == 0)
+        collectingFinishSignalSpy.wait(1000);
 
     //檢查有多少部漫畫
     //QCOMPARE(comicInfoSignalSpy.size(), 8660);

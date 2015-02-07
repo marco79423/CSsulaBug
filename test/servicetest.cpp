@@ -13,6 +13,6 @@ ServiceTest::ServiceTest(QObject *parent)
 {
 }
 
-void ServiceTest::update()
+void ServiceTest::collectComicInfos()
 {
 }

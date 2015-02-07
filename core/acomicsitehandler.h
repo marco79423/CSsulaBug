@@ -23,7 +23,7 @@ public:
 signals:
 
     void comicInfoSignal(const QVariantMap &info);
-    void updateFinishedSignal();
+    void collectingFinishedSignal();
 
 public slots:
 

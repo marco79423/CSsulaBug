@@ -10,9 +10,9 @@ class AService : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(bool isUpdatingStatus MEMBER _isUpdatingStatus NOTIFY isUpdatingStatusChangedSignal)
+    Q_PROPERTY(bool isCollectingStatus MEMBER _isCollectingStatus NOTIFY isCollectingStatusChangedSignal)
     Q_PROPERTY(bool isDownloadingStatus MEMBER _isDownloadingStatus NOTIFY isDownloadingStatusChangedSignal)
-    Q_PROPERTY(QVariantMap downloadProgress MEMBER _downloadProgress NOTIFY isUpdatingStatusChangedSignal)
+    Q_PROPERTY(QVariantMap downloadProgress MEMBER _downloadProgress NOTIFY isDownloadingStatusChangedSignal)
 
 public:
 
@@ -23,8 +23,8 @@ public:
 
 signals:
 
-    void isUpdatingStatusChangedSignal();
-    void updateFinishedSignal();
+    void isCollectingStatusChangedSignal();
+    void collectingFinishedSignal();
 
     void isDownloadingStatusChangedSignal();
     void downloadProgressChangedSignal();
@@ -32,7 +32,7 @@ signals:
 
 public slots:
 
-    virtual void update() = 0;
+    virtual void collectComicInfos() = 0;
     virtual void setComicNameFilter(const QString &pattern) = 0;
 
     virtual void download(const QString &comicKey) = 0;
@@ -41,11 +41,11 @@ public slots:
 
 protected:
 
-    explicit AService(QObject *parent = 0): QObject(parent), _isUpdatingStatus(false), _isDownloadingStatus(false){}
+    explicit AService(QObject *parent = 0): QObject(parent), _isCollectingStatus(false), _isDownloadingStatus(false){}
 
 private:
 
-    bool _isUpdatingStatus;
+    bool _isCollectingStatus;
     bool _isDownloadingStatus;
     QVariantMap _downloadProgress;
 };
