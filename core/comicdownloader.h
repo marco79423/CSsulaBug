@@ -46,7 +46,7 @@ private:
 
     QList<int> _taskIDs;
 
-    FileDownloader::Task _makeTask(const QVariantMap &comicInfo);
+    FileDownloader::Task _makeTask(const QVariantMap &comicInfo, AComicSiteHandler *comicSiteHandler);
 };
 
 #endif // COMICDOWNLOADER_H

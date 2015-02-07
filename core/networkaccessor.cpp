@@ -53,15 +53,13 @@ void NetworkAccessor::abort()
 QByteArray NetworkAccessor::getDataImmediately(const QString &url, const QString &referer)
 {
     QEventLoop eventLoop;
+    QNetworkAccessManager networkAccessManager(this);
 
-    QNetworkAccessManager *networkAccessManager = new QNetworkAccessManager(this);
-    QNetworkReply *reply = networkAccessManager->get(_makeRequest(url, referer));
-    connect(networkAccessManager, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(quit()));
+    QNetworkReply *reply = networkAccessManager.get(_makeRequest(url, referer));
+    connect(&networkAccessManager, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(quit()));
 
     eventLoop.exec();
-
     reply->deleteLater();
-    networkAccessManager->deleteLater();
 
     return reply->readAll();
 }

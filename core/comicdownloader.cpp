@@ -58,8 +58,7 @@ void ComicDownloader::_downloadProcess()
 
     AComicSiteHandler *comicSiteHandler = _comicSiteHandlers[comicInfo["site"].toString()];
 
-    qDebug() << "ComicDownloader" << comicInfo;
-    FileDownloader::Task task = _makeTask(comicInfo);
+    FileDownloader::Task task = _makeTask(comicInfo, comicSiteHandler);
     _fileDownloader->download(task, comicSiteHandler->getReferer());
 }
 
@@ -85,13 +84,12 @@ void ComicDownloader::_onTaskFinish()
     }
 }
 
-FileDownloader::Task ComicDownloader::_makeTask(const QVariantMap &comicInfo)
+FileDownloader::Task ComicDownloader::_makeTask(const QVariantMap &comicInfo, AComicSiteHandler* comicSiteHandler)
 {
     FileDownloader::Task task;
 
     QString dstDir = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
 
-    AComicSiteHandler *comicSiteHandler = _comicSiteHandlers[comicInfo["site"].toString()];
     QList<StringPair> chapters = comicInfo["chapters"].value<QList<StringPair> >();
     foreach(StringPair chapter, chapters)
     {

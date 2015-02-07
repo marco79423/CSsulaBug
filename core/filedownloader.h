@@ -20,6 +20,8 @@ public:
 
     explicit FileDownloader(QObject *parent = 0, ANetworkAccessor *networkAccessor=new NetworkAccessor);
 
+    bool download(const Task &task, const QString &referer="");
+
 signals:
     
     void downloadInfoSignal(const QVariantMap &downloadInfo);
@@ -27,7 +29,6 @@ signals:
 
 public slots:
 
-    bool download(const Task &task, const QString &referer="");
     void abort();
 
 private slots:
@@ -39,6 +40,8 @@ private:
 
     Task _currentTask;
     int _taskSize;
+
+    QString _referer;
 
     ANetworkAccessor *_networkAccessor;
 
