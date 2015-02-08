@@ -1,14 +1,14 @@
-﻿#ifndef SORTFILTERPROXYCOMICMODEL_H
-#define SORTFILTERPROXYCOMICMODEL_H
+﻿#ifndef PROXYCOMICMODEL_H
+#define PROXYCOMICMODEL_H
 
 #include <QSortFilterProxyModel>
 
-class SortFilterProxyComicModel : public QSortFilterProxyModel
+class ProxyComicModel : public QSortFilterProxyModel
 {
     Q_OBJECT
 public:
 
-    explicit SortFilterProxyComicModel(QObject *parent = 0);
+    explicit ProxyComicModel(QObject *parent = 0);
 
 public slots:
 
@@ -23,4 +23,4 @@ private:
     QString _comicNamePattern;
 };
 
-#endif // SORTFILTERPROXYCOMICMODEL_H
+#endif // PROXYCOMICMODEL_H

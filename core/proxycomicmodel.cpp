@@ -1,22 +1,22 @@
-﻿#include "sortfilterproxycomicmodel.h"
+﻿#include "proxycomicmodel.h"
 #include "comicmodel.h"
 
 #include <QRegExp>
 #include <QTime>
 #include <QDebug>
 
-SortFilterProxyComicModel::SortFilterProxyComicModel(QObject *parent)
+ProxyComicModel::ProxyComicModel(QObject *parent)
     :QSortFilterProxyModel(parent)
 {
 }
 
-void SortFilterProxyComicModel::setComicNameFilter(const QString &comicNamePattern)
+void ProxyComicModel::setComicNameFilter(const QString &comicNamePattern)
 {
     _comicNamePattern = comicNamePattern;
     invalidateFilter();
 }
 
-bool SortFilterProxyComicModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
+bool ProxyComicModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
 {
     QModelIndex index = sourceModel()->index(sourceRow, 0, sourceParent);
 

@@ -11,7 +11,7 @@
 #include "blcomicsitehandlertest.h"
 
 #include "comicmodeltest.h"
-#include "sortfilterproxycomicmodeltest.h"
+#include "proxycomicmodeltest.h"
 #include "comicdownloadertest.h"
 #include "servicetest.h"
 

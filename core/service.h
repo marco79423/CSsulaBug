@@ -20,7 +20,7 @@ public:
     explicit Service(QObject *parent = 0);
     void addComicSiteHandler(AComicSiteHandler *comicSiteHandler);
 
-    SortFilterProxyComicModel* getComicModel();
+    ProxyComicModel* getProxyComicModel();
     QStringList getChapterNames(const QString &comicKey);
     ComicModel *getDownloadComicModel();
 
@@ -45,7 +45,7 @@ private:
     QMap<QString, AComicSiteHandler*> _comicSiteHandlers;
 
     ComicModel *_comicModel;
-    SortFilterProxyComicModel *_proxyModel;
+    ProxyComicModel *_proxyModel;
     ComicDownloader *_comicDownloader;
 
     FileDownloader *_fileDownloader;

@@ -12,11 +12,11 @@ HEADERS += \
     filedownloadertest.h \
     comicdownloadertest.h \
     comicmodeltest.h \
-    sortfilterproxycomicmodeltest.h \
     testglobals.h \
     fakedata.h \
     fakecomicsitehandler.h \
-    fakenetworkaccessor.h
+    fakenetworkaccessor.h \
+    proxycomicmodeltest.h
 
 SOURCES += \
     main.cpp \
@@ -28,10 +28,10 @@ SOURCES += \
     filedownloadertest.cpp \
     comicdownloadertest.cpp \
     comicmodeltest.cpp \
-    sortfilterproxycomicmodeltest.cpp \
     fakedata.cpp \
     fakecomicsitehandler.cpp \
-    fakenetworkaccessor.cpp
+    fakenetworkaccessor.cpp \
+    proxycomicmodeltest.cpp
 
 RESOURCES += \
     test_resource.qrc

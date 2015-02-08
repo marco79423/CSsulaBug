@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty("service", &service);
-    engine.rootContext()->setContextProperty("comicModel", service.getComicModel());
+    engine.rootContext()->setContextProperty("comicModel", service.getProxyComicModel());
     engine.rootContext()->setContextProperty("downloadComicModel", service.getDownloadComicModel());
     engine.load(QUrl("qrc:ui/MainView.qml"));
 

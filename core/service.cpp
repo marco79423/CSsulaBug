@@ -2,7 +2,6 @@
 #include "acomicsitehandler.h"
 #include "filedownloader.h"
 #include "comicmodel.h"
-#include "sortfilterproxycomicmodel.h"
 #include "comicdownloader.h"
 
 #include <QStandardPaths>
@@ -14,7 +13,7 @@ Service::Service(QObject *parent)
     :AService(parent)
 {
     _comicModel = new ComicModel(this);
-    _proxyModel = new SortFilterProxyComicModel(this);
+    _proxyModel = new ProxyComicModel(this);
     _proxyModel->setSourceModel(_comicModel);
 
     _comicDownloader = new ComicDownloader(this);
@@ -34,7 +33,7 @@ void Service::addComicSiteHandler(AComicSiteHandler *comicSiteHandler)
 }
 
 
-SortFilterProxyComicModel *Service::getComicModel()
+ProxyComicModel *Service::getProxyComicModel()
 {
     return _proxyModel;
 }

@@ -3,7 +3,7 @@
 
 #include <QObject>
 
-#include "sortfilterproxycomicmodel.h"
+#include "proxycomicmodel.h"
 #include "comicmodel.h"
 
 class AService : public QObject
@@ -16,7 +16,7 @@ class AService : public QObject
 
 public:
 
-    virtual SortFilterProxyComicModel* getComicModel() = 0;
+    virtual ProxyComicModel* getProxyComicModel() = 0;
     virtual ComicModel* getDownloadComicModel() = 0;
 
     Q_INVOKABLE virtual QStringList getChapterNames(const QString &comicKey) = 0;
