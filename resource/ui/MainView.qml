@@ -106,15 +106,24 @@ ApplicationWindow {
 
         id:page
 
-        anchors.fill: parent
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+
+        width: parent.width * 2
+        height: parent.height
 
         color: Globals.MainColor1
         state: "MainPageState"
+
+        Behavior on x {
+            NumberAnimation { duration: 500; easing.type: Easing.InOutQuad }
+        }
 
         states:[
             State {
                 name: "MainPageState"
                 when: !comicDetail.visible && !downloadPageButton.checked
+                PropertyChanges { target: page; x: 0 }
                 PropertyChanges { target: searchField ; visible: true; }
                 PropertyChanges { target: backButton ; visible: false; }
                 PropertyChanges { target: comicList; visible: true; }
@@ -123,6 +132,7 @@ ApplicationWindow {
             State {
                 name: "DetailPageState"
                 when: comicDetail.visible && !downloadPageButton.checked
+                PropertyChanges { target: page; x: 0 }
                 PropertyChanges { target: searchField ; visible: false; }
                 PropertyChanges { target: backButton ; visible: true; }
                 PropertyChanges { target: comicList; visible: false; }
@@ -131,7 +141,7 @@ ApplicationWindow {
             State {
                 name: "DownloadPageState"
                 when: downloadPageButton.checked
-                PropertyChanges { target: downloadPage ; x: 0 }
+                PropertyChanges { target: page ; x: -page.width / 2 }
                 PropertyChanges { target: searchField ; visible: false; }
                 PropertyChanges { target: backButton ; visible: false; }
             }
@@ -140,7 +150,9 @@ ApplicationWindow {
         UI.ComicList {
             id: comicList
 
-            anchors.fill: parent
+            width: parent.width / 2
+            height: parent.height
+
             focus: true
 
             state: "BusyState"
@@ -158,16 +170,16 @@ ApplicationWindow {
 
         UI.ComicDetail{
             id: comicDetail
-            anchors.fill: parent
+            width: comicList.width
+            height: comicList.height
         }
-    }
 
-    UI.DownloadPage {
-        id:　downloadPage
-        x: downloadPage.width
+        UI.DownloadPage {
+            id:　downloadPage
 
-        Behavior on x {
-            NumberAnimation { duration: 500; easing.type: Easing.InOutQuad }
+            width: page.width / 2
+            height: page.height
+            x: page.width / 2
         }
     }
 }
