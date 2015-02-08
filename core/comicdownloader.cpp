@@ -8,6 +8,7 @@
 
 ComicDownloader::ComicDownloader(QObject *parent)
     :QObject(parent),
+      _downloading(false),
       _fileDownloader(new FileDownloader(this)),
       _downloadComicModel(new ComicModel(this))
 {
@@ -29,11 +30,7 @@ void ComicDownloader::addComicSiteHandler(AComicSiteHandler *comicSiteHandler)
 void ComicDownloader::download(const QVariantMap &comicInfo)
 {
     _downloadComicModel->insertComicInfo(comicInfo);
-
-    if(_downloadComicModel->rowCount() == 1)
-    {
-        _downloadProcess();
-    }
+    _downloadProcess();
 }
 
 void ComicDownloader::abort(const QString &comicKey)
@@ -50,6 +47,18 @@ void ComicDownloader::abort(const QString &comicKey)
 
 void ComicDownloader::_downloadProcess()
 {
+    if(_downloadComicModel->rowCount() == 0)
+    {
+        emit downloadFinishSignal();
+        return;
+    }
+
+    if(_downloading)
+    {
+        return;
+    }
+    _downloading = true;
+
     QVariantMap comicInfo = _downloadComicModel->getComicInfo(0);
     QVariantMap downloadProgress;
     downloadProgress["message"] = "準備下載 " + comicInfo["name"].toString();
@@ -71,17 +80,12 @@ void ComicDownloader::_onDownloadInfoUpdated(const QVariantMap &downloadInfo)
     emit downloadProgressChangedSignal(downloadProgress);
 }
 
+
 void ComicDownloader::_onTaskFinish()
 {
+    _downloading = false;
     _downloadComicModel->removeComicInfo(0);
-    if(_downloadComicModel->rowCount() > 0)
-    {
-        _downloadProcess();
-    }
-    else
-    {
-        emit downloadFinishSignal();
-    }
+    _downloadProcess();
 }
 
 FileDownloader::Task ComicDownloader::_makeTask(const QVariantMap &comicInfo, AComicSiteHandler* comicSiteHandler)

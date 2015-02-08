@@ -55,7 +55,6 @@ QStringList SFComicSiteHandler::getImageUrls(const QString &comicKey, const QStr
     QRegExp hostExp("var hosts = \\[\"([^\"]+)");
     hostExp.indexIn(html);
     QString host = hostExp.cap(1);
-    qDebug() << "取得 host " << host;
 
     //取得 imageUrl
     QStringList imageUrls;

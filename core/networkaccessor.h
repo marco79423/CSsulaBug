@@ -4,12 +4,12 @@
 #include <QObject>
 #include <QStringList>
 #include <QQueue>
-#include <QNetworkReply>
 
 #include "anetworkaccessor.h"
 
 class QNetworkAccessManager;
 class QNetworkRequest;
+class QNetworkReply;
 
 class NetworkAccessor : public ANetworkAccessor
 {
@@ -42,8 +42,5 @@ private:
     QList<QNetworkReply*> _replyList;
     QString _referer;
 };
-
-
-Q_DECLARE_METATYPE(QNetworkReply *)
 
 #endif // NETWORKACCESSOR_H

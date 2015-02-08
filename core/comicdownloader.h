@@ -39,6 +39,8 @@ private slots:
 
 private:
 
+    bool _downloading;
+
     QMap<QString, AComicSiteHandler*> _comicSiteHandlers;
 
     FileDownloader *_fileDownloader;
