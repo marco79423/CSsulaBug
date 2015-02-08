@@ -94,9 +94,9 @@ ApplicationWindow {
     statusBar: StatusBar{
         Text {
             text: {
-                if(service.isDownloadingStatus){
+                if(service.downloadStatus){
                     return "[進度 " + Math.round(service.downloadProgress.ratio * 100) + "% ] " + service.downloadProgress.message;
-                }else if(service.isCollectingStatus) return "正在抓取漫畫資訊，請稍等 ...";
+                }else if(service.collectingStatus) return "正在抓取漫畫資訊，請稍等 ...";
                 else return "準備完成，可以選擇要下載的漫畫"
             }
         }

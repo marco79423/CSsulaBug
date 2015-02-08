@@ -58,6 +58,26 @@ void NetworkAccessorTest::abort()
     QNetworkReply *reply = args.at(0).value<QNetworkReply*>();
 
     QVERIFY(reply->error() == QNetworkReply::OperationCanceledError);
+
+    replySpy.clear();
+    finishSpy.clear();
+
+    QVERIFY(networkAccessor->get(url));
+
+    while(replySpy.size() == 0)
+        replySpy.wait(100);
+
+    while(finishSpy.size() == 0)
+        finishSpy.wait(100);
+
+    args = replySpy.takeFirst();
+    reply = args.at(0).value<QNetworkReply*>();
+
+    QVERIFY(reply->error() == QNetworkReply::NoError);
+
+    QFile file(":/images/marco.jpg");
+    QVERIFY(file.open(QFile::ReadOnly));
+    QCOMPARE(reply->readAll(), file.readAll());
 }
 
 void NetworkAccessorTest::getDataImmediately()

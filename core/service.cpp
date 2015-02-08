@@ -64,7 +64,7 @@ ComicModel *Service::getDownloadComicModel()
 
 void Service::collectComicInfos()
 {
-    setProperty("isCollectingStatus", true);
+    setProperty("collectingStatus", true);
 
     foreach(AComicSiteHandler* comicSiteHandler, _comicSiteHandlers)
     {
@@ -84,7 +84,7 @@ void Service::download(const QString &comicKey)
 
 void Service::download(const QString &comicKey, const QStringList &chapterNames)
 {
-    setProperty("isDownloadingStatus", true);
+    setProperty("downloadStatus", true);
 
     QVariantMap comicInfo = _comicModel->getComicInfo(comicKey);
 
@@ -115,7 +115,7 @@ void Service::_onCollectingFinished()
         collectingFinishedCounter = 0;
 
         qDebug() << "更新結束";
-        setProperty("isCollectingStatus", false);
+        setProperty("collectingStatus", false);
         emit collectingFinishedSignal();
     }
 }
@@ -123,11 +123,12 @@ void Service::_onCollectingFinished()
 void Service::_onDownloadProgressChanged(const QVariantMap &downloadProgress)
 {
     setProperty("downloadProgress", downloadProgress);
+    emit downloadProgressChangedSignal();
 }
 
 void Service::_onDownloadFinished()
 {
     qDebug() << "下載結束";
-    setProperty("isDownloadingStatus", false);
-    emit downloadFinishSignal();
+    setProperty("downloadStatus", false);
+    emit downloadFinishedSignal();
 }
