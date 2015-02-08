@@ -81,6 +81,7 @@ Rectangle {
                     }
 
                     Button {
+                        visible: !downloadComic.isCurrent //暫時無法解決 下載取消時發生的錯誤，所以關掉
                         text: "刪除"
                         onClicked: service.abort(model.key);
                         style: ButtonStyle {
