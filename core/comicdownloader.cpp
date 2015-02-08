@@ -68,6 +68,16 @@ void ComicDownloader::_downloadProcess()
     AComicSiteHandler *comicSiteHandler = _comicSiteHandlers[comicInfo["site"].toString()];
 
     FileDownloader::Task task = _makeTask(comicInfo, comicSiteHandler);
+    if(task.isEmpty())
+    {
+        QVariantMap downloadProgress;
+        downloadProgress["message"] = comicInfo["name"].toString() + " 不需要下載";
+        downloadProgress["ratio"] = 0.0;
+        emit downloadProgressChangedSignal(downloadProgress);
+
+        _onTaskFinish();
+        return;
+    }
     _fileDownloader->download(task, comicSiteHandler->getReferer());
 }
 
