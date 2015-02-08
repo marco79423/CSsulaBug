@@ -14,12 +14,12 @@ void SFComicSiteHandlerTest::collectComicInfos()
     SFComicSiteHandler *comicHandler = new SFComicSiteHandler(this);
 
     QSignalSpy comicInfoSignalSpy(comicHandler, SIGNAL(comicInfoSignal(const QVariantMap&)));
-    QSignalSpy collectingFinishSignalSpy(comicHandler, SIGNAL(collectingFinishSignal()));
+    QSignalSpy collectingFinishedSignalSpy(comicHandler, SIGNAL(collectingFinishedSignal()));
 
     comicHandler->collectComicInfos();
 
-    while(collectingFinishSignalSpy.size() == 0)
-        collectingFinishSignalSpy.wait(1000);
+    while(collectingFinishedSignalSpy.size() == 0)
+        collectingFinishedSignalSpy.wait(1000);
 
     //檢查有多少部漫畫
     //QCOMPARE(comicInfoSignalSpy.size(), 1592);
