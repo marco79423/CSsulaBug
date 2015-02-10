@@ -23,22 +23,34 @@ ApplicationWindow {
 
     Component.onCompleted: service.collectComicInfos()
 
+
+
     toolBar: ToolBar{
         id: toolbar
-        height: 60
+        height: 80
 
         style: ToolBarStyle{
             background: Rectangle{
                 color: Globals.MainColor1
+
+                Rectangle {
+                    anchors.bottom: parent.bottom
+
+                    width: parent.width
+                    height: 50 - 3
+
+                    color: Globals.MainColor2
+                }
             }
         }
 
         TextField {
             id: searchField
 
-            anchors.verticalCenter: parent.verticalCenter
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 8
             anchors.left: parent.left
-            anchors.leftMargin: 10
+            anchors.leftMargin: 5
 
             width: 200
 
@@ -55,39 +67,76 @@ ApplicationWindow {
         Button{
             id: backButton
 
-            anchors.verticalCenter: parent.verticalCenter
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 8
             anchors.left: parent.left
-            anchors.leftMargin: 10
+            anchors.leftMargin: 5
 
             text: "返回"
             onClicked: {comicDetail.startLeaveAnimation(); }
         }
 
-        /*Button{
 
-            id: settingPageButton
+        Button{
 
-            anchors.right: parent.right
-            anchors.rightMargin: 10
-            anchors.verticalCenter: parent.verticalCenter
+            enabled: false;
 
-            text: "設定"
+            id: mainPageButton
+
+            anchors.right: downloadPageButton.left
+            anchors.top: parent.top
+            anchors.rightMargin: 5
+
+            text: "漫畫清單"
+
             onClicked: {
-                console.log("setting");
+                mainPageButton.enabled = false;
+                downloadPageButton.enabled = true;
             }
-        }*/
 
+            style: ButtonStyle {
+                label: Text {
+                    y: 5
+                    text: control.text
+                    color: Globals.SoftWhite
+                    font.pointSize: 15
+                }
+                background: Rectangle {
+                    implicitWidth: 70
+                    implicitHeight: 30
+                    color: control.enabled ? Globals.MainColor1: Globals.MainColor2
+                }
+            }
+        }
 
         Button{
 
             id: downloadPageButton
 
-            anchors.right: parent.right//settingPageButton.left
+            anchors.right: parent.right
             anchors.rightMargin: 10
-            anchors.verticalCenter: parent.verticalCenter
+            anchors.top: parent.top
 
-            checkable: true
             text: "我的下載"
+
+            onClicked: {
+                mainPageButton.enabled = true;
+                downloadPageButton.enabled = false;
+            }
+
+            style: ButtonStyle {
+                label: Text {
+                    y: 5
+                    text: control.text
+                    color: Globals.SoftWhite
+                    font.pointSize: 15
+                }
+                background: Rectangle {
+                    implicitWidth: 60
+                    implicitHeight: 30
+                    color: control.enabled ? Globals.MainColor1: Globals.MainColor2
+                }
+            }
         }
     }
 
@@ -103,27 +152,16 @@ ApplicationWindow {
     }
 
     Rectangle{
+        id: page
+        anchors.fill: parent
 
-        id:page
-
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-
-        width: parent.width * 2
-        height: parent.height
-
-        color: Globals.MainColor1
         state: "MainPageState"
-
-        Behavior on x {
-            NumberAnimation { duration: 500; easing.type: Easing.InOutQuad }
-        }
 
         states:[
             State {
                 name: "MainPageState"
-                when: !comicDetail.visible && !downloadPageButton.checked
-                PropertyChanges { target: page; x: 0 }
+                when: !comicDetail.visible && downloadPageButton.enabled
+                PropertyChanges { target: downloadPage; visible: false }
                 PropertyChanges { target: searchField ; visible: true; }
                 PropertyChanges { target: backButton ; visible: false; }
                 PropertyChanges { target: comicList; visible: true; }
@@ -131,8 +169,8 @@ ApplicationWindow {
 
             State {
                 name: "DetailPageState"
-                when: comicDetail.visible && !downloadPageButton.checked
-                PropertyChanges { target: page; x: 0 }
+                when: comicDetail.visible && downloadPageButton.enabled
+                PropertyChanges { target: downloadPage; visible: false }
                 PropertyChanges { target: searchField ; visible: false; }
                 PropertyChanges { target: backButton ; visible: true; }
                 PropertyChanges { target: comicList; visible: false; }
@@ -140,46 +178,55 @@ ApplicationWindow {
 
             State {
                 name: "DownloadPageState"
-                when: downloadPageButton.checked
-                PropertyChanges { target: page ; x: -page.width / 2 }
+                when: !downloadPageButton.enabled
+                PropertyChanges { target: downloadPage; visible: true; }
                 PropertyChanges { target: searchField ; visible: false; }
                 PropertyChanges { target: backButton ; visible: false; }
             }
         ]
 
-        UI.ComicList {
-            id: comicList
 
-            width: parent.width / 2
-            height: parent.height
+        Rectangle{
 
-            focus: true
+            id: mainPage
 
-            state: "BusyState"
+            anchors.fill: parent
 
-            function onAdvanceButtonClicked(comicInfo, startY)
-            {
-                comicDetail.startEnterAnimation(comicInfo, startY);
+            color: Globals.MainColor2
+
+            UI.ComicList {
+                id: comicList
+
+                width: parent.width
+                height: parent.height
+
+                focus: true
+
+                state: "BusyState"
+
+                function onAdvanceButtonClicked(comicInfo, startY)
+                {
+                    comicDetail.startEnterAnimation(comicInfo, startY);
+                }
+
+                Connections {
+                    target: service
+                    onCollectingFinishedSignal: if(comicList.state == "BusyState") comicList.state = "DefaultState"
+                }
             }
 
-            Connections {
-                target: service
-                onCollectingFinishedSignal: if(comicList.state == "BusyState") comicList.state = "DefaultState"
+            UI.ComicDetail{
+                id: comicDetail
+                width: comicList.width
+                height: comicList.height
             }
-        }
-
-        UI.ComicDetail{
-            id: comicDetail
-            width: comicList.width
-            height: comicList.height
         }
 
         UI.DownloadPage {
             id:　downloadPage
+            anchors.fill: parent
 
-            width: page.width / 2
-            height: page.height
-            x: page.width / 2
+            visible: false
         }
     }
 }
