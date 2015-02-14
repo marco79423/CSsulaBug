@@ -38,7 +38,7 @@ Rectangle {
         Flickable {
             id: nameFlick
             width: 290
-            height: nameText.height
+            height: 30
             contentWidth: nameText.width
             clip: true
 
