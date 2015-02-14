@@ -1,5 +1,5 @@
 ﻿#include "comicdownloader.h"
-#include "acomicsitehandler.h"
+#include "comicsitehandler/acomicsitehandler.h"
 #include "comicmodel.h"
 
 #include <QStandardPaths>

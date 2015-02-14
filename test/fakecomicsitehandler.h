@@ -1,7 +1,7 @@
-#ifndef FAKECOMICSITEHANDLER_H
+﻿#ifndef FAKECOMICSITEHANDLER_H
 #define FAKECOMICSITEHANDLER_H
 
-#include <acomicsitehandler.h>
+#include <comicsitehandler/acomicsitehandler.h>
 
 #include "fakedata.h"
 

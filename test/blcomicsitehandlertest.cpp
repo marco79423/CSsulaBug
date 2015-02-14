@@ -1,7 +1,7 @@
 ﻿#include "blcomicsitehandlertest.h"
 #include "testglobals.h"
 
-#include <site/blcomicsitehandler.h>
+#include <comicsitehandler/blcomicsitehandler.h>
 #include <QtTest>
 
 void BLComicSiteHandlerTest::initTestCase()

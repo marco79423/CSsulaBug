@@ -100,7 +100,6 @@ Rectangle{
         z: 1
 
         width: parent.width
-        height: 120
 
         comicInfo: comicDetail.comicInfo
         highlight: true

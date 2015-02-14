@@ -1,5 +1,5 @@
 ﻿#include "service.h"
-#include "acomicsitehandler.h"
+#include "comicsitehandler/acomicsitehandler.h"
 #include "filedownloader.h"
 #include "comicmodel.h"
 #include "comicdownloader.h"

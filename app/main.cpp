@@ -4,8 +4,8 @@
 #include <QFont>
 
 #include <globals.h>
-#include <site/sfcomicsitehandler.h>
-#include <site/blcomicsitehandler.h>
+#include <comicsitehandler/sfcomicsitehandler.h>
+#include <comicsitehandler/blcomicsitehandler.h>
 
 #include <service.h>
 
@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
 
     Service service;
     service.addComicSiteHandler(new SFComicSiteHandler);
-    //service.addComicSiteHandler(new BLComicSiteHandler);
+    service.addComicSiteHandler(new BLComicSiteHandler);
 
     QQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty("service", &service);

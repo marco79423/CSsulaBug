@@ -1,7 +1,7 @@
 ﻿#include "sfcomicsitehandlertest.h"
 #include "testglobals.h"
 
-#include <site/sfcomicsitehandler.h>
+#include <comicsitehandler/sfcomicsitehandler.h>
 #include <QtTest>
 
 void SFComicSiteHandlerTest::initTestCase()

@@ -16,11 +16,11 @@ HEADERS += \
     networkaccessor.h \
     filedownloader.h \
     globals.h \
-    acomicsitehandler.h \
     service.h \
     aservice.h \
-    site/sfcomicsitehandler.h \
-    site/blcomicsitehandler.h \
+    comicsitehandler/acomicsitehandler.h \
+    comicsitehandler/sfcomicsitehandler.h \
+    comicsitehandler/blcomicsitehandler.h \
     comicdownloader.h \
     anetworkaccessor.h \
     proxycomicmodel.h
@@ -31,8 +31,8 @@ SOURCES += \
     networkaccessor.cpp \
     filedownloader.cpp \
     service.cpp \
-    site/sfcomicsitehandler.cpp \
-    site/blcomicsitehandler.cpp \
+    comicsitehandler/sfcomicsitehandler.cpp \
+    comicsitehandler/blcomicsitehandler.cpp \
     comicdownloader.cpp \
     proxycomicmodel.cpp
 
