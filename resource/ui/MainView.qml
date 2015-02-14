@@ -23,34 +23,101 @@ ApplicationWindow {
 
     Component.onCompleted: service.collectComicInfos()
 
+    statusBar: StatusBar{
+        Text {
+            text: {
+                if(service.downloadStatus){
+                    return "[進度 " + Math.round(service.downloadProgress.ratio * 100) + "% ] " + service.downloadProgress.message;
+                }else if(service.collectingStatus) return "正在抓取漫畫資訊，請稍等 ...";
+                else return "準備完成，可以選擇要下載的漫畫"
+            }
+        }
+    }
 
+    Rectangle {
+        id: tabs
+        z: 1
 
-    toolBar: ToolBar{
-        id: toolbar
-        height: 80
+        width: parent.width
+        height: 35
 
-        style: ToolBarStyle{
-            background: Rectangle{
-                color: Globals.MainColor1
+        color: Globals.MainColor1
 
-                Rectangle {
-                    anchors.bottom: parent.bottom
+        Rectangle {
 
-                    width: parent.width
-                    height: 50 - 3
+            enabled: false;
 
-                    color: Globals.MainColor2
+            id: mainPageButton
+
+            anchors.bottom: parent.bottom
+            anchors.right: downloadPageButton.left
+
+            width: 70
+            height: 30
+            color: enabled ? Globals.MainColor1: Globals.MainColor2
+
+            Text {
+                anchors.centerIn: parent
+                text: "漫畫清單"
+                color: Globals.SoftWhite
+                font.pointSize: 11
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    mainPageButton.enabled = false;
+                    downloadPageButton.enabled = true;
                 }
             }
         }
 
+        Rectangle {
+
+            id: downloadPageButton
+
+            anchors.bottom: parent.bottom
+            anchors.right: parent.right
+            anchors.rightMargin: 10
+
+            width: 70
+            height: 30
+            color: enabled ? Globals.MainColor1: Globals.MainColor2
+
+            Text {
+                anchors.centerIn: parent
+                text: "我的下載"
+                color: Globals.SoftWhite
+                font.pointSize: 11
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    mainPageButton.enabled = true;
+                    downloadPageButton.enabled = false;
+                }
+            }
+        }
+    }
+
+    Rectangle {
+        id: toolPanel
+
+        z: 1
+
+        anchors.top: tabs.bottom
+        width: parent.width
+        height: 50
+
+        color: Globals.MainColor2
+
         TextField {
             id: searchField
 
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 8
+            anchors.verticalCenter: parent.verticalCenter
             anchors.left: parent.left
-            anchors.leftMargin: 5
+            anchors.leftMargin: 10
 
             width: 200
 
@@ -67,93 +134,21 @@ ApplicationWindow {
         Button{
             id: backButton
 
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 8
+            anchors.verticalCenter: parent.verticalCenter
             anchors.left: parent.left
-            anchors.leftMargin: 5
+            anchors.leftMargin: 10
 
             text: "返回"
             onClicked: {comicDetail.startLeaveAnimation(); }
-        }
-
-
-        Button{
-
-            enabled: false;
-
-            id: mainPageButton
-
-            anchors.right: downloadPageButton.left
-            anchors.top: parent.top
-            anchors.rightMargin: 5
-
-            text: "漫畫清單"
-
-            onClicked: {
-                mainPageButton.enabled = false;
-                downloadPageButton.enabled = true;
-            }
-
-            style: ButtonStyle {
-                label: Text {
-                    y: 5
-                    text: control.text
-                    color: Globals.SoftWhite
-                    font.pointSize: 15
-                }
-                background: Rectangle {
-                    implicitWidth: 70
-                    implicitHeight: 30
-                    color: control.enabled ? Globals.MainColor1: Globals.MainColor2
-                }
-            }
-        }
-
-        Button{
-
-            id: downloadPageButton
-
-            anchors.right: parent.right
-            anchors.rightMargin: 10
-            anchors.top: parent.top
-
-            text: "我的下載"
-
-            onClicked: {
-                mainPageButton.enabled = true;
-                downloadPageButton.enabled = false;
-            }
-
-            style: ButtonStyle {
-                label: Text {
-                    y: 5
-                    text: control.text
-                    color: Globals.SoftWhite
-                    font.pointSize: 15
-                }
-                background: Rectangle {
-                    implicitWidth: 60
-                    implicitHeight: 30
-                    color: control.enabled ? Globals.MainColor1: Globals.MainColor2
-                }
-            }
-        }
-    }
-
-    statusBar: StatusBar{
-        Text {
-            text: {
-                if(service.downloadStatus){
-                    return "[進度 " + Math.round(service.downloadProgress.ratio * 100) + "% ] " + service.downloadProgress.message;
-                }else if(service.collectingStatus) return "正在抓取漫畫資訊，請稍等 ...";
-                else return "準備完成，可以選擇要下載的漫畫"
-            }
         }
     }
 
     Rectangle{
         id: page
-        anchors.fill: parent
+        anchors.top: toolPanel.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
 
         state: "MainPageState"
 
