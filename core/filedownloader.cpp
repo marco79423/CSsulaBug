@@ -22,6 +22,12 @@ bool FileDownloader::download(const FileDownloader::Task &task, const QString &r
     {
         return false;
     }
+
+    if(task.size() == 0)
+    {
+        emit finishSignal();
+    }
+
     _currentTask = task;
     _taskSize = task.size();
     return _networkAccessor->get(_currentTask.keys(), referer);
