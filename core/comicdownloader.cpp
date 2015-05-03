@@ -60,21 +60,15 @@ void ComicDownloader::_downloadProcess()
     _downloading = true;
 
     QVariantMap comicInfo = _downloadComicModel->getComicInfo(0);
-    QVariantMap downloadProgress;
-    downloadProgress["message"] = "準備下載 " + comicInfo["name"].toString();
-    downloadProgress["ratio"] = 0.0;
-    emit downloadProgressChangedSignal(downloadProgress);
+
+    _updateDownloadProgress(0.0, "準備下載 " + comicInfo["name"].toString());
 
     AComicSiteHandler *comicSiteHandler = _comicSiteHandlers[comicInfo["site"].toString()];
 
     FileDownloader::Task task = _makeTask(comicInfo, comicSiteHandler);
     if(task.isEmpty())
     {
-        QVariantMap downloadProgress;
-        downloadProgress["message"] = comicInfo["name"].toString() + " 不需要下載";
-        downloadProgress["ratio"] = 0.0;
-        emit downloadProgressChangedSignal(downloadProgress);
-
+        _updateDownloadProgress(0.0, comicInfo["name"].toString() + " 不需要下載");
         _onTaskFinish();
         return;
     }
@@ -83,11 +77,9 @@ void ComicDownloader::_downloadProcess()
 
 void ComicDownloader::_onDownloadInfoUpdated(const QVariantMap &downloadInfo)
 {
-    QVariantMap downloadProgress;
-    downloadProgress["message"] = "下載 " + downloadInfo["path"].toString();
-    downloadProgress["ratio"] = downloadInfo["ratio"];
-
-    emit downloadProgressChangedSignal(downloadProgress);
+    _updateDownloadProgress(
+        downloadInfo["ratio"].toFloat(), "下載 " + downloadInfo["path"].toString()
+    );
 }
 
 
@@ -122,5 +114,14 @@ FileDownloader::Task ComicDownloader::_makeTask(const QVariantMap &comicInfo, AC
         }
     }
     return task;
+}
+
+void ComicDownloader::_updateDownloadProgress(const float &radio, const QString &message)
+{
+    QVariantMap downloadProgress;
+    downloadProgress["ratio"] = radio;
+    downloadProgress["message"] = message;
+
+    emit downloadProgressChangedSignal(downloadProgress);
 }
 

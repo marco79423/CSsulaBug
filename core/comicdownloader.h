@@ -49,6 +49,8 @@ private:
     QList<int> _taskIDs;
 
     FileDownloader::Task _makeTask(const QVariantMap &comicInfo, AComicSiteHandler *comicSiteHandler);
+
+    void _updateDownloadProgress(const float &radio, const QString &message);
 };
 
 #endif // COMICDOWNLOADER_H
