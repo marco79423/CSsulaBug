@@ -13,6 +13,7 @@ class AService : public QObject
     Q_PROPERTY(bool collectingStatus MEMBER _collectingStatus NOTIFY collectingStatusChangedSignal)
     Q_PROPERTY(bool downloadStatus MEMBER _downloadStatus NOTIFY downloadStatusChangedSignal)
     Q_PROPERTY(QVariantMap downloadProgress MEMBER _downloadProgress NOTIFY downloadProgressChangedSignal)
+    Q_PROPERTY(QString downloadPath READ getDownloadPath WRITE setDownloadPath NOTIFY downloadPathChangedSignal)
 
 public:
 
@@ -20,8 +21,11 @@ public:
     virtual ComicModel* getDownloadComicModel() = 0;
 
     Q_INVOKABLE virtual QStringList getChapterNames(const QString &comicKey) = 0;
+    Q_INVOKABLE virtual QString getDownloadPath() = 0;
 
 signals:
+
+    void downloadPathChangedSignal();
 
     void collectingStatusChangedSignal();
     void collectingFinishedSignal();
@@ -31,6 +35,8 @@ signals:
     void downloadFinishedSignal();
 
 public slots:
+
+    virtual void setDownloadPath(const QString &downloadPath) = 0;
 
     virtual void collectComicInfos() = 0;
     virtual void setComicNameFilter(const QString &pattern) = 0;

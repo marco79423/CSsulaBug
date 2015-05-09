@@ -50,7 +50,8 @@ ApplicationWindow {
             id: mainPageButton
 
             anchors.bottom: parent.bottom
-            anchors.right: downloadPageButton.left
+            anchors.left: parent.left
+            anchors.leftMargin: 10
 
             width: 70
             height: 30
@@ -68,6 +69,7 @@ ApplicationWindow {
                 onClicked: {
                     mainPageButton.enabled = false;
                     downloadPageButton.enabled = true;
+                    settingsPageButton.enabled = true;
                 }
             }
         }
@@ -77,8 +79,7 @@ ApplicationWindow {
             id: downloadPageButton
 
             anchors.bottom: parent.bottom
-            anchors.right: parent.right
-            anchors.rightMargin: 10
+            anchors.left: mainPageButton.right
 
             width: 70
             height: 30
@@ -96,6 +97,35 @@ ApplicationWindow {
                 onClicked: {
                     mainPageButton.enabled = true;
                     downloadPageButton.enabled = false;
+                    settingsPageButton.enabled = true;
+                }
+            }
+        }
+
+        Rectangle {
+
+            id: settingsPageButton
+
+            anchors.bottom: parent.bottom
+            anchors.right: parent.right
+
+            width: 70
+            height: 30
+            color: enabled ? Globals.MainColor1: Globals.MainColor2
+
+            Text {
+                anchors.centerIn: parent
+                text: "設定"
+                color: Globals.SoftWhite
+                font.pointSize: 11
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    mainPageButton.enabled = true;
+                    downloadPageButton.enabled = true;
+                    settingsPageButton.enabled = false;
                 }
             }
         }
@@ -155,7 +185,8 @@ ApplicationWindow {
         states:[
             State {
                 name: "MainPageState"
-                when: !comicDetail.visible && downloadPageButton.enabled
+                when: !comicDetail.visible && !mainPageButton.enabled
+                PropertyChanges { target: settingsPage; visible: false; }
                 PropertyChanges { target: downloadPage; visible: false }
                 PropertyChanges { target: searchField ; visible: true; }
                 PropertyChanges { target: backButton ; visible: false; }
@@ -164,7 +195,8 @@ ApplicationWindow {
 
             State {
                 name: "DetailPageState"
-                when: comicDetail.visible && downloadPageButton.enabled
+                when: comicDetail.visible && !mainPageButton.enabled
+                PropertyChanges { target: settingsPage; visible: false; }
                 PropertyChanges { target: downloadPage; visible: false }
                 PropertyChanges { target: searchField ; visible: false; }
                 PropertyChanges { target: backButton ; visible: true; }
@@ -174,7 +206,17 @@ ApplicationWindow {
             State {
                 name: "DownloadPageState"
                 when: !downloadPageButton.enabled
+                PropertyChanges { target: settingsPage; visible: false; }
                 PropertyChanges { target: downloadPage; visible: true; }
+                PropertyChanges { target: searchField ; visible: false; }
+                PropertyChanges { target: backButton ; visible: false; }
+            },
+
+            State {
+                name: "SettingsPageState"
+                when: !settingsPageButton.enabled
+                PropertyChanges { target: settingsPage; visible: true; }
+                PropertyChanges { target: downloadPage; visible: false; }
                 PropertyChanges { target: searchField ; visible: false; }
                 PropertyChanges { target: backButton ; visible: false; }
             }
@@ -219,6 +261,13 @@ ApplicationWindow {
 
         UI.DownloadPage {
             id:　downloadPage
+            anchors.fill: parent
+
+            visible: false
+        }
+
+        UI.SettingsPage {
+            id: settingsPage
             anchors.fill: parent
 
             visible: false

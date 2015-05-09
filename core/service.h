@@ -23,8 +23,11 @@ public:
     ProxyComicModel* getProxyComicModel();
     QStringList getChapterNames(const QString &comicKey);
     ComicModel *getDownloadComicModel();
+    QString getDownloadPath();
 
 public slots:
+
+    void setDownloadPath(const QString &downloadPath);
 
     void collectComicInfos();
     void setComicNameFilter(const QString &comicNamePattern);

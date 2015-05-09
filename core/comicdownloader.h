@@ -27,7 +27,7 @@ signals:
 public slots:
 
     void addComicSiteHandler(AComicSiteHandler *comicSiteHandler);
-    void download(const QVariantMap &comicInfo);
+    void download(const QVariantMap &comicInfo, const QString &downloadPath);
     void abort(const QString &comicKey);
 
 private slots:

@@ -27,9 +27,11 @@ void ComicDownloader::addComicSiteHandler(AComicSiteHandler *comicSiteHandler)
     _comicSiteHandlers[comicSiteHandler->getComicSiteName()] = comicSiteHandler;
 }
 
-void ComicDownloader::download(const QVariantMap &comicInfo)
+void ComicDownloader::download(const QVariantMap &comicInfo, const QString &downloadPath)
 {
-    _downloadComicModel->insertComicInfo(comicInfo);
+    QVariantMap tempComicInfo(comicInfo);
+    tempComicInfo["downloadPath"] = downloadPath;
+    _downloadComicModel->insertComicInfo(tempComicInfo);
     _downloadProcess();
 }
 
@@ -88,7 +90,7 @@ FileDownloader::Task ComicDownloader::_makeTask(const QVariantMap &comicInfo, AC
 {
     FileDownloader::Task task;
 
-    QString dstDir = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
+    QString dstDir = comicInfo["downloadPath"].toString();
 
     QList<StringPair> chapters = comicInfo["chapters"].value<QList<StringPair> >();
     foreach(StringPair chapter, chapters)

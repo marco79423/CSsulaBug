@@ -8,5 +8,6 @@
         <file>ui/ComicDetail.qml</file>
         <file>ui/DownloadPage.qml</file>
         <file>ui/globals.js</file>
+        <file>ui/SettingsPage.qml</file>
     </qresource>
 </RCC>

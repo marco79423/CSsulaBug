@@ -6,6 +6,7 @@
 
 #include <QStandardPaths>
 #include <QFileInfo>
+#include <QSettings>
 #include <QDebug>
 
 
@@ -61,6 +62,20 @@ ComicModel *Service::getDownloadComicModel()
     return _comicDownloader->getDownloadComicModel();
 }
 
+QString Service::getDownloadPath()
+{
+    QSettings settings("marco79423.twbbs.org", "CSsulaBug");
+    return settings.value("downloadPath", QStandardPaths::writableLocation(QStandardPaths::DesktopLocation)).toString();
+}
+
+void Service::setDownloadPath(const QString &downloadPath)
+{
+    QSettings settings("marco79423.twbbs.org", "CSsulaBug");
+    settings.setValue("downloadPath", downloadPath);
+    qDebug() << downloadPath;
+    emit downloadPathChangedSignal();
+}
+
 void Service::collectComicInfos()
 {
     setProperty("collectingStatus", true);
@@ -98,7 +113,7 @@ void Service::download(const QString &comicKey, const QStringList &chapterNames)
         }
     }
     comicInfo["chapters"].setValue(results);
-    _comicDownloader->download(comicInfo);
+    _comicDownloader->download(comicInfo, getDownloadPath());
 }
 
 void Service::abort(const QString &comicKey)
