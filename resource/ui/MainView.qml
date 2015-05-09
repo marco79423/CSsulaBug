@@ -108,6 +108,7 @@ ApplicationWindow {
 
             anchors.bottom: parent.bottom
             anchors.right: parent.right
+            anchors.rightMargin: 10
 
             width: 70
             height: 30
@@ -131,51 +132,9 @@ ApplicationWindow {
         }
     }
 
-    Rectangle {
-        id: toolPanel
-
-        z: 1
-
-        anchors.top: tabs.bottom
-        width: parent.width
-        height: 50
-
-        color: Globals.MainColor2
-
-        TextField {
-            id: searchField
-
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.left: parent.left
-            anchors.leftMargin: 10
-
-            width: 200
-
-            style: TextFieldStyle {
-                background: Rectangle{
-                    color: Globals.SoftWhite
-                }
-            }
-
-            placeholderText: "點此搜尋想下載的漫畫至桌面 ..."
-            onTextChanged: { service.setComicNameFilter(text); }
-        }
-
-        Button{
-            id: backButton
-
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.left: parent.left
-            anchors.leftMargin: 10
-
-            text: "返回"
-            onClicked: {comicDetail.startLeaveAnimation(); }
-        }
-    }
-
     Rectangle{
         id: page
-        anchors.top: toolPanel.bottom
+        anchors.top: tabs.bottom
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
@@ -185,40 +144,26 @@ ApplicationWindow {
         states:[
             State {
                 name: "MainPageState"
-                when: !comicDetail.visible && !mainPageButton.enabled
+                when: !mainPageButton.enabled
+                PropertyChanges { target: mainPage ; visible: true; }
                 PropertyChanges { target: settingsPage; visible: false; }
                 PropertyChanges { target: downloadPage; visible: false }
-                PropertyChanges { target: searchField ; visible: true; }
-                PropertyChanges { target: backButton ; visible: false; }
-                PropertyChanges { target: comicList; visible: true; }
-            },
-
-            State {
-                name: "DetailPageState"
-                when: comicDetail.visible && !mainPageButton.enabled
-                PropertyChanges { target: settingsPage; visible: false; }
-                PropertyChanges { target: downloadPage; visible: false }
-                PropertyChanges { target: searchField ; visible: false; }
-                PropertyChanges { target: backButton ; visible: true; }
-                PropertyChanges { target: comicList; visible: false; }
             },
 
             State {
                 name: "DownloadPageState"
                 when: !downloadPageButton.enabled
+                PropertyChanges { target: mainPage ; visible: false; }
                 PropertyChanges { target: settingsPage; visible: false; }
                 PropertyChanges { target: downloadPage; visible: true; }
-                PropertyChanges { target: searchField ; visible: false; }
-                PropertyChanges { target: backButton ; visible: false; }
             },
 
             State {
                 name: "SettingsPageState"
                 when: !settingsPageButton.enabled
+                PropertyChanges { target: mainPage ; visible: false; }
                 PropertyChanges { target: settingsPage; visible: true; }
                 PropertyChanges { target: downloadPage; visible: false; }
-                PropertyChanges { target: searchField ; visible: false; }
-                PropertyChanges { target: backButton ; visible: false; }
             }
         ]
 
@@ -231,11 +176,76 @@ ApplicationWindow {
 
             color: Globals.MainColor2
 
+            state: "listMode"
+            states:[
+                State {
+                    name: "listMode"
+                    when: !comicDetail.visible
+                    PropertyChanges { target: searchField ; visible: true; }
+                    PropertyChanges { target: backButton ; visible: false; }
+                    PropertyChanges { target: comicList; visible: true; }
+                },
+
+                State {
+                    name: "detailMode"
+                    when: comicDetail.visible
+                    PropertyChanges { target: searchField ; visible: false; }
+                    PropertyChanges { target: backButton ; visible: true; }
+                    PropertyChanges { target: comicList; visible: false; }
+                }
+            ]
+
+            Rectangle {
+                id: searchPanel
+
+                z: 1
+
+                anchors.top: tabs.bottom
+                width: parent.width
+                height: 50
+
+                color: Globals.MainColor2
+
+                TextField {
+                    id: searchField
+
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.left: parent.left
+                    anchors.leftMargin: 10
+
+                    width: 200
+
+                    style: TextFieldStyle {
+                        background: Rectangle{
+                            color: Globals.SoftWhite
+                        }
+                    }
+
+                    placeholderText: "點此搜尋想下載的漫畫 ..."
+                    onTextChanged: { service.setComicNameFilter(text); }
+                }
+
+                Button{
+                    id: backButton
+
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.left: parent.left
+                    anchors.leftMargin: 10
+
+                    text: "返回"
+                    onClicked: {comicDetail.startLeaveAnimation(); }
+                }
+            }
+
             UI.ComicList {
                 id: comicList
 
-                width: parent.width
-                height: parent.height
+                anchors {
+                    top: searchPanel.bottom
+                    left: parent.left
+                    right: parent.right
+                    bottom: parent.bottom
+                }
 
                 focus: true
 
@@ -254,8 +264,13 @@ ApplicationWindow {
 
             UI.ComicDetail{
                 id: comicDetail
-                width: comicList.width
-                height: comicList.height
+
+                anchors {
+                    top: searchPanel.bottom
+                    left: parent.left
+                    right: parent.right
+                    bottom: parent.bottom
+                }
             }
         }
 

@@ -1,4 +1,5 @@
-var SoftWhite = "#f5f5f5"
+﻿var SoftWhite = "#f5f5f5";
+var SoftBlack = "#1a1a1a";
 
 var MainColor1 = "#004d40";
 var MainColor2 = "#00695c";

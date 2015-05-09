@@ -36,7 +36,11 @@ Rectangle {
             rowSpacing: 10
             columnSpacing: 10
 
-            Label {text: "下載路徑："}
+            Label {
+                text: "下載路徑："
+                color: Globals.SoftBlack
+                font.pointSize: 11
+            }
             TextField {
                 id: downloadPathTextField
                 Layout.fillWidth: true
